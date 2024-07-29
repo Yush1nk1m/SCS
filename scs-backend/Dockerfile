@@ -1,18 +1,16 @@
-# base image
+# 베이스 이미지 설정
 FROM node:16-alpine
 
-# set working directory
+# 작업 디렉토리 설정
 WORKDIR /usr/src/app
 
-# install and cache app dependencies
-COPY package*.json ./
+# 의존성 설치
+COPY package.json ./
+COPY package-lock.json ./
 RUN npm install
 
-# copy project files
+# 소스 코드 복사
 COPY . .
 
-# build the project
-RUN npm run build
-
-# start the application
-CMD ["node", "dist/main.js"]
+# 기본 명령어를 sh로 설정
+CMD ["sh"]
