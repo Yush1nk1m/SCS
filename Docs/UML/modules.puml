@@ -1,0 +1,115 @@
+@startuml
+package "NestJS Application" {
+    
+    package "Root Module" {
+        class AppModule {
+            + imports: [
+                UserModule, 
+                SectionModule, 
+                QuestionModule, 
+                ActionModule, 
+                CommentModule,
+                BookModule, 
+                LibraryModule,
+                AuthModule
+            ]
+        }
+    }
+
+    package "User Module" {
+        class UserModule {
+            + providers
+            + controllers
+        }
+
+        class User
+        class UserService
+        class UserController
+        class UserRepository
+    }
+
+    package "Section Module" {
+        class SectionModule {
+            + providers
+            + controllers
+        }
+
+        class Section
+        class SectionService
+        class SectionController
+        class SectionRepository
+    }
+
+    package "Question Module" {
+        class QuestionModule {
+            + providers
+            + controllers
+        }
+
+        class Question
+        class QuestionService
+        class QuestionController
+        class QuestionRepository
+    }
+
+    package "Action Module" {
+        class ActionModule {
+            + providers
+            + controllers
+        }
+
+        class Action
+        class ActionService
+        class ActionController
+        class ActionRepository
+    }
+
+    package "Comment Module" {
+        class CommentModule {
+            + providers
+            + controllers
+        }
+
+        class Comment
+        class CommentService
+        class CommentController
+        class CommentRepository
+    }
+
+    package "Book Module" {
+        class BookModule {
+            + providers
+            + controllers
+        }
+
+        class Book
+        class BookService
+        class BookController
+        class BookRepository
+    }
+
+    package "Library Module" {
+        class LibraryModule {
+            + providers
+            + controllers
+        }
+
+        class Library
+        class LibraryService
+        class LibraryController
+        class LibraryRepository
+    }
+
+    package "Auth Module" {
+        class AuthModule {
+            + providers
+            + controllers
+        }
+
+        class AuthService
+        class AuthController
+        class AuthRepository
+    }
+
+}
+@enduml

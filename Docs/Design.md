@@ -69,3 +69,7 @@
 - Library(User & Book 간 다대다 관계): 문제집 목록
   - id: 고유 부여되는 아이디
   - books: Book[]
+
+## 서비스 구성 모듈
+
+![modules](UML/modules.png)
