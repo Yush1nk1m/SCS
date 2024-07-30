@@ -12,5 +12,5 @@ RUN npm install
 # 소스 코드 복사
 COPY . .
 
-# 기본 명령어를 sh로 설정
-CMD ["sh"]
+# 앱 실행
+CMD ["npm", "run", "start:dev"]
