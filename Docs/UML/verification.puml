@@ -2,6 +2,7 @@
 actor Client
 
 participant "AuthService" as Auth
+participant "UserService" as User
 database "Database" as DB
 
 Client -> Auth : [A-01] 이메일과 함께 인증 코드 전송 요청
@@ -17,7 +18,9 @@ Auth -> Client : 인증 코드 검증 결과
 Client -> Auth : [A-03] 개인 정보와 인증 코드 포함 회원 가입 요청
 Auth -> DB : 이메일과 인증 코드 검증
 DB -> Auth : 검증 결과
-Auth -> DB : 회원 정보 저장
-DB -> Auth : 저장 완료
+Auth -> User : 회원 정보 저장 요청
+User -> DB : 회원 정보 저장
+DB -> User : 회원 정보 저장 완료
+User -> Auth : 회원 정보 저장 완료
 Auth -> Client : 회원 가입 완료
 @enduml
