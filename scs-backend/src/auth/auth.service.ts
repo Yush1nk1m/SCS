@@ -17,14 +17,23 @@ export class AuthService {
 
     async sendMail(): Promise<void> {
         try {
-            this.logger.verbose("Try to send mail!");
+            this.logger.verbose("Try to send mail !");
+
+            const verificationCode = "123456";
+            this.logger.verbose(`verificationCode: ${verificationCode}`);
 
             await this.mailerService.sendMail({
                 to: "kys010306@sogang.ac.kr",
-                subject: "Nodemailer test mail",
-                text: "Hello world!",
+                subject: "Study Computer Science - Email Verification",
+                template: "./verification",
+                context: {
+                    verificationCode,
+                },
             });
+
+            this.logger.verbose("A mail has been sent successfully !");
         } catch (error) {
+            this.logger.error(error);
             throw new InternalServerErrorException(
                 "An error has been occurred while sending a mail.",
             );

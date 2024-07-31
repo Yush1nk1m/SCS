@@ -23,6 +23,11 @@ services:
       - "3000:3000"
     depends_on:
       - postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"  # 최대 1개의 코어 할당
+          memory: 2GB   # 최대 2GB의 메모리 할당
 
   postgres:
     image: postgres:13
@@ -35,6 +40,11 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"  # 최대 1개의 코어 할당
+          memory: 2G    # 최대 2GB의 메모리 할당
 
 volumes:
   pgdata:
