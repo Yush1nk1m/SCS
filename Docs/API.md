@@ -21,7 +21,7 @@
 - **Status code / Response**
   - 
 
-## A-02: 인증 코드 검증
+### A-02: 인증 코드 검증
 
 - **Description**: `A-01`로 사용자 이메일에 인증 코드를 전송하고, `A-02`로 인증 코드를 검증한 후, `A-03`으로 회원 가입을 마무리한다.
 - **Method**: `POST`
@@ -30,7 +30,7 @@
 - **Status code / Response**
   - 
 
-## A-03: 회원 가입
+### A-03: 회원 가입
 
 - **Description**: `A-01`로 사용자 이메일에 인증 코드를 전송하고, `A-02`로 인증 코드를 검증한 후, `A-03`으로 회원 가입을 마무리한다.
 - **Method**: `POST`
@@ -38,3 +38,7 @@
 - **Request**: Body = { email: `user email`, password: `user password`, nickname: `user nickname`, affiliation: `user's affiliation`, position: `user's position in the field`, verificationCode: `verified code` }
 - **Status code / Response**
   - 
+
+### Appendix. 회원 가입 API 사용 절차
+
+![Sequence diagram for vefirication](UML/verification.png)
