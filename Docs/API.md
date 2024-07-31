@@ -18,8 +18,6 @@
 - **Method**: `POST`
 - **URI**: `/auth/v1/email/verification-code`
 - **Request**: Body = { email: `user email` }
-- **Status code / Response**
-  - 
 
 ### A-02: 인증 코드 검증
 
@@ -27,8 +25,6 @@
 - **Method**: `POST`
 - **URI**: `/auth/v1/email/verify-code`
 - **Request**: Body = { email: `user email`, verificationCode: `verification code` }
-- **Status code / Response**
-  - 
 
 ### A-03: 회원 가입
 
@@ -36,8 +32,6 @@
 - **Method**: `POST`
 - **URI**: `/auth/v1/signup`
 - **Request**: Body = { email: `user email`, password: `user password`, nickname: `user nickname`, affiliation: `user's affiliation`, position: `user's position in the field`, verificationCode: `verified code` }
-- **Status code / Response**
-  - 
 
 ### Appendix. 회원 가입 API 사용 절차
 

@@ -1,5 +1,10 @@
 import { IsBoolean, IsEmail, Length } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+} from "typeorm";
 
 @Entity()
 export class Verification {
@@ -17,4 +22,7 @@ export class Verification {
     @Column({ default: false })
     @IsBoolean()
     verified: boolean;
+
+    @CreateDateColumn()
+    createdAt: Date;
 }
