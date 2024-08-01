@@ -4,6 +4,7 @@ import { AuthService } from "./auth.service";
 import { EmailDto } from "./dto/email.dto";
 import { ResponseDto } from "src/common/dto/response.dto";
 import { HttpStatus, InternalServerErrorException } from "@nestjs/common";
+import { VerificationDto } from "./dto/verification.dto";
 
 describe("AuthController", () => {
     let authController: AuthController;
@@ -17,6 +18,7 @@ describe("AuthController", () => {
                     provide: AuthService,
                     useValue: {
                         sendVerificationMail: jest.fn(),
+                        verifySignupCode: jest.fn(),
                     },
                 },
             ],
@@ -43,6 +45,7 @@ describe("AuthController", () => {
                 .spyOn(authService, "sendVerificationMail")
                 .mockResolvedValue();
 
+            // define an expected result
             const expectedResult: ResponseDto<null> = {
                 statusCode: HttpStatus.CREATED,
                 message: "A verification mail has been sent.",
@@ -65,6 +68,71 @@ describe("AuthController", () => {
                 authController.sendVerificationMail(emailDto),
             ).rejects.toThrow(InternalServerErrorException);
 
+            expect(mockedFunc).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("[C-A-02] AuthController.verifySignupCode()", () => {
+        // define a mocked input
+        const verificationDto: VerificationDto = {
+            email: "kys010306@sogang.ac.kr",
+            verificationCode: "123456",
+        };
+
+        it("[C-A-02-01] Success", async () => {
+            // mock a service method
+            const mockedFunc = jest
+                .spyOn(authService, "verifySignupCode")
+                .mockResolvedValueOnce(true);
+
+            // define an expected result
+            const expectedResult: ResponseDto<null> = {
+                statusCode: HttpStatus.OK,
+                message: "Verified.",
+            };
+
+            // execute
+            await expect(
+                authController.verifySignupCode(verificationDto),
+            ).resolves.toEqual(expectedResult);
+
+            // check called
+            expect(mockedFunc).toHaveBeenCalledTimes(1);
+        });
+
+        it("[C-A-02-02] Not verified", async () => {
+            // mock a service method
+            const mockedFunc = jest
+                .spyOn(authService, "verifySignupCode")
+                .mockResolvedValueOnce(false);
+
+            // define an expected result
+            const expectedResult: ResponseDto<null> = {
+                statusCode: HttpStatus.UNAUTHORIZED,
+                message: "Not verified.",
+            };
+
+            // execute
+            await expect(
+                authController.verifySignupCode(verificationDto),
+            ).resolves.toEqual(expectedResult);
+
+            // check called
+            expect(mockedFunc).toHaveBeenCalledTimes(1);
+        });
+
+        it("[C-A-02-03] Exception occurred", async () => {
+            // mock a service method
+            const mockedFunc = jest
+                .spyOn(authService, "verifySignupCode")
+                .mockRejectedValueOnce(new InternalServerErrorException());
+
+            // execute
+            await expect(
+                authController.verifySignupCode(verificationDto),
+            ).rejects.toThrow(InternalServerErrorException);
+
+            // check called
             expect(mockedFunc).toHaveBeenCalledTimes(1);
         });
     });

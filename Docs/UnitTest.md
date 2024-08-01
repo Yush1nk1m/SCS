@@ -27,7 +27,7 @@
 | Test ID | Name | Summary | Expected result |
 | :--: | :--: | :-- | :-- |
 | C-A-02-01 | Success | 예외 발생 없이 인증에 성공한다. | 컨트롤러가 ResponseDto<null> 타입의 성공 응답을 반환한다. |
-| C-A-02-02 | Not vefiried | 예외는 발생하지 않았지만 응답 코드가 유효하지 않아 인증에 실패한다. | 컨트롤러가 ResponseDto<null> 타입의 실패 응답을 반환한다. |
+| C-A-02-02 | Not verified | 예외는 발생하지 않았지만 응답 코드가 유효하지 않아 인증에 실패한다. | 컨트롤러가 ResponseDto<null> 타입의 실패 응답을 반환한다. |
 | C-A-02-03 | Exception occurred | 예외가 발생하여 응답에 실패한다. | 컨트롤러가 예외를 던진다. |
 
 ### AuthService
