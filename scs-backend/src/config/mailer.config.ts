@@ -1,6 +1,7 @@
 import { MailerAsyncOptions } from "@nestjs-modules/mailer/dist/interfaces/mailer-async-options.interface";
 import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
 import * as path from "path";
+import * as dotenv from "dotenv";
 
 export class mailerConfig implements MailerAsyncOptions {
     useFactory = () => ({

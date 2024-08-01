@@ -7,7 +7,7 @@ import {
 } from "@nestjs/common";
 import { EmailDto } from "./dto/email.dto";
 import { AuthRepository } from "./auth.repository";
-import { UserRepository } from "src/user/user.repository";
+import { UserRepository } from "../user/user.repository";
 
 @Injectable()
 export class AuthService {
