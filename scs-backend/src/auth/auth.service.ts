@@ -7,7 +7,7 @@ import {
 } from "@nestjs/common";
 import { EmailDto } from "./dto/email.dto";
 import { AuthRepository } from "./auth.repository";
-import { UserRepository } from "../user/user.repository";
+import { UserService } from "../user/user.service";
 
 @Injectable()
 export class AuthService {
@@ -15,19 +15,19 @@ export class AuthService {
 
     constructor(
         private readonly authRepository: AuthRepository,
-        private readonly userRepository: UserRepository,
+        private readonly userService: UserService,
         private readonly mailerService: MailerService,
     ) {}
 
     // [A-01] Service logic
     async sendVerificationMail(emailDto: EmailDto): Promise<void> {
-        // extract an email information from DTO
+        // extract an email address from DTO
         const { email } = emailDto;
         // generate a random verification code
         const verificationCode = Math.random().toString(36).substring(2, 8);
 
         // check if it is already registered
-        const user = await this.userRepository.findUserByEmail(email);
+        const user = await this.userService.findUserByEmail(emailDto);
         if (user) {
             throw new ConflictException(
                 "An user with the same email already exists.",
