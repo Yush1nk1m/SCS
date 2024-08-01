@@ -4,11 +4,16 @@ import {
     Injectable,
     InternalServerErrorException,
     Logger,
+    UnauthorizedException,
 } from "@nestjs/common";
 import { EmailDto } from "./dto/email.dto";
 import { AuthRepository } from "./auth.repository";
 import { UserService } from "../user/user.service";
 import { VerificationDto } from "./dto/verification.dto";
+import { SignupDto } from "./dto/signup.dto";
+import { User } from "../user/user.entity";
+import { CreateUserDto } from "../user/dto/user.dto";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
@@ -67,5 +72,45 @@ export class AuthService {
         // extract DTO data
         const { email, verificationCode } = verificationDto;
         return this.authRepository.verify(email, verificationCode);
+    }
+
+    // [A-03] Service logic
+    async signup(signupDto: SignupDto): Promise<User> {
+        // destruction
+        const {
+            email,
+            password,
+            nickname,
+            affiliation,
+            position,
+            verificationCode,
+        } = signupDto;
+
+        // encrypt password
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // DTO for creating an user
+        const createUserDto: CreateUserDto = {
+            email,
+            password: hashedPassword,
+            nickname,
+            affiliation,
+            position,
+        };
+
+        // check if the email address has already been verified
+        const isVerified = await this.authRepository.checkVerification(
+            email,
+            verificationCode,
+        );
+
+        if (isVerified) {
+            return this.userService.createUser(createUserDto);
+        } else {
+            throw new UnauthorizedException(
+                "User's email has not been verified",
+            );
+        }
     }
 }

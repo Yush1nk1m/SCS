@@ -12,6 +12,8 @@ import { AuthService } from "./auth.service";
 import { EmailDto } from "./dto/email.dto";
 import { ResponseDto } from "src/common/dto/response.dto";
 import { VerificationDto } from "./dto/verification.dto";
+import { SignupDto } from "./dto/signup.dto";
+import { User } from "../user/user.entity";
 
 @Controller("auth/v1")
 export class AuthController {
@@ -54,5 +56,20 @@ export class AuthController {
                 message: "Not verified.",
             };
         }
+    }
+
+    // [A-03] Controller logic
+    @Post("signup")
+    @UsePipes(ValidationPipe)
+    @HttpCode(HttpStatus.CREATED)
+    async signup(@Body() signupDto: SignupDto): Promise<ResponseDto<User>> {
+        const user = await this.authService.signup(signupDto);
+        delete user.password;
+
+        return {
+            statusCode: HttpStatus.CREATED,
+            message: "A new user has been signed up.",
+            data: user,
+        };
     }
 }

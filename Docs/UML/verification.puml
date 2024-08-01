@@ -13,6 +13,7 @@ Auth -> Client : 인증 코드 전송 완료
 Client -> Auth : [A-02] 이메일과 인증 코드 검증 요청
 Auth -> DB : 이메일과 인증 코드 검증
 DB -> Auth : 검증 결과
+Auth -> DB : 검증 여부 저장
 Auth -> Client : 인증 코드 검증 결과
 
 Client -> Auth : [A-03] 개인 정보와 인증 코드 포함 회원 가입 요청

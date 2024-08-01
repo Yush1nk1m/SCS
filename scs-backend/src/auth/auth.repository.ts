@@ -50,4 +50,14 @@ export class AuthRepository {
             return false;
         }
     }
+
+    async checkVerification(
+        email: string,
+        verificationCode: string,
+    ): Promise<boolean> {
+        const verification = await this.repository.findOne({
+            where: { email, verificationCode },
+        });
+        return verification.verified;
+    }
 }

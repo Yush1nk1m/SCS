@@ -37,6 +37,7 @@
   - sectionId: 질문이 속한 섹션의 id
   - content: 질문 내용
   - actions: Action[]
+  - saved: 문제집에 저장된 횟수
   - createdAt: 작성 날짜
   - updatedAt: 수정 날짜
 - Action: 질문에 대한 답변
