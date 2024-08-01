@@ -8,6 +8,7 @@ import {
 import { EmailDto } from "./dto/email.dto";
 import { AuthRepository } from "./auth.repository";
 import { UserService } from "../user/user.service";
+import { VerificationDto } from "./dto/verification.dto";
 
 @Injectable()
 export class AuthService {
@@ -59,5 +60,12 @@ export class AuthService {
                 "An error has been occurred while sending a mail.",
             );
         }
+    }
+
+    // [A-02] Service logic
+    async verifySignupCode(verificationDto: VerificationDto): Promise<boolean> {
+        // extract DTO data
+        const { email, verificationCode } = verificationDto;
+        return this.authRepository.findVerification(email, verificationCode);
     }
 }

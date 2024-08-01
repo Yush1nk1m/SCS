@@ -39,11 +39,3 @@
 | S-A-01-03 | User exists | 같은 이메일의 사용자가 이미 존재한다. | Conflict 예외가 발생하고 서비스가 이를 던진다. |
 | S-A-01-04 | Failed to create a verification | 인증 코드를 데이터베이스에 기록하는 중 예외가 발생한다. | 서비스가 예외를 던진다. |
 | S-A-01-05 | Failed to send a mail | 인증 코드 전송 중 예외가 발생한다. | 서비스가 InternalServerError 예외를 던진다. |
-
-### AuthRepository
-
-이 섹션은 인증 관련 API의 리포지토리에 대한 단위 테스트 설계이다.
-
-| Test ID | Method |
-| :--: | :--: |
-| R-A-01 | AuthRepository.createVerification() |
