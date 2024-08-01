@@ -32,35 +32,40 @@ describe("AuthController", () => {
     });
 
     describe("[C-A-01] AuthController.sendVerificationMail()", () => {
-        // define a valid input
+        // define a mocked input
         const emailDto: EmailDto = {
             email: "kys010306@sogang.ac.kr",
         };
 
         it("[C-A-01-01] Success", async () => {
             // mock a service method
-            jest.spyOn(authService, "sendVerificationMail").mockImplementation(
-                () => Promise.resolve(),
-            );
+            const mockedFunc = jest
+                .spyOn(authService, "sendVerificationMail")
+                .mockResolvedValue();
 
-            const result = await authController.sendVerificationMail(emailDto);
             const expectedResult: ResponseDto<null> = {
                 statusCode: HttpStatus.CREATED,
                 message: "A verification mail has been sent.",
             };
 
-            expect(result).toEqual(expectedResult);
+            await expect(
+                authController.sendVerificationMail(emailDto),
+            ).resolves.toEqual(expectedResult);
+
+            expect(mockedFunc).toHaveBeenCalledTimes(1);
         });
 
         it("[C-A-01-02] Exception occurred", async () => {
             // mock a service method
-            jest.spyOn(authService, "sendVerificationMail").mockImplementation(
-                () => Promise.reject(new InternalServerErrorException()),
-            );
+            const mockedFunc = jest
+                .spyOn(authService, "sendVerificationMail")
+                .mockRejectedValue(new InternalServerErrorException());
 
             await expect(
                 authController.sendVerificationMail(emailDto),
             ).rejects.toThrow(InternalServerErrorException);
+
+            expect(mockedFunc).toHaveBeenCalledTimes(1);
         });
     });
 });
