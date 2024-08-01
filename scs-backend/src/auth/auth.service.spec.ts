@@ -9,6 +9,7 @@ import {
     ConflictException,
     InternalServerErrorException,
 } from "@nestjs/common";
+import { VerificationDto } from "./dto/verification.dto";
 
 describe("AuthService", () => {
     let authService: AuthService;
@@ -24,6 +25,7 @@ describe("AuthService", () => {
                     provide: AuthRepository,
                     useValue: {
                         createVerification: jest.fn(),
+                        verify: jest.fn(),
                     },
                 },
                 {
@@ -183,6 +185,59 @@ describe("AuthService", () => {
             for (const func of mockedFuncs) {
                 expect(func).toHaveBeenCalledTimes(1);
             }
+        });
+    });
+
+    describe("[S-A-02] AuthService.verifySignupCode()", () => {
+        // mock an input
+        const verificationDto: VerificationDto = {
+            email: "kys010306@sogang.ac.kr",
+            verificationCode: "123456",
+        };
+
+        it("[S-A-02-01] Success", async () => {
+            // mock a return value
+            const mockedFunc = jest
+                .spyOn(authRepository, "verify")
+                .mockResolvedValueOnce(true);
+
+            // execute
+            await expect(
+                authService.verifySignupCode(verificationDto),
+            ).resolves.toBeTruthy();
+
+            // check if a mocked function have been called
+            expect(mockedFunc).toHaveBeenCalledTimes(1);
+        });
+
+        it("[S-A-02-02] Not verified", async () => {
+            // mock a return value
+            const mockedFunc = jest
+                .spyOn(authRepository, "verify")
+                .mockResolvedValueOnce(false);
+
+            // execute
+            await expect(
+                authService.verifySignupCode(verificationDto),
+            ).resolves.toBeFalsy();
+
+            // check if a mocked function have been called
+            expect(mockedFunc).toHaveBeenCalledTimes(1);
+        });
+
+        it("[S-A-02-03] Exception occurred", async () => {
+            // mock a return value
+            const mockedFunc = jest
+                .spyOn(authRepository, "verify")
+                .mockRejectedValueOnce(new InternalServerErrorException());
+
+            // execute
+            await expect(
+                authService.verifySignupCode(verificationDto),
+            ).rejects.toThrow(InternalServerErrorException);
+
+            // check if a mocked function have been called
+            expect(mockedFunc).toHaveBeenCalledTimes(1);
         });
     });
 });

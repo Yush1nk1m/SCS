@@ -66,6 +66,6 @@ export class AuthService {
     async verifySignupCode(verificationDto: VerificationDto): Promise<boolean> {
         // extract DTO data
         const { email, verificationCode } = verificationDto;
-        return this.authRepository.findVerification(email, verificationCode);
+        return this.authRepository.verify(email, verificationCode);
     }
 }

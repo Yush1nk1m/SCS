@@ -34,10 +34,7 @@ export class AuthRepository {
         }
     }
 
-    async findVerification(
-        email: string,
-        verificationCode: string,
-    ): Promise<boolean> {
+    async verify(email: string, verificationCode: string): Promise<boolean> {
         // find verification data in DB
         const verification = await this.repository.findOne({
             where: { email, verificationCode },
