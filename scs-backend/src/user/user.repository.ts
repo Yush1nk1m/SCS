@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./user.entity";
 import { DataSource, Repository } from "typeorm";
+import { Verification } from "../auth/verification.entity";
 
 @Injectable()
 export class UserRepository {
@@ -66,6 +67,11 @@ export class UserRepository {
 
             // save the entity to DB
             const savedUser = await queryRunner.manager.save(user);
+
+            // the information for the verification is no more needed
+            await queryRunner.manager
+                .getRepository(Verification)
+                .delete({ email });
 
             // commit the transaction
             await queryRunner.commitTransaction();
