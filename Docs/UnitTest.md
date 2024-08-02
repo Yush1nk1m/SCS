@@ -54,8 +54,9 @@
 | Test ID | Name | Summary | Expected result |
 | :--: | :--: | :-- | :-- |
 | S-A-02-01 | Success | 예외 발생 없이 응답에 성공한다. | 서비스가 true를 반환한다. |
-| S-A-02-02 | Not verified | 예외는 발생하지 않았지만 응답 코드가 유효하지 않아 인증에 실패한다. | 서비스가 false를 반환한다. |
-| S-A-02-03 | Exception occurred | 예외가 발생한다. | 서비스가 예외를 던진다. |
+| S-A-02-02 | Not found | 인증 코드가 발견되지 않았다. | 서비스가 false를 반환한다. |
+| S-A-02-03 | Exception occurred while finding | 인증 코드를 찾는 중 예외가 발생한다. | 서비스는 예외를 던진다. |
+| S-A-02-04 | Exception occurred while updating | 인증 여부를 갱신하는 중 예외가 발생한다. | 서비스는 예외를 던진다. |
 
 ### AuthRepository
 
@@ -71,13 +72,5 @@
 | Test ID | Name | Summary | Expected result |
 | :--: | :--: | :-- | :-- |
 | R-A-01-01 | Success | DB에 데이터를 저장하는 것에 성공한다. | 리포지토리는 반환 값 없이 resolve한다. |
-| R-A-01-02 | Exception occurred | 예외가 발생하여 DB에 데이터를 저장하는 것에 실패한다. | 리포지토리는 InternalServerError 예외를 던진다. |
+| R-A-01-02 | Exception occurred | 예외가 발생하여 DB에 데이터를 저장하는 것에 실패한다. | 리포지토리는 예외를 던진다. |
 
-#### [R-A-02]: AuthRepository.verify()
-
-| Test ID | Name | Summary | Expected result |
-| :--: | :--: | :-- | :-- |
-| R-A-02-01 | Success | 인증에 성공한다. | 리포지토리는 true를 resolve한다. |
-| R-A-02-02 | Not verified | 예외는 발생하지 않았지만 인증에 실패한다. | 리포지토리는 false를 resolve한다. |
-| R-A-02-03 | Exception occurred while finding | 데이터베이스 조회 중 예외가 발생한다. | 리포지토리는 예외를 던진다. |
-| R-A-02-04 | Exception occurred while saving | 인증되었음을 기록하는 중 예외가 발생한다. | 리포지토리는 예외를 던진다. |

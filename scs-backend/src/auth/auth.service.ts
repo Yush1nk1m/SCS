@@ -82,6 +82,7 @@ export class AuthService {
                 verificationCode,
                 true,
             );
+
             return true;
         } else {
             return false;
