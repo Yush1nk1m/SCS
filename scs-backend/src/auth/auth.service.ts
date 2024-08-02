@@ -109,9 +109,10 @@ export class AuthService {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // find verification information
-        const verification = await this.authRepository.findOne({
-            where: { email, verificationCode },
-        });
+        const verification = await this.authRepository.findVerification(
+            email,
+            verificationCode,
+        );
 
         // check if it is verified
         if (verification && verification.verified) {
@@ -119,13 +120,16 @@ export class AuthService {
             await this.authRepository.deleteVerification(email);
 
             // create a new user's information
-            return this.userRepository.createUser(
+            const user = await this.userRepository.createUser(
                 email,
                 hashedPassword,
                 nickname,
                 affiliation,
                 position,
             );
+
+            delete user.password;
+            return user;
         } else {
             throw new UnauthorizedException(
                 "User's email has not been verified",

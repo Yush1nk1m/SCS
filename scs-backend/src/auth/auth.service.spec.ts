@@ -7,11 +7,33 @@ import { User } from "../user/user.entity";
 import {
     ConflictException,
     InternalServerErrorException,
+    UnauthorizedException,
 } from "@nestjs/common";
 import { VerificationDto } from "./dto/verification.dto";
 import { Verification } from "./verification.entity";
 import { DataSource } from "typeorm";
 import { UserRepository } from "../user/user.repository";
+import { SignupDto } from "./dto/signup.dto";
+
+// mock @Transactional() decorator
+jest.mock("typeorm-transactional", () => ({
+    Transactional: jest.fn().mockImplementation(() => {
+        return function (
+            target,
+            propertyKey: string,
+            descriptor: PropertyDescriptor,
+        ) {
+            const originalMethod = descriptor.value;
+            descriptor.value = function (...args: any[]) {
+                return originalMethod.apply(this, args);
+            };
+            return descriptor;
+        };
+    }),
+    IsolationLevel: {
+        REPEATABLE_READ: "REPEATABLE_READ",
+    },
+}));
 
 describe("AuthService", () => {
     let authService: AuthService;
@@ -30,12 +52,14 @@ describe("AuthService", () => {
                         createVerification: jest.fn(),
                         findVerification: jest.fn(),
                         updateVerification: jest.fn(),
+                        deleteVerification: jest.fn(),
                     },
                 },
                 {
                     provide: UserRepository,
                     useValue: {
                         findUserByEmail: jest.fn(),
+                        createUser: jest.fn(),
                     },
                 },
                 {
@@ -309,6 +333,166 @@ describe("AuthService", () => {
     });
 
     describe("[S-A-03] AuthService.signup()", () => {
-        return;
+        // mock input
+        const signupDto: SignupDto = {
+            email: "kys010306@sogang.ac.kr",
+            password: "11111111",
+            nickname: "유신",
+            affiliation: "서강대학교",
+            position: "백엔드",
+            verificationCode: "123456",
+        };
+        const foundVerification: Verification = {
+            id: expect.any(Number),
+            email: expect.any(String),
+            verificationCode: expect.any(String),
+            verified: true,
+            createdAt: expect.any(Date),
+        };
+        const nonFoundVerification: Verification = null;
+        const user: User = {
+            id: expect.any(Number),
+            email: "kys010306@sogang.ac.kr",
+            password: "11111111",
+            nickname: "유신",
+            affiliation: "서강대학교",
+            position: "백엔드",
+            createdAt: expect.any(Date),
+        };
+        const createdUser: User = {
+            id: expect.any(Number),
+            email: expect.any(String),
+            password: expect.any(String),
+            nickname: expect.any(String),
+            affiliation: expect.any(String),
+            position: expect.any(String),
+            createdAt: expect.any(Date),
+        };
+        delete createdUser.password;
+
+        it("[S-A-03-01] Success", async () => {
+            // mock
+            const mockedFuncs = [];
+            mockedFuncs.push(
+                jest
+                    .spyOn(authRepository, "findVerification")
+                    .mockResolvedValueOnce(foundVerification),
+            );
+            mockedFuncs.push(
+                jest
+                    .spyOn(authRepository, "deleteVerification")
+                    .mockResolvedValueOnce(),
+            );
+            mockedFuncs.push(
+                jest
+                    .spyOn(userRepository, "createUser")
+                    .mockResolvedValueOnce(user),
+            );
+
+            // execute
+            await expect(authService.signup(signupDto)).resolves.toEqual(
+                createdUser,
+            );
+
+            // check called
+            for (const func of mockedFuncs) {
+                expect(func).toHaveBeenCalledTimes(1);
+            }
+        });
+
+        it("[S-A-03-02] Exception occurred while finding", async () => {
+            // mock
+            const mockedFuncs = [];
+            mockedFuncs.push(
+                jest
+                    .spyOn(authRepository, "findVerification")
+                    .mockRejectedValueOnce(new InternalServerErrorException()),
+            );
+
+            // execute
+            await expect(authService.signup(signupDto)).rejects.toThrow(
+                InternalServerErrorException,
+            );
+
+            // check called
+            for (const func of mockedFuncs) {
+                expect(func).toHaveBeenCalledTimes(1);
+            }
+        });
+
+        it("[S-A-03-03] Not verified", async () => {
+            // mock
+            const mockedFuncs = [];
+            mockedFuncs.push(
+                jest
+                    .spyOn(authRepository, "findVerification")
+                    .mockResolvedValueOnce(nonFoundVerification),
+            );
+
+            // execute
+            await expect(authService.signup(signupDto)).rejects.toThrow(
+                UnauthorizedException,
+            );
+
+            // check called
+            for (const func of mockedFuncs) {
+                expect(func).toHaveBeenCalledTimes(1);
+            }
+        });
+
+        it("[S-A-03-04] Exception occurred while deleting", async () => {
+            // mock
+            const mockedFuncs = [];
+            mockedFuncs.push(
+                jest
+                    .spyOn(authRepository, "findVerification")
+                    .mockResolvedValueOnce(foundVerification),
+            );
+            mockedFuncs.push(
+                jest
+                    .spyOn(authRepository, "deleteVerification")
+                    .mockRejectedValueOnce(new InternalServerErrorException()),
+            );
+
+            // execute
+            await expect(authService.signup(signupDto)).rejects.toThrow(
+                InternalServerErrorException,
+            );
+
+            // check called
+            for (const func of mockedFuncs) {
+                expect(func).toHaveBeenCalledTimes(1);
+            }
+        });
+
+        it("[S-A-03-05] Exception occurred while creating", async () => {
+            // mock
+            const mockedFuncs = [];
+            mockedFuncs.push(
+                jest
+                    .spyOn(authRepository, "findVerification")
+                    .mockResolvedValueOnce(foundVerification),
+            );
+            mockedFuncs.push(
+                jest
+                    .spyOn(authRepository, "deleteVerification")
+                    .mockResolvedValueOnce(),
+            );
+            mockedFuncs.push(
+                jest
+                    .spyOn(userRepository, "createUser")
+                    .mockRejectedValueOnce(new InternalServerErrorException()),
+            );
+
+            // execute
+            await expect(authService.signup(signupDto)).rejects.toThrow(
+                InternalServerErrorException,
+            );
+
+            // check called
+            for (const func of mockedFuncs) {
+                expect(func).toHaveBeenCalledTimes(1);
+            }
+        });
     });
 });
