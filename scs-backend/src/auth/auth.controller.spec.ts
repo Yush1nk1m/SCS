@@ -5,6 +5,8 @@ import { EmailDto } from "./dto/email.dto";
 import { ResponseDto } from "src/common/dto/response.dto";
 import { HttpStatus, InternalServerErrorException } from "@nestjs/common";
 import { VerificationDto } from "./dto/verification.dto";
+import { User } from "../user/user.entity";
+import { SignupDto } from "./dto/signup.dto";
 
 describe("AuthController", () => {
     let authController: AuthController;
@@ -19,6 +21,7 @@ describe("AuthController", () => {
                     useValue: {
                         sendVerificationMail: jest.fn(),
                         verifySignupCode: jest.fn(),
+                        signup: jest.fn(),
                     },
                 },
             ],
@@ -131,6 +134,61 @@ describe("AuthController", () => {
             await expect(
                 authController.verifySignupCode(verificationDto),
             ).rejects.toThrow(InternalServerErrorException);
+
+            // check called
+            expect(mockedFunc).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("[C-A-03] AuthController.signup()", () => {
+        // mock input, output
+        const signupDto: SignupDto = {
+            email: "kys010306@sogang.ac.kr",
+            password: "password",
+            nickname: "유신",
+            affiliation: "서강대학교",
+            position: "백엔드",
+            verificationCode: "123456",
+        };
+
+        const user: User = {
+            id: 1,
+            email: "kys010306@sogang.ac.kr",
+            password: null,
+            nickname: "유신",
+            affiliation: "서강대학교",
+            position: "백엔드",
+            createdAt: expect.any(Date),
+        };
+
+        it("[C-A-03-01] Success", async () => {
+            // mock a service method and expected result
+            const mockedFunc = jest
+                .spyOn(authService, "signup")
+                .mockResolvedValueOnce(user);
+            const expectedResult: ResponseDto<User> = {
+                statusCode: HttpStatus.CREATED,
+                message: "A new user has been signed up.",
+                data: user,
+            };
+
+            // execute
+            await expect(authController.signup(signupDto)).resolves.toEqual(
+                expectedResult,
+            );
+
+            // check called
+            expect(mockedFunc).toHaveBeenCalledTimes(1);
+        });
+
+        it("[C-A-03-02] Exception occurred", async () => {
+            // mock a service method and expected result
+            const mockedFunc = jest
+                .spyOn(authService, "signup")
+                .mockRejectedValueOnce(new InternalServerErrorException());
+
+            // execute
+            await expect(authController.signup(signupDto)).rejects.toThrow(InternalServerErrorException);
 
             // check called
             expect(mockedFunc).toHaveBeenCalledTimes(1);

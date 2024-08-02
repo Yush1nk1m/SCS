@@ -14,21 +14,30 @@
 | :--: | :--: | :--: |
 | C-A-01 | A-01 | AuthController.sendVerificationMail() |
 | C-A-02 | A-02 | AuthController.verifySignupCode() |
+| C-A-03 | A-03 | AuthController.signup() |
 
 #### [C-A-01]: AuthController.sendVerificationMail()
 
 | Test ID | Name | Summary | Expected result |
 | :--: | :--: | :-- | :-- |
-| C-A-01-01 | Success | 예외 발생 없이 응답에 성공한다. | 컨트롤러가 ResponseDto<null> 타입의 데이터를 반환한다. |
+| C-A-01-01 | Success | 예외 발생 없이 응답에 성공한다. | 컨트롤러가 성공 응답을 반환한다. |
 | C-A-01-02 | Exception occurred | 예외가 발생하여 응답에 실패한다. | 컨트롤러가 예외를 던진다. |
 
 #### [C-A-02]: AuthController.verifySignupCode()
 
 | Test ID | Name | Summary | Expected result |
 | :--: | :--: | :-- | :-- |
-| C-A-02-01 | Success | 예외 발생 없이 인증에 성공한다. | 컨트롤러가 ResponseDto<null> 타입의 성공 응답을 반환한다. |
-| C-A-02-02 | Not verified | 예외는 발생하지 않았지만 응답 코드가 유효하지 않아 인증에 실패한다. | 컨트롤러가 ResponseDto<null> 타입의 실패 응답을 반환한다. |
+| C-A-02-01 | Success | 예외 발생 없이 인증에 성공한다. | 컨트롤러가 성공 응답을 반환한다. |
+| C-A-02-02 | Not verified | 예외는 발생하지 않았지만 응답 코드가 유효하지 않아 인증에 실패한다. | 컨트롤러가 실패 응답을 반환한다. |
 | C-A-02-03 | Exception occurred | 예외가 발생하여 응답에 실패한다. | 컨트롤러가 예외를 던진다. |
+
+#### [C-A-03]: AuthController.signup()
+
+| Test ID | Name | Summary | Expected result |
+| :--: | :--: | :-- | :-- |
+| C-A-03-01 | Success | 예외 발생 없이 회원 가입에 성공한다. | 컨트롤러가 성공 응답을 반환한다. |
+| C-A-03-02 | Exception occurred | 예외가 발생하여 응답에 실패한다. | 컨트롤러가 예외를 던진다. |
+
 
 ### AuthService
 
@@ -65,7 +74,6 @@
 | Test ID | Method |
 | :--: | :--: |
 | R-A-01 | AuthRepository.createVerification() |
-| R-A-02 | AuthRepository.verify() |
 
 #### [R-A-01]: AuthRepository.createVerification()
 
