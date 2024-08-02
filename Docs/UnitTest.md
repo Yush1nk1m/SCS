@@ -47,6 +47,7 @@
 | :--: | :--: | :--: |
 | S-A-01 | A-01 | AuthService.sendVerificationMail() |
 | S-A-02 | A-02 | AuthService.verifySignupCode() |
+| S-A-03 | A-03 | AuthService.signup() |
 
 #### [S-A-01]: AuthService.sendVerificationMail()
 리
@@ -66,6 +67,16 @@
 | S-A-02-02 | Not found | 인증 코드가 발견되지 않았다. | 서비스가 false를 반환한다. |
 | S-A-02-03 | Exception occurred while finding | 인증 코드를 찾는 중 예외가 발생한다. | 서비스는 예외를 던진다. |
 | S-A-02-04 | Exception occurred while updating | 인증 여부를 갱신하는 중 예외가 발생한다. | 서비스는 예외를 던진다. |
+
+#### [S-A-03]: AuthService.signup()
+
+| Test ID | Name | Summary | Expected result |
+| :--: | :--: | :-- | :-- |
+| S-A-03-01 | Success | 회원 가입에 성공한다. | 서비스는 사용자 데이터에서 비밀번호 값을 제거하고 반환한다. |
+| S-A-03-02 | Exception occurred while finding | 인증 정보를 찾는 중 예외가 발생한다. | 서비스는 예외를 던진다. |
+| S-A-03-03 | Not verified | 데이터베이스에 인증 정보가 존재하지 않는다. | 서비스는 Unauthorized 예외를 반환한다. |
+| S-A-03-04 | Exception occurred while deleting | 인증 정보 삭제 중 예외가 발생한다. | 서비스는 예외를 던진다. |
+| S-A-03-05 | Exception occurred while creating | 사용자 정보 생성 중 예외가 발생한다. | 서비스는 예외를 던진다. |
 
 ### AuthRepository
 

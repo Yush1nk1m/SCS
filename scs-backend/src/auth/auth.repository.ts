@@ -1,23 +1,21 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
 import { Verification } from "./verification.entity";
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 
 @Injectable()
-export class AuthRepository {
+export class AuthRepository extends Repository<Verification> {
     private logger = new Logger("AuthRepository");
 
-    constructor(
-        @InjectRepository(Verification)
-        private readonly repository: Repository<Verification>,
-    ) {}
+    constructor(private readonly dataSource: DataSource) {
+        super(Verification, dataSource.createEntityManager());
+    }
 
     async createVerification(
         email: string,
         verificationCode: string,
     ): Promise<void> {
         // create or update a verification row on database
-        await this.repository.upsert([{ email, verificationCode }], ["email"]);
+        await this.upsert([{ email, verificationCode }], ["email"]);
     }
 
     async updateVerification(
@@ -25,19 +23,19 @@ export class AuthRepository {
         verificationCode: string,
         verified: boolean,
     ): Promise<void> {
-        await this.repository.update({ email, verificationCode }, { verified });
+        await this.update({ email, verificationCode }, { verified });
     }
 
     async findVerification(
         email: string,
         verificationCode: string,
     ): Promise<Verification> {
-        return this.repository.findOne({
+        return this.findOne({
             where: { email, verificationCode },
         });
     }
 
     async deleteVerification(email: string): Promise<void> {
-        await this.repository.delete({ email });
+        await this.delete({ email });
     }
 }

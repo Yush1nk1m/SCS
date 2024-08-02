@@ -8,11 +8,11 @@ import {
 } from "@nestjs/common";
 import { EmailDto } from "./dto/email.dto";
 import { AuthRepository } from "./auth.repository";
-import { UserService } from "../user/user.service";
 import { VerificationDto } from "./dto/verification.dto";
 import { SignupDto } from "./dto/signup.dto";
 import { User } from "../user/user.entity";
-import { CreateUserDto } from "../user/dto/user.dto";
+import { UserRepository } from "../user/user.repository";
+import { IsolationLevel, Transactional } from "typeorm-transactional";
 import * as bcrypt from "bcrypt";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class AuthService {
 
     constructor(
         private readonly authRepository: AuthRepository,
-        private readonly userService: UserService,
+        private readonly userRepository: UserRepository,
         private readonly mailerService: MailerService,
     ) {}
 
@@ -33,7 +33,7 @@ export class AuthService {
         const verificationCode = Math.random().toString(36).substring(2, 8);
 
         // check if it is already registered
-        const user = await this.userService.findUser(emailDto);
+        const user = await this.userRepository.findUserByEmail(email);
         if (user) {
             throw new ConflictException(
                 "An user with the same email already exists.",
@@ -90,6 +90,9 @@ export class AuthService {
     }
 
     // [A-03] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
     async signup(signupDto: SignupDto): Promise<User> {
         // destruction
         const {
@@ -101,28 +104,28 @@ export class AuthService {
             verificationCode,
         } = signupDto;
 
-        // encrypt password
+        // hash password
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // DTO for creating an user
-        const createUserDto: CreateUserDto = {
-            email,
-            password: hashedPassword,
-            nickname,
-            affiliation,
-            position,
-        };
+        // find verification information
+        const verification = await this.authRepository.findOne({
+            where: { email, verificationCode },
+        });
 
-        // check if the email address has already been verified
-        const verification = await this.authRepository.findVerification(
-            email,
-            verificationCode,
-        );
-
-        if (verification.verified) {
+        // check if it is verified
+        if (verification && verification.verified) {
+            // delete the information from DB
             await this.authRepository.deleteVerification(email);
-            return this.userService.createUser(createUserDto);
+
+            // create a new user's information
+            return this.userRepository.createUser(
+                email,
+                hashedPassword,
+                nickname,
+                affiliation,
+                position,
+            );
         } else {
             throw new UnauthorizedException(
                 "User's email has not been verified",

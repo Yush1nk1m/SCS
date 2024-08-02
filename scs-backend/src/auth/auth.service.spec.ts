@@ -2,7 +2,6 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { AuthService } from "./auth.service";
 import { AuthRepository } from "./auth.repository";
 import { MailerService } from "@nestjs-modules/mailer";
-import { UserService } from "../user/user.service";
 import { EmailDto } from "./dto/email.dto";
 import { User } from "../user/user.entity";
 import {
@@ -11,12 +10,15 @@ import {
 } from "@nestjs/common";
 import { VerificationDto } from "./dto/verification.dto";
 import { Verification } from "./verification.entity";
+import { DataSource } from "typeorm";
+import { UserRepository } from "../user/user.repository";
 
 describe("AuthService", () => {
     let authService: AuthService;
     let authRepository: AuthRepository;
-    let userService: UserService;
+    let userRepository: UserRepository;
     let mailerService: MailerService;
+    let dataSource: DataSource;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -31,9 +33,9 @@ describe("AuthService", () => {
                     },
                 },
                 {
-                    provide: UserService,
+                    provide: UserRepository,
                     useValue: {
-                        findUser: jest.fn(),
+                        findUserByEmail: jest.fn(),
                     },
                 },
                 {
@@ -42,20 +44,28 @@ describe("AuthService", () => {
                         sendMail: jest.fn(),
                     },
                 },
+                {
+                    provide: DataSource,
+                    useValue: {
+                        createQueryRunner: jest.fn(),
+                    },
+                },
             ],
         }).compile();
 
         authService = module.get<AuthService>(AuthService);
         authRepository = module.get<AuthRepository>(AuthRepository);
-        userService = module.get<UserService>(UserService);
+        userRepository = module.get<UserRepository>(UserRepository);
         mailerService = module.get<MailerService>(MailerService);
+        dataSource = module.get<DataSource>(DataSource);
     });
 
     it("should be defined", () => {
         expect(authService).toBeDefined();
         expect(authRepository).toBeDefined();
-        expect(userService).toBeDefined();
+        expect(userRepository).toBeDefined();
         expect(mailerService).toBeDefined();
+        expect(dataSource).toBeDefined();
     });
 
     describe("[S-A-01] AuthService.sendVerificationMail()", () => {
@@ -79,7 +89,7 @@ describe("AuthService", () => {
             const mockedFuncs = [];
             mockedFuncs.push(
                 jest
-                    .spyOn(userService, "findUser")
+                    .spyOn(userRepository, "findUserByEmail")
                     .mockResolvedValueOnce(nonExistingUser),
             );
             mockedFuncs.push(
@@ -107,7 +117,7 @@ describe("AuthService", () => {
         it("[S-A-01-02] Failed to find a user", async () => {
             // mock a return value
             const mockedFunc = jest
-                .spyOn(userService, "findUser")
+                .spyOn(userRepository, "findUserByEmail")
                 .mockRejectedValueOnce(new InternalServerErrorException());
 
             // execute
@@ -122,7 +132,7 @@ describe("AuthService", () => {
         it("[S-A-01-03] User exists", async () => {
             // mock a return value
             const mockedFunc = jest
-                .spyOn(userService, "findUser")
+                .spyOn(userRepository, "findUserByEmail")
                 .mockResolvedValueOnce(existingUser);
 
             // execute
@@ -139,7 +149,7 @@ describe("AuthService", () => {
             const mockedFuncs = [];
             mockedFuncs.push(
                 jest
-                    .spyOn(userService, "findUser")
+                    .spyOn(userRepository, "findUserByEmail")
                     .mockResolvedValueOnce(nonExistingUser),
             );
             mockedFuncs.push(
@@ -164,7 +174,7 @@ describe("AuthService", () => {
             const mockedFuncs = [];
             mockedFuncs.push(
                 jest
-                    .spyOn(userService, "findUser")
+                    .spyOn(userRepository, "findUserByEmail")
                     .mockResolvedValueOnce(nonExistingUser),
             );
             mockedFuncs.push(
@@ -296,5 +306,9 @@ describe("AuthService", () => {
                 expect(func).toHaveBeenCalledTimes(1);
             }
         });
+    });
+
+    describe("[S-A-03] AuthService.signup()", () => {
+        return;
     });
 });

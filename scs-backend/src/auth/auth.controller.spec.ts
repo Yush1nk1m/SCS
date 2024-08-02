@@ -188,7 +188,9 @@ describe("AuthController", () => {
                 .mockRejectedValueOnce(new InternalServerErrorException());
 
             // execute
-            await expect(authController.signup(signupDto)).rejects.toThrow(InternalServerErrorException);
+            await expect(authController.signup(signupDto)).rejects.toThrow(
+                InternalServerErrorException,
+            );
 
             // check called
             expect(mockedFunc).toHaveBeenCalledTimes(1);

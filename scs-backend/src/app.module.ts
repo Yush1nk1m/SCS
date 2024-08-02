@@ -11,10 +11,23 @@ import { ActionModule } from "./action/action.module";
 import { CommentModule } from "./comment/comment.module";
 import { BookModule } from "./book/book.module";
 import { LibraryModule } from "./library/library.module";
+import { addTransactionalDataSource } from "typeorm-transactional";
+import { DataSource } from "typeorm";
 
 @Module({
     imports: [
-        TypeOrmModule.forRoot(typeORMConfig),
+        TypeOrmModule.forRootAsync({
+            useFactory() {
+                return typeORMConfig;
+            },
+            async dataSourceFactory(options) {
+                if (!options) {
+                    throw new Error("Invalid options passed.");
+                }
+
+                return addTransactionalDataSource(new DataSource(options));
+            },
+        }),
         AuthModule,
         UserModule,
         SectionModule,

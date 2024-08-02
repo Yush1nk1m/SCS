@@ -15,4 +15,22 @@ export class UserRepository {
     async findUserByEmail(email: string): Promise<User> {
         return this.repository.findOne({ where: { email } });
     }
+
+    async createUser(
+        email: string,
+        password: string,
+        nickname: string,
+        affiliation: string,
+        position: string,
+    ): Promise<User> {
+        const user = this.repository.create({
+            email,
+            password,
+            nickname,
+            affiliation,
+            position,
+        });
+
+        return this.repository.save(user);
+    }
 }
