@@ -33,7 +33,7 @@ export class AuthService {
         const verificationCode = Math.random().toString(36).substring(2, 8);
 
         // check if it is already registered
-        const user = await this.userService.findUserByEmail(emailDto);
+        const user = await this.userService.findUser(emailDto);
         if (user) {
             throw new ConflictException(
                 "An user with the same email already exists.",
@@ -71,7 +71,21 @@ export class AuthService {
     async verifySignupCode(verificationDto: VerificationDto): Promise<boolean> {
         // extract DTO data
         const { email, verificationCode } = verificationDto;
-        return this.authRepository.verify(email, verificationCode);
+        const verification = await this.authRepository.findVerification(
+            email,
+            verificationCode,
+        );
+
+        if (verification) {
+            await this.authRepository.updateVerification(
+                email,
+                verificationCode,
+                true,
+            );
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // [A-03] Service logic
@@ -100,12 +114,13 @@ export class AuthService {
         };
 
         // check if the email address has already been verified
-        const isVerified = await this.authRepository.checkVerification(
+        const verification = await this.authRepository.findVerification(
             email,
             verificationCode,
         );
 
-        if (isVerified) {
+        if (verification.verified) {
+            await this.authRepository.deleteVerification(email);
             return this.userService.createUser(createUserDto);
         } else {
             throw new UnauthorizedException(

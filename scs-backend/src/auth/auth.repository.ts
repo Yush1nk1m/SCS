@@ -1,8 +1,4 @@
-import {
-    Injectable,
-    InternalServerErrorException,
-    Logger,
-} from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Verification } from "./verification.entity";
 import { Repository } from "typeorm";
@@ -20,44 +16,28 @@ export class AuthRepository {
         email: string,
         verificationCode: string,
     ): Promise<void> {
-        try {
-            // create or update a verification row on database
-            await this.repository.upsert(
-                [{ email, verificationCode }],
-                ["email"],
-            );
-        } catch (error) {
-            this.logger.error(error);
-            throw new InternalServerErrorException(
-                "Failed to create a verification row on database.",
-            );
-        }
+        // create or update a verification row on database
+        await this.repository.upsert([{ email, verificationCode }], ["email"]);
     }
 
-    async verify(email: string, verificationCode: string): Promise<boolean> {
-        // find verification data in DB
-        const verification = await this.repository.findOne({
-            where: { email, verificationCode },
-        });
-
-        if (verification) {
-            // sign on DB to be verified
-            verification.verified = true;
-            await this.repository.save(verification);
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    async checkVerification(
+    async updateVerification(
         email: string,
         verificationCode: string,
-    ): Promise<boolean> {
-        const verification = await this.repository.findOne({
+        verified: boolean,
+    ): Promise<void> {
+        await this.repository.update({ email, verificationCode }, { verified });
+    }
+
+    async findVerification(
+        email: string,
+        verificationCode: string,
+    ): Promise<Verification> {
+        return this.repository.findOne({
             where: { email, verificationCode },
         });
-        return verification.verified;
+    }
+
+    async deleteVerification(email: string): Promise<void> {
+        await this.repository.delete({ email });
     }
 }
