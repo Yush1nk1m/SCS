@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { jwtDecode } from 'jwt-decode';
 import { fetchUserProfile, logout } from '../api/api';
+
+const gradientAnimation = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
 
 const Nav = styled.nav`
   background-color: #282c34;
@@ -40,6 +46,7 @@ const StyledNavLink = styled(NavLink)`
   transition: all 0.3s ease;
 
   &:hover {
+    animation: ${gradientAnimation} 4s ease infinite;
     color: #282c34;
     background-color: #61dafb;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
@@ -61,7 +68,11 @@ const Button = styled.button`
   margin: 0 1rem;
 
   &:hover {
-    color: #61dafb;
+    animation: ${gradientAnimation} 4s ease infinite;
+    color: #282c34;
+    background-color: #61dafb;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
   }
 `;
 

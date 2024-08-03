@@ -11,6 +11,7 @@ async function bootstrap() {
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
 
     const app = await NestFactory.create(AppModule);
+    app.enableCors();
 
     app.useGlobalFilters(new AllExceptionFilter());
     app.useGlobalPipes(new ValidationPipe());

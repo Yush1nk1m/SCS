@@ -8,7 +8,7 @@ export const login = async (email, password) => {
 };
 
 export const signup = async (userData) => {
-  const response = await axios.post(`${API_URL}/auth/signup`, userData);
+  const response = await axios.post(`${API_URL}/auth/v1/signup`, userData);
   return response.data;
 };
 
@@ -29,5 +29,15 @@ export const fetchSections = async () => {
 
 export const fetchLibraries = async () => {
   const response = await axios.get(`${API_URL}/libraries`);
+  return response.data;
+};
+
+export const sendVerificationCode = async (email) => {
+  const response = await axios.post(`${API_URL}/auth/v1/email/verification-code`, { email });
+  return response.data;
+};
+
+export const verifyCode = async (email, verificationCode) => {
+  const response = await axios.post(`${API_URL}/auth/v1/email/verify-code`, { email, verificationCode });
   return response.data;
 };
