@@ -54,7 +54,8 @@ const StyledNavLink = styled(NavLink)`
   }
 
   &.active {
-    text-decoration: underline;
+    color: #282c34;
+    background-color: #61dafb;
   }
 `;
 

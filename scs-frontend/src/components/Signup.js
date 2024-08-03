@@ -46,12 +46,19 @@ const InputContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  margin: 0px 0;
+  margin: 10px 0;
+`;
+
+const Label = styled.label`
+  flex: 1;
+  font-size: 1rem;
+  margin-right: 10px;
+  text-align: left;
 `;
 
 const Input = styled.input`
+  flex: 2;
   padding: 10px;
-  margin: 10px 0;
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 1rem;
@@ -185,9 +192,9 @@ const Signup = () => {
     <SignupForm onSubmit={handleSubmit}>
       <h2>Sign Up</h2>
       <InputContainer>
+        <Label>Email</Label>
         <Input
           type="email"
-          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -199,9 +206,9 @@ const Signup = () => {
       </InputContainer>
       {verificationSent && (
         <VerificationContainer>
+          <Label>Code</Label>
           <VerificationInput
             type="text"
-            placeholder="Verification Code"
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
             disabled={isVerified}
@@ -217,33 +224,33 @@ const Signup = () => {
         </VerificationContainer>
       )}
       <InputContainer>
+        <Label>Password</Label>
         <Input
           type="password"
-          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </InputContainer>
       <InputContainer>
+        <Label>Nickname</Label>
         <Input
           type="text"
-          placeholder="Nickname"
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
         />
       </InputContainer>
       <InputContainer>
+        <Label>Affiliation</Label>
         <Input
           type="text"
-          placeholder="Affiliation"
           value={affiliation}
           onChange={(e) => setAffiliation(e.target.value)}
         />
       </InputContainer>
       <InputContainer>
+        <Label>Position</Label>
         <Input
           type="text"
-          placeholder="Position"
           value={position}
           onChange={(e) => setPosition(e.target.value)}
         />
