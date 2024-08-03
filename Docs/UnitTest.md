@@ -85,6 +85,9 @@
 | Test ID | Method |
 | :--: | :--: |
 | R-A-01 | AuthRepository.createVerification() |
+| R-A-02 | AuthRepository.updateVerification() |
+| R-A-03 | AuthRepository.findVerification() |
+| R-A-04 | AuthRepository.deleteVerification() |
 
 #### [R-A-01]: AuthRepository.createVerification()
 
@@ -93,3 +96,24 @@
 | R-A-01-01 | Success | DB에 데이터를 저장하는 것에 성공한다. | 리포지토리는 반환 값 없이 resolve한다. |
 | R-A-01-02 | Exception occurred | 예외가 발생하여 DB에 데이터를 저장하는 것에 실패한다. | 리포지토리는 예외를 던진다. |
 
+#### [R-A-02]: AuthRepository.updateVerification()
+
+| Test ID | Name | Summary | Expected result |
+| :--: | :--: | :-- | :-- |
+| R-A-02-01 | Success | DB의 데이터를 업데이트하는 것에 성공한다. | 리포지토리는 반환 값 없이 resolve한다. |
+| R-A-02-02 | Exception occurred | 예외가 발생하여 DB의 데이터를 업데이트하는 것에 실패한다. | 리포지토리는 예외를 던진다. |
+
+#### [R-A-03]: AuthRepository.findVerification()
+
+| Test ID | Name | Summary | Expected result |
+| :--: | :--: | :-- | :-- |
+| R-A-03-01 | Success | DB에서 데이터를 조회하는 데 성공한다. | 리포지토리는 조회된 데이터를 resolve한다. |
+| R-A-03-02 | Not found | DB에서 조회된 데이터가 없다. | 리포지토리는 null을 resolve한다. |
+| R-A-03-03 | Exception occurred | 예외가 발생하여 DB에서 데이터를 조회하는 데 실패한다. | 리포지토리는 예외를 던진다. |
+
+#### [R-A-04]: AuthRepository.deleteVerification()
+
+| Test ID | Name | Summary | Expected result |
+| :--: | :--: | :-- | :-- |
+| R-A-04-01 | Success | DB에서 데이터를 삭제하는 데 실패한다. | 리포지토리는 반환 값 없이 resolve한다. |
+| R-A-04-02 | Exception occurred | 예외가 발생하여 DB에서 데이터를 삭제하는 데 실패한다. | 리포지토리는 예외를 던진다. |
