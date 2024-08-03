@@ -1,19 +1,17 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./user.entity";
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 
 @Injectable()
-export class UserRepository {
+export class UserRepository extends Repository<User> {
     private logger = new Logger("UserRepository");
 
-    constructor(
-        @InjectRepository(User)
-        private readonly repository: Repository<User>,
-    ) {}
+    constructor(private readonly dataSource: DataSource) {
+        super(User, dataSource.createEntityManager());
+    }
 
     async findUserByEmail(email: string): Promise<User> {
-        return this.repository.findOne({ where: { email } });
+        return this.findOne({ where: { email } });
     }
 
     async createUser(
@@ -23,7 +21,7 @@ export class UserRepository {
         affiliation: string,
         position: string,
     ): Promise<User> {
-        const user = this.repository.create({
+        const user = this.create({
             email,
             password,
             nickname,
@@ -31,6 +29,6 @@ export class UserRepository {
             position,
         });
 
-        return this.repository.save(user);
+        return this.save(user);
     }
 }

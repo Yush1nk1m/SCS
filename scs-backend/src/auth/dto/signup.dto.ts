@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, Length } from "class-validator";
-import { CreateUserDto } from "../../user/dto/user.dto";
+import { CreateUserDto } from "../../user/dto/create-user.dto";
 
 export class SignupDto extends CreateUserDto {
     @IsString()

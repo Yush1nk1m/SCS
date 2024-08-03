@@ -93,8 +93,8 @@ describe("AuthRepository", () => {
         it("[R-A-02-01] Success", async () => {
             // mock
             const mockedFunc = jest
-                .spyOn(authRepository, "updateVerification")
-                .mockResolvedValueOnce();
+                .spyOn(authRepository, "update")
+                .mockResolvedValueOnce(null);
 
             // execute & expect
             await expect(
@@ -112,7 +112,7 @@ describe("AuthRepository", () => {
         it("[R-A-02-02] Exception occurred", async () => {
             // mock
             const mockedFunc = jest
-                .spyOn(authRepository, "updateVerification")
+                .spyOn(authRepository, "update")
                 .mockRejectedValueOnce(new InternalServerErrorException());
 
             // execute & expect
@@ -133,7 +133,7 @@ describe("AuthRepository", () => {
         it("[R-A-03-01] Success", async () => {
             // mock
             const mockedFunc = jest
-                .spyOn(authRepository, "findVerification")
+                .spyOn(authRepository, "findOne")
                 .mockResolvedValueOnce(verification);
 
             // execute & expect
@@ -148,7 +148,7 @@ describe("AuthRepository", () => {
         it("[R-A-03-02] Not found", async () => {
             // mock
             const mockedFunc = jest
-                .spyOn(authRepository, "findVerification")
+                .spyOn(authRepository, "findOne")
                 .mockResolvedValueOnce(none);
 
             // execute & expect
@@ -163,7 +163,7 @@ describe("AuthRepository", () => {
         it("[R-A-03-03] Exception occurred", async () => {
             // mock
             const mockedFunc = jest
-                .spyOn(authRepository, "findVerification")
+                .spyOn(authRepository, "findOne")
                 .mockRejectedValueOnce(new InternalServerErrorException());
 
             // execute & expect
@@ -180,7 +180,7 @@ describe("AuthRepository", () => {
         it("[R-A-04-01] Success", async () => {
             // mock
             const mockedFunc = jest
-                .spyOn(authRepository, "deleteVerification")
+                .spyOn(authRepository, "delete")
                 .mockResolvedValueOnce();
 
             // execute & expect
@@ -195,7 +195,7 @@ describe("AuthRepository", () => {
         it("[R-A-04-02] Exception occurred", async () => {
             // mock
             const mockedFunc = jest
-                .spyOn(authRepository, "deleteVerification")
+                .spyOn(authRepository, "delete")
                 .mockRejectedValueOnce(new InternalServerErrorException());
 
             // execute & expect
