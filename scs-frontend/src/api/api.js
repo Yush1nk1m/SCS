@@ -1,43 +1,40 @@
+// 기존 코드 유지
 import axios from 'axios';
 
-const API_URL = 'http://localhost:4000';
+const api = axios.create({
+  baseURL: 'http://localhost:4000', // 실제 백엔드 서버의 주소로 변경하세요
+});
 
-export const login = async (email, password) => {
-  const response = await axios.post(`${API_URL}/auth/login`, { email, password });
-  return response.data;
-};
-
-export const signup = async (userData) => {
-  const response = await axios.post(`${API_URL}/auth/v1/signup`, userData);
-  return response.data;
-};
-
-export const logout = async () => {
-  const response = await axios.post(`${API_URL}/auth/logout`);
-  return response.data;
-};
-
-export const fetchUserProfile = async () => {
-  const response = await axios.get(`${API_URL}/user/profile`);
-  return response.data;
-};
-
-export const fetchSections = async () => {
-  const response = await axios.get(`${API_URL}/sections`);
-  return response.data;
-};
-
-export const fetchLibraries = async () => {
-  const response = await axios.get(`${API_URL}/libraries`);
-  return response.data;
-};
-
+// 인증 코드 전송 (A-01)
 export const sendVerificationCode = async (email) => {
-  const response = await axios.post(`${API_URL}/auth/v1/email/verification-code`, { email });
-  return response.data;
+  return api.post('/auth/v1/email/verification-code', { email });
 };
 
+// 인증 코드 검증 (A-02)
 export const verifyCode = async (email, verificationCode) => {
-  const response = await axios.post(`${API_URL}/auth/v1/email/verify-code`, { email, verificationCode });
-  return response.data;
+  return api.post('/auth/v1/email/verify-code', { email, verificationCode });
+};
+
+// 회원 가입 (A-03)
+export const signup = async (userData) => {
+  return api.post('/auth/v1/signup', userData);
+};
+
+// 로그인 (A-04)
+export const login = async (email, password) => {
+  return api.post('/auth/v1/jwt/login', { email, password });
+};
+
+// 리프레시 (A-05)
+export const refreshAccessToken = async (refreshToken) => {
+  return api.post('/auth/v1/jwt/refresh', null, {
+    headers: { Authorization: `Bearer ${refreshToken}` },
+  });
+};
+
+// 로그아웃 (A-06)
+export const logout = async (accessToken) => {
+  return api.post('/auth/v1/jwt/logout', null, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
 };

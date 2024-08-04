@@ -1,38 +1,21 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import styled from 'styled-components';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Home from './components/Home';
-import Login from './components/Login';
+import React, { useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Signup from './components/Signup';
-import Sections from './components/Sections';
-import Libraries from './components/Libraries';
-import MyPage from './components/MyPage';
-
-const Main = styled.main`
-  background: linear-gradient(135deg, #3a8dff, #6a70ff);
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+import Login from './components/Login';
+import Home from './components/Home';
+import Layout from './components/Layout';
 
 const App = () => {
+  const [auth, setAuth] = useState(false);
+  const [currentForm, setCurrentForm] = useState('home'); // 현재 폼 상태
+
   return (
     <Router>
-      <Header />
-      <Main>
-        <Routes>
-          <Route path="/" element={<Home />} /> {/* 기본 라우트를 Home 페이지로 설정 */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/sections" element={<Sections />} />
-          <Route path="/libraries" element={<Libraries />} />
-          <Route path="/mypage" element={<MyPage />} />
-        </Routes>
-      </Main>
-      <Footer />
+      <Layout auth={auth} setAuth={setAuth} setCurrentForm={setCurrentForm}>
+        {currentForm === 'home' && <Home />}
+        {currentForm === 'signup' && <Signup setCurrentForm={setCurrentForm} />}
+        {currentForm === 'login' && <Login setAuth={setAuth} setCurrentForm={setCurrentForm} />}
+      </Layout>
     </Router>
   );
 };

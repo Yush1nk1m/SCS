@@ -62,7 +62,6 @@
 - **URI**: `/auth/v1/jwt/logout`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
 - **Response data**: None
-- **Precondition**: 로그인되어 있어야 한다.
 
 ### Appendix. 회원 가입 API 사용 절차
 
