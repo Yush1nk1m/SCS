@@ -10,6 +10,10 @@ export class UserRepository extends Repository<User> {
         super(User, dataSource.createEntityManager());
     }
 
+    async findUserById(id: number): Promise<User> {
+        return this.findOne({ where: { id } });
+    }
+
     async findUserByEmail(email: string): Promise<User> {
         return this.findOne({ where: { email } });
     }
@@ -30,5 +34,9 @@ export class UserRepository extends Repository<User> {
         });
 
         return this.save(user);
+    }
+
+    async updateRefreshToken(id: number, refreshToken: string): Promise<void> {
+        await this.update({ id }, { refreshToken });
     }
 }

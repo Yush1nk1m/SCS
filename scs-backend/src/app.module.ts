@@ -13,6 +13,8 @@ import { BookModule } from "./book/book.module";
 import { LibraryModule } from "./library/library.module";
 import { addTransactionalDataSource } from "typeorm-transactional";
 import { DataSource } from "typeorm";
+import { APP_GUARD } from "@nestjs/core";
+import { AccessTokenGuard } from "./common/guard/access-token.guard";
 
 @Module({
     imports: [
@@ -38,6 +40,12 @@ import { DataSource } from "typeorm";
         LibraryModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        {
+            provide: APP_GUARD,
+            useClass: AccessTokenGuard,
+        },
+    ],
 })
 export class AppModule {}

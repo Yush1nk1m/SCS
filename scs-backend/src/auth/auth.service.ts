@@ -1,6 +1,7 @@
 import { MailerService } from "@nestjs-modules/mailer";
 import {
     ConflictException,
+    ForbiddenException,
     Injectable,
     InternalServerErrorException,
     Logger,
@@ -14,6 +15,12 @@ import { User } from "../user/user.entity";
 import { UserRepository } from "../user/user.repository";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
+import { LoginDto } from "./dto/login.dto";
+import { Tokens } from "./types/tokens.type";
+import { JwtPayload } from "./types/jwt-payload.type";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 @Injectable()
 export class AuthService {
@@ -23,6 +30,7 @@ export class AuthService {
         private readonly authRepository: AuthRepository,
         private readonly userRepository: UserRepository,
         private readonly mailerService: MailerService,
+        private readonly jwtService: JwtService,
     ) {}
 
     // [A-01] Service logic
@@ -105,7 +113,7 @@ export class AuthService {
         } = signupDto;
 
         // hash password
-        const salt = await bcrypt.genSalt();
+        const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // find verification information
@@ -135,5 +143,91 @@ export class AuthService {
                 "User's email has not been verified",
             );
         }
+    }
+
+    // [A-04] Service logic
+    async login(loginDto: LoginDto): Promise<Tokens> {
+        const { email, password } = loginDto;
+        const user = await this.userRepository.findUserByEmail(email);
+
+        if (user && bcrypt.compare(password, user.password)) {
+            const tokens = await this.getTokens(
+                user.id,
+                user.email,
+                user.nickname,
+            );
+            await this.updateRefreshToken(user.id, tokens.refreshToken);
+
+            return tokens;
+        } else {
+            throw new ForbiddenException(
+                "The given user information is not valid.",
+            );
+        }
+    }
+
+    // [A-05] Service logic
+    async refreshJwtTokens(
+        userId: number,
+        refreshToken: string,
+    ): Promise<Tokens> {
+        const user = await this.userRepository.findUserById(userId);
+        this.logger.verbose(user.refreshToken);
+        this.logger.verbose(refreshToken);
+
+        if (user && user.refreshToken && user.refreshToken === refreshToken) {
+            const tokens = await this.getTokens(
+                user.id,
+                user.email,
+                user.nickname,
+            );
+            await this.updateRefreshToken(user.id, tokens.refreshToken);
+
+            return tokens;
+        } else {
+            throw new ForbiddenException("The token is not valid.");
+        }
+    }
+
+    async updateRefreshToken(
+        userId: number,
+        refreshToken: string,
+    ): Promise<void> {
+        await this.userRepository.updateRefreshToken(userId, refreshToken);
+    }
+
+    // [A-04], [A-05] Common service logic
+    async getTokens(
+        userId: number,
+        email: string,
+        nickname: string,
+    ): Promise<Tokens> {
+        const jwtPayload: JwtPayload = {
+            sub: userId,
+            email,
+            nickname,
+            iat: Date.now(),
+        };
+
+        const [accessToken, refreshToken] = await Promise.all([
+            this.jwtService.signAsync(jwtPayload, {
+                secret: process.env.JWT_ACCESS_SECRET,
+                expiresIn: process.env.JWT_ACCESS_EXPIRESIN,
+            }),
+            this.jwtService.signAsync(jwtPayload, {
+                secret: process.env.JWT_REFRESH_SECRET,
+                expiresIn: process.env.JWT_REFRESH_EXPIRESIN,
+            }),
+        ]);
+
+        return {
+            accessToken,
+            refreshToken,
+        };
+    }
+
+    // [A-06] Service logic
+    async logout(userId: number): Promise<void> {
+        await this.userRepository.updateRefreshToken(userId, null);
     }
 }
