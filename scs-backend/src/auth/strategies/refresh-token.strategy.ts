@@ -3,8 +3,8 @@ import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { JwtPayload } from "../types/jwt-payload.type";
 import { JwtRefreshPayload } from "../types/jwt-refresh-payload.type";
-import * as dotenv from "dotenv";
 import { Request } from "express";
+import * as dotenv from "dotenv";
 dotenv.config();
 
 @Injectable()

@@ -145,7 +145,6 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     test(@GetCurrentUser() user: JwtPayload): ResponseDto<null> {
         this.logger.verbose(`TEST API has been called by user ${user}`);
-
         return {
             statusCode: HttpStatus.OK,
             message: "You have been succeeded to request.",

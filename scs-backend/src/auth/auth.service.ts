@@ -147,17 +147,23 @@ export class AuthService {
 
     // [A-04] Service logic
     async login(loginDto: LoginDto): Promise<Tokens> {
+        // extract user information
         const { email, password } = loginDto;
-        const user = await this.userRepository.findUserByEmail(email);
 
-        if (user && bcrypt.compare(password, user.password)) {
+        // find a user with the same email address
+        const user = await this.userRepository.findUserByEmail(email);
+        if (user && (await bcrypt.compare(password, user.password))) {
+            // generate JWT tokens
             const tokens = await this.getTokens(
                 user.id,
                 user.email,
                 user.nickname,
             );
+
+            // update refresh token's information on DB
             await this.updateRefreshToken(user.id, tokens.refreshToken);
 
+            // return JWT tokens
             return tokens;
         } else {
             throw new ForbiddenException(
@@ -193,13 +199,16 @@ export class AuthService {
         }
     }
 
+    // [A-04], [A-05] Common service logic
     async updateRefreshToken(
         userId: number,
         refreshToken: string,
     ): Promise<void> {
+        // salting and hashing refresh token
         const salt = await bcrypt.genSalt(10);
         const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
 
+        // save the hashed refresh token on DB
         await this.userRepository.updateRefreshToken(
             userId,
             hashedRefreshToken,
@@ -212,13 +221,14 @@ export class AuthService {
         email: string,
         nickname: string,
     ): Promise<Tokens> {
+        // generate JWT payload content
         const jwtPayload: JwtPayload = {
             sub: userId,
             email,
             nickname,
-            iat: Date.now(),
         };
 
+        // sign JWT tokens with Passport.js
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(jwtPayload, {
                 secret: process.env.JWT_ACCESS_SECRET,
@@ -230,6 +240,7 @@ export class AuthService {
             }),
         ]);
 
+        // return generated JWT tokens
         return {
             accessToken,
             refreshToken,
