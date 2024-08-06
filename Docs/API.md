@@ -79,13 +79,14 @@
 
 이 섹션은 사용자 관련 API에 대한 설계이다.
 
-| API ID | Method |      URI      | Summary                   |
-| :----: | :----: | :-----------: | :------------------------ |
-|  U-01  |  GET   |   /v1/users   | 모든 사용자 정보 조회     |
-|  U-02  |  GET   | /v1/users/:id | 특정 사용자 정보 조회     |
-|  U-03  |  GET   | /v1/users/me  | 로그인한 사용자 정보 조회 |
-|  U-04  | PATCH  |   /v1/users   | 로그인한 사용자 정보 변경 |
-|  U-05  | DELETE |   /v1/users   | 로그인한 사용자 회원 탈퇴 |
+| API ID | Method |        URI         | Summary                       |
+| :----: | :----: | :----------------: | :---------------------------- |
+|  U-01  |  GET   |     /v1/users      | 모든 사용자 정보 조회         |
+|  U-02  |  GET   |   /v1/users/:id    | 특정 사용자 정보 조회         |
+|  U-03  |  GET   |    /v1/users/me    | 로그인한 사용자 정보 조회     |
+|  U-04  | PATCH  | /v1/users/password | 로그인한 사용자 비밀번호 변경 |
+|  U-05  | PATCH  | /v1/users/nickname | 로그인한 사용자 닉네임 변경   |
+|  U-06  | DELETE |     /v1/users      | 로그인한 사용자 회원 탈퇴     |
 
 ### U-01: 모든 사용자 정보 조회
 
@@ -111,15 +112,23 @@
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
 - **Response data**: { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` }
 
-### U-04: 로그인한 사용자 정보 변경
+### U-04: 로그인한 사용자 비밀번호 변경
 
-- **Description**: 로그인한 사용자의 기본적인 정보를 변경한다.
+- **Description**: 로그인한 사용자의 비밀번호를 변경한다.
 - **Method**: `PATCH`
-- **URI**: `/v1/users`
+- **URI**: `/v1/users/password`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } &
 - **Response data**:
 
-### U-05: 로그인한 사용자 회원 탈퇴
+### U-05: 로그인한 사용자 닉네임 변경
+
+- **Description**: 로그인한 사용자의 닉네임을 변경한다.
+- **Method**: `PATCH`
+- **URI**: `/v1/users/nickname`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } &
+- **Response data**:
+
+### U-06: 로그인한 사용자 회원 탈퇴
 
 - **Description**: 로그인한 사용자의 정보를 삭제한다.
 - **Method**: `DELETE`

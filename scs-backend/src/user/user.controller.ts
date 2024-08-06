@@ -1,4 +1,5 @@
 import {
+    Body,
     Controller,
     Get,
     HttpCode,
@@ -6,12 +7,14 @@ import {
     Logger,
     Param,
     ParseIntPipe,
+    Patch,
 } from "@nestjs/common";
 import { Public } from "../common/decorator/public.decorator";
 import { UserService } from "./user.service";
 import { ResponseDto } from "../common/dto/response.dto";
 import { User } from "./user.entity";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
+import { ChangePasswordDto } from "./dto/change-password.dto";
 
 @Controller("v1/users")
 export class UserController {
@@ -52,7 +55,7 @@ export class UserController {
     @Get("me")
     @HttpCode(HttpStatus.OK)
     async getCurrentUser(
-        @GetCurrentUserId(ParseIntPipe) id: number,
+        @GetCurrentUserId() id: number,
     ): Promise<ResponseDto<User>> {
         const user = await this.userService.findUserByIdFiltered(id);
 
@@ -60,6 +63,21 @@ export class UserController {
             statusCode: HttpStatus.OK,
             message: `An user with id: ${id} has been found.`,
             data: user,
+        };
+    }
+
+    // [U-04] Controller logic
+    @Patch("password")
+    @HttpCode(HttpStatus.OK)
+    async changeUserPassword(
+        @GetCurrentUserId() id: number,
+        @Body() changePasswordDto: ChangePasswordDto,
+    ): Promise<ResponseDto<void>> {
+        await this.userService.changeUserPassword(id, changePasswordDto);
+
+        return {
+            statusCode: HttpStatus.OK,
+            message: "User password has been changed.",
         };
     }
 }
