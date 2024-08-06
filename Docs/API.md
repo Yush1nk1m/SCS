@@ -101,7 +101,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/users/:id`
 - **Request**: URI 경로에 사용자의 ID를 전달한다.
-- **Response data**:
+- **Response data**: { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` }
 
 ### U-03: 로그인한 사용자 정보 조회
 
@@ -109,7 +109,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/users/me`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
-- **Response data**:
+- **Response data**: { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` }
 
 ### U-04: 로그인한 사용자 정보 변경
 

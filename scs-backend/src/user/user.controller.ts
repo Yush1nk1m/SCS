@@ -11,6 +11,7 @@ import { Public } from "../common/decorator/public.decorator";
 import { UserService } from "./user.service";
 import { ResponseDto } from "../common/dto/response.dto";
 import { User } from "./user.entity";
+import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 
 @Controller("v1/users")
 export class UserController {
@@ -37,6 +38,21 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     async getSpecificUser(
         @Param("id", ParseIntPipe) id: number,
+    ): Promise<ResponseDto<User>> {
+        const user = await this.userService.findUserByIdFiltered(id);
+
+        return {
+            statusCode: HttpStatus.OK,
+            message: `An user with id: ${id} has been found.`,
+            data: user,
+        };
+    }
+
+    // [U-03] Controller logic
+    @Get("me")
+    @HttpCode(HttpStatus.OK)
+    async getCurrentUser(
+        @GetCurrentUserId(ParseIntPipe) id: number,
     ): Promise<ResponseDto<User>> {
         const user = await this.userService.findUserByIdFiltered(id);
 
