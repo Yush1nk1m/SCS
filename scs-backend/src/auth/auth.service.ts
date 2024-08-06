@@ -177,22 +177,24 @@ export class AuthService {
         userId: number,
         refreshToken: string,
     ): Promise<Tokens> {
+        // find user from DB
         const user = await this.userRepository.findUserById(userId);
-        this.logger.verbose(user.refreshToken);
-        this.logger.verbose(refreshToken);
 
         if (
             user &&
-            user.refreshToken &&
-            (await bcrypt.compare(refreshToken, user.refreshToken))
+            user.refreshToken && // if the user exists and a refresh token also exists
+            user.refreshToken === refreshToken // check if the hashed refresh token is the same
         ) {
+            // get new tokens
             const tokens = await this.getTokens(
                 user.id,
                 user.email,
                 user.nickname,
             );
+            // update new refresh token
             await this.updateRefreshToken(user.id, tokens.refreshToken);
 
+            // return new tokens
             return tokens;
         } else {
             throw new ForbiddenException("The token is not valid.");
@@ -204,15 +206,8 @@ export class AuthService {
         userId: number,
         refreshToken: string,
     ): Promise<void> {
-        // salting and hashing refresh token
-        const salt = await bcrypt.genSalt(10);
-        const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
-
-        // save the hashed refresh token on DB
-        await this.userRepository.updateRefreshToken(
-            userId,
-            hashedRefreshToken,
-        );
+        // save the refresh token on DB
+        await this.userRepository.updateRefreshToken(userId, refreshToken);
     }
 
     // [A-04], [A-05] Common service logic

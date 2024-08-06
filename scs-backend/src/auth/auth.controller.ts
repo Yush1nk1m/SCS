@@ -24,7 +24,7 @@ import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decora
 import { GetCurrentUser } from "../common/decorator/get-current-user.decorator";
 import { JwtPayload } from "./types/jwt-payload.type";
 
-@Controller("auth/v1")
+@Controller("v1/auth")
 export class AuthController {
     private logger = new Logger("AuthController");
     constructor(private readonly authService: AuthService) {}
