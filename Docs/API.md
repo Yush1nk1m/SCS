@@ -93,7 +93,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/users`
 - **Request**: None
-- **Response data**:
+- **Response data**: [ { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` }, { ... }, ... ]
 
 ### U-02: 특정 사용자 정보 조회
 

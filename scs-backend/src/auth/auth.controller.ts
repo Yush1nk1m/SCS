@@ -4,8 +4,6 @@ import {
     HttpCode,
     HttpStatus,
     Post,
-    UsePipes,
-    ValidationPipe,
     Logger,
     UseGuards,
     Get,
@@ -32,7 +30,6 @@ export class AuthController {
     // [A-01] Controller logic
     @Public()
     @Post("email/verification-code")
-    @UsePipes(ValidationPipe)
     @HttpCode(HttpStatus.CREATED)
     async sendVerificationMail(
         @Body() emailDto: EmailDto,
@@ -48,7 +45,6 @@ export class AuthController {
     // [A-02] Controller logic
     @Public()
     @Post("email/verify-code")
-    @UsePipes(ValidationPipe)
     @HttpCode(HttpStatus.OK)
     async verifySignupCode(
         @Body() verificationDto: VerificationDto,
@@ -72,7 +68,6 @@ export class AuthController {
     // [A-03] Controller logic
     @Public()
     @Post("signup")
-    @UsePipes(ValidationPipe)
     @HttpCode(HttpStatus.CREATED)
     async signup(@Body() signupDto: SignupDto): Promise<ResponseDto<User>> {
         const user = await this.authService.signup(signupDto);

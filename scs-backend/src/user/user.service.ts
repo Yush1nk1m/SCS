@@ -1,9 +1,19 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { UserRepository } from "./user.repository";
-import { EmailDto } from "../auth/dto/email.dto";
 import { User } from "./user.entity";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { DataSource } from "typeorm";
 
 @Injectable()
-export class UserService {}
+export class UserService {
+    constructor(private readonly userRepository: UserRepository) {}
+
+    // [U-01] Service logic
+    async findAllUsersFiltered(): Promise<User[]> {
+        const users = await this.userRepository.findAllUsers();
+        for (const user of users) {
+            delete user.password;
+            delete user.refreshToken;
+            delete user.createdAt;
+        }
+        return users;
+    }
+}
