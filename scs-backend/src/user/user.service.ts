@@ -14,6 +14,17 @@ export class UserService {
             delete user.refreshToken;
             delete user.createdAt;
         }
+
         return users;
+    }
+
+    // [U-02] Service logic
+    async findUserByIdFiltered(id: number) {
+        const user = await this.userRepository.findUserById(id);
+        delete user.password;
+        delete user.refreshToken;
+        delete user.createdAt;
+
+        return user;
     }
 }

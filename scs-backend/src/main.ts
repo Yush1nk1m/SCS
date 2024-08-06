@@ -14,7 +14,7 @@ async function bootstrap() {
     app.enableCors();
 
     app.useGlobalFilters(new AllExceptionFilter());
-    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
     await app.listen(4000);
 }
