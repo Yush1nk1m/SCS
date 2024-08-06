@@ -36,12 +36,14 @@ const Text = styled.h1`
   font-size: 2.5rem;
   margin: 20px 0;
   animation: ${fadeIn} 2s ease-in-out;
+  z-index: 2;
 `;
 
 const Banners = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  z-index: 2;
 `;
 
 const Banner = styled.div`
@@ -55,6 +57,7 @@ const Banner = styled.div`
   transition: all 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   font-size: 1.5rem;
   text-align: center;
+  z-index: 2;
 
   &:hover {
     animation: ${gradientAnimation} 4s ease infinite;
@@ -70,6 +73,7 @@ const FallingStar = styled.div`
   background: white;
   opacity: 0;
   animation: ${fallingStarsAnimation} 3s linear infinite;
+  z-index: 1;
 `;
 
 const generateFallingStars = () => {
