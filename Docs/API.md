@@ -6,14 +6,14 @@
 
 이 섹션은 인증 관련 API에 대한 설계이다.
 
-| API ID | Method | URI | Summary |
-| :--: | :--: | :--: | :-- |
-| A-01 | POST | /auth/v1/email/verification-code | 인증 코드 전송 |
-| A-02 | POST | /auth/v1/email/verify-code | 인증 코드 검증 |
-| A-03 | POST | /auth/v1/signup | 회원 가입 |
-| A-04 | POST | /auth/v1/jwt/login | 로그인 |
-| A-05 | POST | /auth/v1/jwt/refresh | 리프레시 |
-| A-06 | POST | /auth/v1/jwt/logout | 로그아웃 |
+| API ID | Method |               URI                | Summary        |
+| :----: | :----: | :------------------------------: | :------------- |
+|  A-01  |  POST  | /auth/v1/email/verification-code | 인증 코드 전송 |
+|  A-02  |  POST  |    /auth/v1/email/verify-code    | 인증 코드 검증 |
+|  A-03  |  POST  |         /auth/v1/signup          | 회원 가입      |
+|  A-04  |  POST  |        /auth/v1/jwt/login        | 로그인         |
+|  A-05  |  POST  |       /auth/v1/jwt/refresh       | 리프레시       |
+|  A-06  |  POST  |       /auth/v1/jwt/logout        | 로그아웃       |
 
 ### A-01: 인증 코드 전송
 
@@ -66,3 +66,11 @@
 ### Appendix. 회원 가입 API 사용 절차
 
 ![Sequence diagram for vefirication](UML/verification.png)
+
+### Appendix. 사용자 인증 API 사용 절차
+
+![Sequence diagram for login](UML/jwt-login.png)
+
+![Sequence diagram for refresh](UML/jwt-refresh.png)
+
+![Sequence diagram for logout](UML/jwt-logout.png)

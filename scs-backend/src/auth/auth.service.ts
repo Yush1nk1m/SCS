@@ -175,7 +175,11 @@ export class AuthService {
         this.logger.verbose(user.refreshToken);
         this.logger.verbose(refreshToken);
 
-        if (user && user.refreshToken && user.refreshToken === refreshToken) {
+        if (
+            user &&
+            user.refreshToken &&
+            (await bcrypt.compare(refreshToken, user.refreshToken))
+        ) {
             const tokens = await this.getTokens(
                 user.id,
                 user.email,
@@ -193,7 +197,13 @@ export class AuthService {
         userId: number,
         refreshToken: string,
     ): Promise<void> {
-        await this.userRepository.updateRefreshToken(userId, refreshToken);
+        const salt = await bcrypt.genSalt(10);
+        const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
+
+        await this.userRepository.updateRefreshToken(
+            userId,
+            hashedRefreshToken,
+        );
     }
 
     // [A-04], [A-05] Common service logic

@@ -1,0 +1,15 @@
+@startuml [A-05] 리프레시
+actor Client
+
+database "Local storage" as LS
+participant "AuthService" as Auth
+database "Database" as DB
+
+Client -> Auth : [A-05] 요청 헤더에 리프레시 토큰을 담아 리프레시 요청
+Auth -> DB : 리프레시 토큰 검증
+DB -> Auth : 검증 완료
+Auth -> DB : 새롭게 생성된 리프레시 토큰 정보 저장
+Auth -> Client : 새롭게 생성된 액세스 토큰, 리프레시 토큰 발급
+LS <- Client : 새롭게 생성된 액세스 토큰, 리프레시 토큰 저장
+
+@enduml

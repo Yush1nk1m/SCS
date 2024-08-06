@@ -1,0 +1,12 @@
+@startuml [A-06] 로그아웃
+actor Client
+
+participant "AuthService" as Auth
+database "Database" as DB
+
+Client -> Auth : [A-06] 요청 헤더에 액세스 토큰을 담아 로그아웃 요청
+Auth -> DB : DB에 저장된 리프레시 토큰 삭제
+DB -> Auth : 삭제 완료
+Auth -> Client : 로그아웃 완료 응답
+
+@enduml

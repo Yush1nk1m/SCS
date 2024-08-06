@@ -1,0 +1,15 @@
+@startuml [A-04] 로그인
+actor Client
+
+database "Local storage" as LS
+participant "AuthService" as Auth
+database "Database" as DB
+
+Client -> Auth : [A-04] 이메일, 비밀번호와 함께 로그인 요청
+Auth -> DB : 이메일과 인증 코드 검증
+DB -> Auth : 검증 완료
+Auth -> DB : 생성된 리프레시 토큰 정보 저장
+Auth -> Client : 액세스 토큰, 리프레시 토큰 발급
+LS <- Client : 액세스 토큰, 리프레시 토큰 저장
+
+@enduml
