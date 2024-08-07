@@ -117,8 +117,8 @@
 - **Description**: 로그인한 사용자의 비밀번호를 변경한다.
 - **Method**: `PATCH`
 - **URI**: `/v1/users/password`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } &
-- **Response data**:
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { password: `current password`, newPassword: `new password`, confirmPassword: `new confirm password` }
+- **Response data**: None
 
 ### U-05: 로그인한 사용자 닉네임 변경
 
