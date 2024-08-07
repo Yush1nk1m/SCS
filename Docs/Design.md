@@ -25,6 +25,7 @@
   - nickname: 활동할 닉네임
   - affiliation: 소속
   - position: 포지션
+  - refreshToken: 리프레시 토큰 정보
   - createdAt: 가입 날짜
 - Section: 질문이 포함되는 CS 분야
   - id: 고유 부여되는 아이디

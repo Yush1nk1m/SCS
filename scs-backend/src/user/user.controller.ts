@@ -35,13 +35,15 @@ export class UserController {
         };
     }
 
-    // [U-02] Controller logic
-    @Public()
-    @Get(":id")
+    // [U-03] Controller logic
+    @Get("me")
     @HttpCode(HttpStatus.OK)
-    async getSpecificUser(
-        @Param("id", ParseIntPipe) id: number,
+    async getCurrentUser(
+        @GetCurrentUserId(ParseIntPipe) id: number,
     ): Promise<ResponseDto<User>> {
+        this.logger.verbose(
+            `An user with id: ${id} has requested to get information`,
+        );
         const user = await this.userService.findUserByIdFiltered(id);
 
         return {
@@ -51,11 +53,12 @@ export class UserController {
         };
     }
 
-    // [U-03] Controller logic
-    @Get("me")
+    // [U-02] Controller logic
+    @Public()
+    @Get(":id")
     @HttpCode(HttpStatus.OK)
-    async getCurrentUser(
-        @GetCurrentUserId() id: number,
+    async getSpecificUser(
+        @Param("id", ParseIntPipe) id: number,
     ): Promise<ResponseDto<User>> {
         const user = await this.userService.findUserByIdFiltered(id);
 
