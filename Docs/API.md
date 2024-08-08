@@ -125,7 +125,7 @@
 - **Description**: 로그인한 사용자의 닉네임을 변경한다.
 - **Method**: `PATCH`
 - **URI**: `/v1/users/nickname`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } &
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { nickname: `new nickname` }
 - **Response data**: { message: `result message` }
 
 ### U-06: 로그인한 사용자 회원 탈퇴
@@ -133,5 +133,5 @@
 - **Description**: 로그인한 사용자의 정보를 삭제한다.
 - **Method**: `DELETE`
 - **URI**: `/v1/users`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } &
-- **Response data**:
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { password: `user's password`, confirmMessage: `회원 탈퇴를 희망합니다.` }
+- **Response data**: { message: `result message` }

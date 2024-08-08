@@ -52,4 +52,8 @@ export class UserRepository extends Repository<User> {
     async updateNickname(id: number, nickname: string): Promise<void> {
         await this.update({ id }, { nickname });
     }
+
+    async deleteUserById(id: number): Promise<void> {
+        await this.delete({ id });
+    }
 }

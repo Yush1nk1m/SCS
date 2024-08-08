@@ -2,7 +2,6 @@ import {
     BadRequestException,
     Injectable,
     Logger,
-    NotFoundException,
     UnauthorizedException,
 } from "@nestjs/common";
 import { UserRepository } from "./user.repository";
@@ -11,6 +10,7 @@ import { ChangePasswordDto } from "./dto/change-password.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 import * as bcrypt from "bcrypt";
 import { ChangeNicknameDto } from "./dto/change-nickname.dto";
+import { DeleteUserDto } from "./dto/delete-user.dto";
 @Injectable()
 export class UserService {
     private logger = new Logger("UserService");
@@ -63,9 +63,7 @@ export class UserService {
         // find user by id and check if it exists
         const user = await this.userRepository.findUserById(id);
         if (!user) {
-            throw new NotFoundException(
-                "An user with the same id does not exist.",
-            );
+            throw new UnauthorizedException("User information is invalid.");
         }
 
         // check if the current password is correct and change the password, remove refresh token
@@ -88,5 +86,24 @@ export class UserService {
     ): Promise<void> {
         const { nickname } = changeNicknameDto;
         await this.userRepository.updateNickname(id, nickname);
+    }
+
+    // [U-06] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async deleteUser(id: number, deleteUserDto: DeleteUserDto): Promise<void> {
+        const { password, confirmMessage } = deleteUserDto;
+
+        if (confirmMessage !== "회원 탈퇴를 희망합니다.") {
+            throw new BadRequestException("Confirm message is invalid.");
+        }
+
+        const user = await this.userRepository.findUserById(id);
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            throw new UnauthorizedException("User information is invalid.");
+        }
+
+        await this.userRepository.deleteUserById(id);
     }
 }

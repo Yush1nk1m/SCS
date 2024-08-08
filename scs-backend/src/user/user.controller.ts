@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -16,6 +17,7 @@ import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decora
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import { UserResponse, UsersResponse } from "./types/response.type";
 import { ChangeNicknameDto } from "./dto/change-nickname.dto";
+import { DeleteUserDto } from "./dto/delete-user.dto";
 
 @Controller("v1/users")
 export class UserController {
@@ -92,6 +94,20 @@ export class UserController {
 
         return {
             message: "User nickname has been changed.",
+        };
+    }
+
+    // [U-06] Controller logic
+    @Delete()
+    @HttpCode(HttpStatus.OK)
+    async deleteCurrentUser(
+        @GetCurrentUserId() id: number,
+        @Body() deleteUserDto: DeleteUserDto,
+    ): Promise<BaseResponse> {
+        await this.userService.deleteUser(id, deleteUserDto);
+
+        return {
+            message: `An user with id: ${id} has been deleted.`,
         };
     }
 }
