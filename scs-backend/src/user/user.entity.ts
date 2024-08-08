@@ -3,6 +3,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     OneToMany,
     PrimaryGeneratedColumn,
 } from "typeorm";
@@ -11,6 +12,7 @@ import { Section } from "../section/section.entity";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
+    @Index("IDX_USER_ID", { unique: true })
     id: number;
 
     @Column({ unique: true })

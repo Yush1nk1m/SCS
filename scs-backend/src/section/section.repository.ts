@@ -10,6 +10,10 @@ export class SectionRepository extends Repository<Section> {
         super(Section, dataSource.createEntityManager());
     }
 
+    async findSectionById(id: number): Promise<Section> {
+        return this.findOne({ where: { id } });
+    }
+
     async findAllSections(): Promise<Section[]> {
         return this.find({
             select: {

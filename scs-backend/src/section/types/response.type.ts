@@ -4,3 +4,7 @@ import { Section } from "../section.entity";
 export interface SectionsResponse extends BaseResponse {
     sections: Section[];
 }
+
+export interface SectionResponse extends BaseResponse {
+    section: Section;
+}
