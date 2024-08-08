@@ -48,4 +48,8 @@ export class UserRepository extends Repository<User> {
         // remove refresh token to protect user information
         await this.update({ id }, { password, refreshToken: null });
     }
+
+    async updateNickname(id: number, nickname: string): Promise<void> {
+        await this.update({ id }, { nickname });
+    }
 }

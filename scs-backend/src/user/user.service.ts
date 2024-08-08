@@ -10,6 +10,7 @@ import { User } from "./user.entity";
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 import * as bcrypt from "bcrypt";
+import { ChangeNicknameDto } from "./dto/change-nickname.dto";
 @Injectable()
 export class UserService {
     private logger = new Logger("UserService");
@@ -78,5 +79,14 @@ export class UserService {
                 "The current password is incorrect.",
             );
         }
+    }
+
+    // [U-05] Service logic
+    async changeUserNickname(
+        id: number,
+        changeNicknameDto: ChangeNicknameDto,
+    ): Promise<void> {
+        const { nickname } = changeNicknameDto;
+        await this.userRepository.updateNickname(id, nickname);
     }
 }

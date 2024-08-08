@@ -15,6 +15,7 @@ import { BaseResponse } from "../common/types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import { UserResponse, UsersResponse } from "./types/response.type";
+import { ChangeNicknameDto } from "./dto/change-nickname.dto";
 
 @Controller("v1/users")
 export class UserController {
@@ -77,6 +78,20 @@ export class UserController {
 
         return {
             message: "User password has been changed.",
+        };
+    }
+
+    // [U-05] Controller logic
+    @Patch("nickname")
+    @HttpCode(HttpStatus.OK)
+    async changeUserNickname(
+        @GetCurrentUserId() id: number,
+        @Body() changeNicknameDto: ChangeNicknameDto,
+    ): Promise<BaseResponse> {
+        await this.userService.changeUserNickname(id, changeNicknameDto);
+
+        return {
+            message: "User nickname has been changed.",
         };
     }
 }
