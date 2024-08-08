@@ -15,6 +15,7 @@ import { addTransactionalDataSource } from "typeorm-transactional";
 import { DataSource } from "typeorm";
 import { APP_GUARD } from "@nestjs/core";
 import { AccessTokenGuard } from "./common/guard/access-token.guard";
+import { RolesGuard } from "./common/guard/roles.guard";
 
 @Module({
     imports: [
@@ -45,6 +46,10 @@ import { AccessTokenGuard } from "./common/guard/access-token.guard";
         {
             provide: APP_GUARD,
             useClass: AccessTokenGuard,
+        },
+        {
+            provide: APP_GUARD,
+            useClass: RolesGuard,
         },
     ],
 })
