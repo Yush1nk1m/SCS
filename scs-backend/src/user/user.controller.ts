@@ -11,10 +11,10 @@ import {
 } from "@nestjs/common";
 import { Public } from "../common/decorator/public.decorator";
 import { UserService } from "./user.service";
-import { ResponseDto } from "../common/dto/response.dto";
-import { User } from "./user.entity";
+import { BaseResponse } from "../common/types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { ChangePasswordDto } from "./dto/change-password.dto";
+import { UserResponse, UsersResponse } from "./types/response.type";
 
 @Controller("v1/users")
 export class UserController {
@@ -25,13 +25,12 @@ export class UserController {
     @Public()
     @Get()
     @HttpCode(HttpStatus.OK)
-    async getAllUsers(): Promise<ResponseDto<User[]>> {
+    async getAllUsers(): Promise<UsersResponse> {
         const users = await this.userService.findAllUsersFiltered();
 
         return {
-            statusCode: HttpStatus.OK,
             message: "All users have been found.",
-            data: users,
+            users,
         };
     }
 
@@ -40,16 +39,15 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     async getCurrentUser(
         @GetCurrentUserId(ParseIntPipe) id: number,
-    ): Promise<ResponseDto<User>> {
+    ): Promise<UserResponse> {
         this.logger.verbose(
             `An user with id: ${id} has requested to get information`,
         );
         const user = await this.userService.findUserByIdFiltered(id);
 
         return {
-            statusCode: HttpStatus.OK,
             message: `An user with id: ${id} has been found.`,
-            data: user,
+            user,
         };
     }
 
@@ -59,13 +57,12 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     async getSpecificUser(
         @Param("id", ParseIntPipe) id: number,
-    ): Promise<ResponseDto<User>> {
+    ): Promise<UserResponse> {
         const user = await this.userService.findUserByIdFiltered(id);
 
         return {
-            statusCode: HttpStatus.OK,
             message: `An user with id: ${id} has been found.`,
-            data: user,
+            user,
         };
     }
 
@@ -75,11 +72,10 @@ export class UserController {
     async changeUserPassword(
         @GetCurrentUserId() id: number,
         @Body() changePasswordDto: ChangePasswordDto,
-    ): Promise<ResponseDto<void>> {
+    ): Promise<BaseResponse> {
         await this.userService.changeUserPassword(id, changePasswordDto);
 
         return {
-            statusCode: HttpStatus.OK,
             message: "User password has been changed.",
         };
     }

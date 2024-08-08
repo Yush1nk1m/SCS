@@ -21,7 +21,7 @@
 - **Method**: `POST`
 - **URI**: `/v1/auth/email/verification-code`
 - **Request**: Body = { email: `user email` }
-- **Response data**: None
+- **Response data**: { message: `result message` }
 
 ### A-02: 인증 코드 검증
 
@@ -29,7 +29,7 @@
 - **Method**: `POST`
 - **URI**: `/v1/auth/email/verify-code`
 - **Request**: Body = { email: `user email`, verificationCode: `verification code` }
-- **Response data**: None
+- **Response data**: { message: `result message` }
 
 ### A-03: 회원 가입
 
@@ -37,7 +37,7 @@
 - **Method**: `POST`
 - **URI**: `/v1/auth/signup`
 - **Request**: Body = { email: `user email`, password: `user password`, nickname: `user nickname`, affiliation: `user's affiliation`, position: `user's position in the field`, verificationCode: `verified code` }
-- **Response data**: User entity with no password
+- **Response data**: { message: `result message`, user: `created user information with no password` }
 
 ### A-04: 로그인
 
@@ -45,7 +45,7 @@
 - **Method**:`POST`
 - **URI**: `/v1/auth/jwt/login`
 - **Request**: Body = { email: `user email`, password: `user password` }
-- **Response data**: { accessToken: `JWT access token`, refreshToken: `JWT refresh token` }
+- **Response data**: { message: `result message`, accessToken: `JWT access token`, refreshToken: `JWT refresh token` }
 
 ### A-05: 리프레시
 
@@ -53,7 +53,7 @@
 - **Method**: `POST`
 - **URI**: `/v1/auth/jwt/refresh`
 - **Request**: Request header = { Authorization: `Bearer ${refreshToken}` }
-- **Response data**: { accessToken: `JWT access token`, refreshToken: `JWT refresh token` }
+- **Response data**: { message: `result message`, accessToken: `JWT access token`, refreshToken: `JWT refresh token` }
 
 ### A-06: 로그아웃
 
@@ -61,7 +61,7 @@
 - **Method**: `POST`
 - **URI**: `/v1/auth/jwt/logout`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
-- **Response data**: None
+- **Response data**: { message: `result message` }
 
 ### Appendix. 회원 가입 API 사용 절차
 
@@ -94,7 +94,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/users`
 - **Request**: None
-- **Response data**: [ { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` }, { ... }, ... ]
+- **Response data**: { message: `result message`, users: [ { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` }, { ... }, ... ] }
 
 ### U-02: 특정 사용자 정보 조회
 
@@ -102,7 +102,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/users/:id`
 - **Request**: URI 경로에 사용자의 ID를 전달한다.
-- **Response data**: { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` }
+- **Response data**: { message: `result message`, user: { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` } }
 
 ### U-03: 로그인한 사용자 정보 조회
 
@@ -110,7 +110,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/users/me`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
-- **Response data**: { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` }
+- **Response data**: { message: `result message`, user: { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` } }
 
 ### U-04: 로그인한 사용자 비밀번호 변경
 
@@ -118,7 +118,7 @@
 - **Method**: `PATCH`
 - **URI**: `/v1/users/password`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { password: `current password`, newPassword: `new password`, confirmPassword: `new confirm password` }
-- **Response data**: None
+- **Response data**: { message: `result message` }
 
 ### U-05: 로그인한 사용자 닉네임 변경
 
@@ -126,7 +126,7 @@
 - **Method**: `PATCH`
 - **URI**: `/v1/users/nickname`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } &
-- **Response data**:
+- **Response data**: { message: `result message` }
 
 ### U-06: 로그인한 사용자 회원 탈퇴
 
