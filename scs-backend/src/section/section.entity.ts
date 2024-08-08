@@ -16,6 +16,9 @@ export class Section {
     @Column()
     subject: string;
 
+    @Column({ nullable: true })
+    description: string;
+
     @CreateDateColumn()
     createdAt: Date;
 

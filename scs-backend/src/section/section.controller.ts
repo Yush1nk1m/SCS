@@ -1,4 +1,5 @@
 import {
+    Body,
     Controller,
     Get,
     HttpCode,
@@ -6,10 +7,16 @@ import {
     Logger,
     Param,
     ParseIntPipe,
+    Post,
+    UseGuards,
 } from "@nestjs/common";
 import { SectionService } from "./section.service";
 import { Public } from "../common/decorator/public.decorator";
 import { SectionResponse, SectionsResponse } from "./types/response.type";
+import { RolesGuard } from "../common/guard/roles.guard";
+import { Roles } from "../common/decorator/roles.decorator";
+import { CreateSectionDto } from "./dto/create-section.dto";
+import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 
 @Controller("v1/sections")
 export class SectionController {
@@ -40,6 +47,26 @@ export class SectionController {
 
         return {
             message: `Section with id: ${id} has been found.`,
+            section,
+        };
+    }
+
+    // [S-03] Controller logic
+    @UseGuards(RolesGuard)
+    @Roles("admin")
+    @Post()
+    @HttpCode(HttpStatus.CREATED)
+    async createSection(
+        @GetCurrentUserId() id: number,
+        @Body() createSectionDto: CreateSectionDto,
+    ): Promise<SectionResponse> {
+        const section = await this.sectionService.createSection(
+            id,
+            createSectionDto,
+        );
+
+        return {
+            message: "New section has been created.",
             section,
         };
     }

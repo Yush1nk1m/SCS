@@ -169,7 +169,7 @@
 - **Description**: 새로운 섹션을 생성한다. 관리자만 접근 가능하다.
 - **Method**: `POST`
 - **URI**: `/v1/sections`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { subject: `section's subject` }
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { subject: `section's subject`, description: `section's description` }
 - **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date` } }
 
 ### S-04: 섹션 정보 수정

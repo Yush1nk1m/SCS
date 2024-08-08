@@ -1,6 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { DataSource, Repository } from "typeorm";
 import { Section } from "./section.entity";
+import { User } from "../user/user.entity";
 
 @Injectable()
 export class SectionRepository extends Repository<Section> {
@@ -29,5 +30,17 @@ export class SectionRepository extends Repository<Section> {
                 creator: true,
             },
         });
+    }
+
+    async createSection(
+        creator: User,
+        subject: string,
+        description: string,
+    ): Promise<Section> {
+        const section = this.create({ subject, description, creator });
+        this.logger.verbose("created section:", section);
+        await this.save(section);
+
+        return section;
     }
 }
