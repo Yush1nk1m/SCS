@@ -3,8 +3,10 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    OneToMany,
     PrimaryGeneratedColumn,
 } from "typeorm";
+import { Section } from "../section/section.entity";
 
 @Entity()
 export class User {
@@ -38,4 +40,7 @@ export class User {
 
     @CreateDateColumn()
     createdAt: Date;
+
+    @OneToMany(() => Section, (section) => section.creator)
+    sections: Section[];
 }

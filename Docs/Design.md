@@ -29,6 +29,7 @@
   - createdAt: 가입 날짜
 - Section: 질문이 포함되는 CS 분야
   - id: 고유 부여되는 아이디
+  - creator: 생성자의 id
   - subject: 주제
   - questions: Question[]
   - createdAt: 생성 날짜
