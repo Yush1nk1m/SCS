@@ -11,6 +11,9 @@ import { IsolationLevel, Transactional } from "typeorm-transactional";
 import * as bcrypt from "bcrypt";
 import { ChangeNicknameDto } from "./dto/change-nickname.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
+import * as dotenv from "dotenv";
+dotenv.config();
+
 @Injectable()
 export class UserService {
     private logger = new Logger("UserService");
@@ -68,7 +71,9 @@ export class UserService {
 
         // check if the current password is correct and change the password, remove refresh token
         if (user.password && (await bcrypt.compare(password, user.password))) {
-            const salt = await bcrypt.genSalt(10);
+            const salt = await bcrypt.genSalt(
+                parseInt(process.env.SALT_LENGTH) || 10,
+            );
             const hashedPassword = await bcrypt.hash(newPassword, salt);
 
             await this.userRepository.updatePassword(user.id, hashedPassword);
@@ -80,6 +85,9 @@ export class UserService {
     }
 
     // [U-05] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
     async changeUserNickname(
         id: number,
         changeNicknameDto: ChangeNicknameDto,

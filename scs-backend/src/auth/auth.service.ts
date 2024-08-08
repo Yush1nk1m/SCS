@@ -113,7 +113,9 @@ export class AuthService {
         } = signupDto;
 
         // hash password
-        const salt = await bcrypt.genSalt(10);
+        const salt = await bcrypt.genSalt(
+            parseInt(process.env.SALT_LENGTH) || 10,
+        );
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // find verification information

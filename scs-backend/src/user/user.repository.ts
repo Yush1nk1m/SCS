@@ -11,7 +11,9 @@ export class UserRepository extends Repository<User> {
     }
 
     async findAllUsers(): Promise<User[]> {
-        return this.find();
+        return this.find({
+            select: ["id", "email", "nickname", "affiliation", "position"],
+        });
     }
 
     async findUserById(id: number): Promise<User> {
