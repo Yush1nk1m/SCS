@@ -21,6 +21,8 @@ import { JwtPayload } from "./types/jwt-payload.type";
 import { BaseResponse } from "../common/types/response.type";
 import { UserResponse } from "../user/types/response.type";
 import { TokensResponse } from "./types/response.type";
+import { Roles } from "../common/decorator/roles.decorator";
+import { RolesGuard } from "../common/guard/roles.guard";
 
 @Controller("v1/auth")
 export class AuthController {
@@ -28,7 +30,8 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     // [A-01] Controller logic
-    @Public()
+    @Roles("admin")
+    @UseGuards(RolesGuard)
     @Post("email/verification-code")
     @HttpCode(HttpStatus.CREATED)
     async sendVerificationMail(

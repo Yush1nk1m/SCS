@@ -160,6 +160,7 @@ export class AuthService {
                 user.id,
                 user.email,
                 user.nickname,
+                user.role,
             );
 
             // update refresh token's information on DB
@@ -192,6 +193,7 @@ export class AuthService {
                 user.id,
                 user.email,
                 user.nickname,
+                user.role,
             );
             // update new refresh token
             await this.updateRefreshToken(user.id, tokens.refreshToken);
@@ -217,12 +219,14 @@ export class AuthService {
         userId: number,
         email: string,
         nickname: string,
+        role: string,
     ): Promise<Tokens> {
         // generate JWT payload content
         const jwtPayload: JwtPayload = {
             sub: userId,
             email,
             nickname,
+            role,
         };
 
         // sign JWT tokens with Passport.js

@@ -18,7 +18,6 @@ import { ChangePasswordDto } from "./dto/change-password.dto";
 import { UserResponse, UsersResponse } from "./types/response.type";
 import { ChangeNicknameDto } from "./dto/change-nickname.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
-import { Roles } from "../common/decorator/roles.decorator";
 
 @Controller("v1/users")
 export class UserController {
