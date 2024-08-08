@@ -30,6 +30,7 @@ export class UserRepository extends Repository<User> {
         nickname: string,
         affiliation: string,
         position: string,
+        role: string = "user",
     ): Promise<User> {
         const user = this.create({
             email,
@@ -37,6 +38,7 @@ export class UserRepository extends Repository<User> {
             nickname,
             affiliation,
             position,
+            role,
         });
 
         return this.save(user);

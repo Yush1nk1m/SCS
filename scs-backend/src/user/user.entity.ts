@@ -41,6 +41,13 @@ export class User {
     @CreateDateColumn()
     createdAt: Date;
 
+    @Column({
+        type: "enum",
+        enum: ["user", "admin"],
+        default: "user",
+    })
+    role: string;
+
     @OneToMany(() => Section, (section) => section.creator)
     sections: Section[];
 }

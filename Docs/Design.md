@@ -27,6 +27,7 @@
   - position: 포지션
   - refreshToken: 리프레시 토큰 정보
   - createdAt: 가입 날짜
+  - role: 사용자 / 관리자 권한 정보
 - Section: 질문이 포함되는 CS 분야
   - id: 고유 부여되는 아이디
   - creator: 생성자의 id
