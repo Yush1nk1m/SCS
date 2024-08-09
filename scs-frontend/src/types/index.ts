@@ -6,3 +6,11 @@ export interface SignupData {
   position: string;
   verificationCode: string;
 }
+
+export interface UserData {
+  id: string;
+  email: string;
+  nickname: string;
+  affiliation: string;
+  position: string;
+}

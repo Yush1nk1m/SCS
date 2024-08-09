@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./SignupForm.css";
 
 interface SignupFormProps {
-  onSignupSuccess: () => void;
+  onSignupSuccess: (nickname: string) => void;
 }
 
 const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
@@ -39,9 +39,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await signup(info);
+      const user = await signup(info);
       alert("회원가입 성공");
-      onSignupSuccess();
+      onSignupSuccess(user.nickname);
     } catch (error) {
       alert("회원가입 실패");
     }
