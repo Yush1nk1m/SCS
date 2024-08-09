@@ -1,0 +1,51 @@
+.main-content {
+  padding: 20px;
+  height: 60vh;
+  text-align: center;
+  background: linear-gradient(-45deg, #87ceeb, #1e90ff, #00bfff, #add8e6);
+  background-size: 400% 400%;
+  animation: wave 15s ease infinite;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.text-line {
+  opacity: 0;
+  transform: translateY(20px);
+  font-size: 24px;
+  color: white;
+  margin-bottom: 20px;
+  white-space: nowrap;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.line1 {
+  animation: fadeIn 0.5s ease forwards 0.5s;
+}
+.line2 {
+  animation: fadeIn 0.5s ease forwards 1.5s;
+}
+.line3 {
+  animation: fadeIn 0.5s ease forwards 2.5s;
+}

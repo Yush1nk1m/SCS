@@ -1,15 +1,19 @@
-import React, { useState } from "react";
-import Header from "./components/Header";
-import Main from "./components/Main";
-import Footer from "./components/Footer";
+import "./App.css";
+import React from "react";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import { Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage/HomePage";
+import SignupPage from "./pages/SignupPage/SignupPage";
 
 const App: React.FC = () => {
-  const [page, setPage] = useState<string>("home");
-
   return (
     <div className="App">
-      <Header setPage={setPage} />
-      <Main page={page} />
+      <Header />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
       <Footer />
     </div>
   );
