@@ -155,7 +155,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/sections`
 - **Request**: None
-- **Response data**: { message: `result message`, sections: [ { id: `section's id`, subject: `section's subject`, creator: `creator's id`, createdAt: `creation date`, questionCount: `number of questions` }, { ... }, ... ] }
+- **Response data**: { message: `result message`, sections: [ { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date`, questionCount: `number of questions` }, { ... }, ... ] }
 
 ### S-02: 특정 섹션 조회
 
@@ -179,7 +179,7 @@
 - **Method**: `PATCH`
 - **URI**: `/v1/sections/:id/subject`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { subject: `new section's subject` }
-- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `updated section's subject`, creator: `creator's id`, createdAt: `creation date`, updatedAt: `update date` } }
+- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date` } }
 
 ### S-05: 섹션 설명 수정
 
@@ -187,7 +187,7 @@
 - **Method**: `PATCH`
 - **URI**: `/v1/sections/:id/description`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { description: `new section's description` }
-- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `updated section's subject`, creator: `creator's id`, createdAt: `creation date`, updatedAt: `update date` } }
+- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date` } }
 
 ### S-06: 섹션 삭제
 

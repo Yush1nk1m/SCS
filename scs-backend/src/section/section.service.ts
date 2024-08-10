@@ -17,12 +17,16 @@ export class SectionService {
 
     // [S-01] Service logic
     async getAllSections(): Promise<Section[]> {
+        // find all sections with no creator information
         return this.sectionRepository.findAllSections();
     }
 
     // [S-02] Service logic
     async getSpecificSection(id: number): Promise<Section> {
-        const section = await this.sectionRepository.findSectionAndUserById(id);
+        // find specific section with creator information
+        const section = await this.sectionRepository.findSectionById(id);
+
+        // if it does not exist, it is an error
         if (!section) {
             throw new NotFoundException(
                 `Section with id: ${id} has not been found.`,
@@ -39,11 +43,13 @@ export class SectionService {
     ): Promise<Section> {
         const { subject, description } = createSectionDto;
 
+        // check again if user exists
         const creator = await this.userRepository.findUserById(userId);
         if (!creator) {
             throw new NotFoundException("User not found.");
         }
 
+        // create new section
         const section = await this.sectionRepository.createSection(
             creator,
             subject,
@@ -62,15 +68,8 @@ export class SectionService {
         updateSectionSubjectDto: UpdateSectionSubjectDto,
     ): Promise<Section> {
         const { subject } = updateSectionSubjectDto;
-        const section = await this.sectionRepository.findSectionById(sectionId);
 
-        if (!section) {
-            throw new NotFoundException("Section not found.");
-        }
-
-        section.subject = subject;
-        await this.sectionRepository.save(section);
-
-        return section;
+        // change found section's subject and save
+        return this.sectionRepository.updateSectionSubject(sectionId, subject);
     }
 }
