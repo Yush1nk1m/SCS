@@ -4,9 +4,11 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
+import { Question } from "../question/question.entity";
 
 @Entity()
 export class Section {
@@ -25,4 +27,7 @@ export class Section {
     @ManyToOne(() => User, (user) => user.sections)
     @JoinColumn({ name: "creator", referencedColumnName: "id" })
     creator: User;
+
+    @OneToMany(() => Question, (question) => question.section)
+    questions: Question[];
 }

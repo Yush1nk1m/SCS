@@ -8,6 +8,7 @@ import {
     PrimaryGeneratedColumn,
 } from "typeorm";
 import { Section } from "../section/section.entity";
+import { Question } from "../question/question.entity";
 
 @Entity()
 export class User {
@@ -52,4 +53,7 @@ export class User {
 
     @OneToMany(() => Section, (section) => section.creator)
     sections: Section[];
+
+    @OneToMany(() => Question, (question) => question.writer)
+    questions: Question[];
 }
