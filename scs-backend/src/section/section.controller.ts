@@ -18,7 +18,10 @@ import { RolesGuard } from "../common/guard/roles.guard";
 import { Roles } from "../common/decorator/roles.decorator";
 import { CreateSectionDto } from "./dto/create-section.dto";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
-import { UpdateSectionSubjectDto } from "./dto/update-section.dto";
+import {
+    UpdateSectionDescriptionDto,
+    UpdateSectionSubjectDto,
+} from "./dto/update-section.dto";
 
 @Controller("v1/sections")
 export class SectionController {
@@ -89,6 +92,26 @@ export class SectionController {
 
         return {
             message: "Section subject has been updated.",
+            section,
+        };
+    }
+
+    // [U-06] Controller logic
+    @UseGuards(RolesGuard)
+    @Roles("admin")
+    @Patch(":id/description")
+    @HttpCode(HttpStatus.OK)
+    async updateSectionDescription(
+        @Param("id", ParseIntPipe) sectionId: number,
+        @Body() updateSectionDescriptionDto: UpdateSectionDescriptionDto,
+    ): Promise<SectionResponse> {
+        const section = await this.sectionService.updateSectionDescription(
+            sectionId,
+            updateSectionDescriptionDto,
+        );
+
+        return {
+            message: "Section description has been updated.",
             section,
         };
     }

@@ -56,25 +56,27 @@ export class SectionRepository extends Repository<Section> {
     }
 
     async updateSectionSubject(id: number, subject: string): Promise<Section> {
-        const section = await this.findOne({
-            where: { id },
-            relations: ["creator"],
-            select: {
-                id: true,
-                subject: true,
-                description: true,
-                createdAt: true,
-                creator: {
-                    id: true,
-                    nickname: true,
-                },
-            },
-        });
+        const section = await this.findSectionById(id);
         if (!section) {
             throw new NotFoundException(`Section ${id} not found.`);
         }
 
         section.subject = subject;
+        await this.save(section);
+
+        return section;
+    }
+
+    async updateSectionDescription(
+        id: number,
+        description: string,
+    ): Promise<Section> {
+        const section = await this.findSectionById(id);
+        if (!section) {
+            throw new NotFoundException(`Section ${id} not found.`);
+        }
+
+        section.description = description;
         await this.save(section);
 
         return section;

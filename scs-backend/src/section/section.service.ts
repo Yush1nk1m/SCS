@@ -2,7 +2,10 @@ import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { SectionRepository } from "./section.repository";
 import { Section } from "./section.entity";
 import { CreateSectionDto } from "./dto/create-section.dto";
-import { UpdateSectionSubjectDto } from "./dto/update-section.dto";
+import {
+    UpdateSectionDescriptionDto,
+    UpdateSectionSubjectDto,
+} from "./dto/update-section.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 import { UserRepository } from "../user/user.repository";
 
@@ -71,5 +74,22 @@ export class SectionService {
 
         // change found section's subject and save
         return this.sectionRepository.updateSectionSubject(sectionId, subject);
+    }
+
+    // [S-05] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async updateSectionDescription(
+        sectionId: number,
+        updateSectionDescriptionDto: UpdateSectionDescriptionDto,
+    ): Promise<Section> {
+        const { description } = updateSectionDescriptionDto;
+
+        // change found section's description and save
+        return this.sectionRepository.updateSectionDescription(
+            sectionId,
+            description,
+        );
     }
 }
