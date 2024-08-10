@@ -15,21 +15,25 @@ export class SectionRepository extends Repository<Section> {
         return this.findOne({ where: { id } });
     }
 
-    async findAllSections(): Promise<Section[]> {
-        return this.find({
+    async findSectionAndUserById(id: number): Promise<Section> {
+        return this.findOne({
+            where: { id },
+            relations: ["creator"],
             select: {
                 id: true,
                 subject: true,
+                description: true,
                 createdAt: true,
                 creator: {
                     id: true,
                     nickname: true,
                 },
             },
-            relations: {
-                creator: true,
-            },
         });
+    }
+
+    async findAllSections(): Promise<Section[]> {
+        return this.find();
     }
 
     async createSection(
@@ -38,7 +42,6 @@ export class SectionRepository extends Repository<Section> {
         description: string,
     ): Promise<Section> {
         const section = this.create({ subject, description, creator });
-        this.logger.verbose("created section:", section);
         await this.save(section);
 
         return section;

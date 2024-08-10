@@ -140,13 +140,14 @@
 
 이 섹션은 섹션 관련 API에 대한 설계이다.
 
-| API ID | Method |       URI        | Summary        |
-| :----: | :----: | :--------------: | :------------- |
-|  S-01  |  GET   |   /v1/sections   | 모든 섹션 조회 |
-|  S-02  |  GET   | /v1/sections/:id | 특정 섹션 조회 |
-|  S-03  |  POST  |   /v1/sections   | 새 섹션 생성   |
-|  S-04  |  PUT   | /v1/sections/:id | 섹션 정보 수정 |
-|  S-05  | DELETE | /v1/sections/:id | 섹션 삭제      |
+| API ID | Method |             URI              | Summary        |
+| :----: | :----: | :--------------------------: | :------------- |
+|  S-01  |  GET   |         /v1/sections         | 모든 섹션 조회 |
+|  S-02  |  GET   |       /v1/sections/:id       | 특정 섹션 조회 |
+|  S-03  |  POST  |         /v1/sections         | 새 섹션 생성   |
+|  S-04  | PATCH  |   /v1/sections/:id/subject   | 섹션 제목 수정 |
+|  S-05  | PATCH  | /v1/sections/:id/description | 섹션 설명 수정 |
+|  S-06  | DELETE |       /v1/sections/:id       | 섹션 삭제      |
 
 ### S-01: 모든 섹션 조회
 
@@ -154,7 +155,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/sections`
 - **Request**: None
-- **Response data**: { message: `result message`, sections: [ { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date`, questionCount: `number of questions` }, { ... }, ... ] }
+- **Response data**: { message: `result message`, sections: [ { id: `section's id`, subject: `section's subject`, creator: `creator's id`, createdAt: `creation date`, questionCount: `number of questions` }, { ... }, ... ] }
 
 ### S-02: 특정 섹션 조회
 
@@ -170,17 +171,25 @@
 - **Method**: `POST`
 - **URI**: `/v1/sections`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { subject: `section's subject`, description: `section's description` }
-- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date` } }
+- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: `creator's id`, createdAt: `creation date` } }
 
-### S-04: 섹션 정보 수정
+### S-04: 섹션 제목 수정
 
-- **Description**: 특정 섹션의 정보를 수정한다. 관리자만 접근 가능하다.
-- **Method**: `PUT`
-- **URI**: `/v1/sections/:id`
+- **Description**: 특정 섹션의 제목을 수정한다. 관리자만 접근 가능하다.
+- **Method**: `PATCH`
+- **URI**: `/v1/sections/:id/subject`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { subject: `new section's subject` }
-- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `updated section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date`, updatedAt: `update date` } }
+- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `updated section's subject`, creator: `creator's id`, createdAt: `creation date`, updatedAt: `update date` } }
 
-### S-05: 섹션 삭제
+### S-05: 섹션 설명 수정
+
+- **Description**: 특정 섹션의 설명을 수정한다. 관리자만 접근 가능하다.
+- **Method**: `PATCH`
+- **URI**: `/v1/sections/:id/description`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { description: `new section's description` }
+- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `updated section's subject`, creator: `creator's id`, createdAt: `creation date`, updatedAt: `update date` } }
+
+### S-06: 섹션 삭제
 
 - **Description**: 특정 섹션을 삭제한다. 관리자만 접근 가능하다.
 - **Method**: `DELETE`
