@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -22,6 +23,7 @@ import {
     UpdateSectionDescriptionDto,
     UpdateSectionSubjectDto,
 } from "./dto/update-section.dto";
+import { BaseResponse } from "../common/types/response.type";
 
 @Controller("v1/sections")
 export class SectionController {
@@ -96,7 +98,7 @@ export class SectionController {
         };
     }
 
-    // [U-06] Controller logic
+    // [S-05] Controller logic
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Patch(":id/description")
@@ -113,6 +115,21 @@ export class SectionController {
         return {
             message: "Section description has been updated.",
             section,
+        };
+    }
+
+    // [S-06] Controller logic
+    @UseGuards(RolesGuard)
+    @Roles("admin")
+    @Delete(":id")
+    @HttpCode(HttpStatus.OK)
+    async deleteSection(
+        @Param("id", ParseIntPipe) sectionId: number,
+    ): Promise<BaseResponse> {
+        await this.sectionService.deleteSection(sectionId);
+
+        return {
+            message: "Section has been deleted.",
         };
     }
 }

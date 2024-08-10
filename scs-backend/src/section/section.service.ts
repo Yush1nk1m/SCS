@@ -92,4 +92,12 @@ export class SectionService {
             description,
         );
     }
+
+    // [S-06] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async deleteSection(sectionId: number): Promise<void> {
+        return this.sectionRepository.deleteSection(sectionId);
+    }
 }

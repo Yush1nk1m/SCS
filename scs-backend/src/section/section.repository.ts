@@ -81,4 +81,8 @@ export class SectionRepository extends Repository<Section> {
 
         return section;
     }
+
+    async deleteSection(id: number): Promise<void> {
+        await this.delete({ id });
+    }
 }
