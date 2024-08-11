@@ -140,14 +140,15 @@
 
 이 섹션은 섹션 관련 API에 대한 설계이다.
 
-| API ID | Method |             URI              | Summary        |
-| :----: | :----: | :--------------------------: | :------------- |
-|  S-01  |  GET   |         /v1/sections         | 모든 섹션 조회 |
-|  S-02  |  GET   |       /v1/sections/:id       | 특정 섹션 조회 |
-|  S-03  |  POST  |         /v1/sections         | 새 섹션 생성   |
-|  S-04  | PATCH  |   /v1/sections/:id/subject   | 섹션 제목 수정 |
-|  S-05  | PATCH  | /v1/sections/:id/description | 섹션 설명 수정 |
-|  S-06  | DELETE |       /v1/sections/:id       | 섹션 삭제      |
+| API ID | Method |             URI              | Summary                 |
+| :----: | :----: | :--------------------------: | :---------------------- |
+|  S-01  |  GET   |         /v1/sections         | 모든 섹션 조회          |
+|  S-02  |  GET   |       /v1/sections/:id       | 특정 섹션 조회          |
+|  S-03  |  POST  |         /v1/sections         | 새 섹션 생성            |
+|  S-04  | PATCH  |   /v1/sections/:id/subject   | 섹션 제목 수정          |
+|  S-05  | PATCH  | /v1/sections/:id/description | 섹션 설명 수정          |
+|  S-06  | DELETE |       /v1/sections/:id       | 섹션 삭제               |
+|  S-07  |  GET   |  /v1/sections/:id/questions  | 특정 섹션의 질문들 조회 |
 
 ### S-01: 모든 섹션 조회
 
@@ -163,7 +164,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/sections/:id`
 - **Request**: URI 경로에 섹션의 ID를 전달한다.
-- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date`, questions: [ { id: `question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, createdAt: `creation date` }, { ... }, ... ] } }
+- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date` } }
 
 ### S-03: 새 섹션 생성
 
@@ -196,3 +197,73 @@
 - **URI**: `/v1/sections/:id`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
 - **Response data**: { message: `result message` }
+
+### S-07: 특정 섹션의 질문들 조회
+
+- **Description**: 특정 섹션에 속한 모든 질문을 조회한다. 페이지네이션을 지원한다.
+- **Method**: `GET`
+- **URI**: `/v1/sections/:id/questions?page={page number}&limit={items per page}`
+- **Query Parameters**: page: `page number`, limit: `items per page`
+- **Request**: URI 경로에 섹션의 ID를 전달한다.
+- **Response data**: { message: `result message`, questions: [ { id: `question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, createdAt: `creation date`, saved: `number of times saved` }, { ... }, ... ], totalPages: `total number of pages`, currentPage: `current page number` }
+
+## Question
+
+이 섹션은 질문 관련 API에 대한 설계이다.
+
+| API ID | Method |            URI             | Summary                 |
+| :----: | :----: | :------------------------: | :---------------------- |
+|  Q-01  |  GET   |       /v1/questions        | 모든 질문 조회          |
+|  Q-02  |  GET   |     /v1/questions/:id      | 특정 질문 조회          |
+|  Q-03  |  POST  |       /v1/questions        | 새 질문 생성            |
+|  Q-04  | PATCH  |     /v1/questions/:id      | 질문 내용 수정          |
+|  Q-05  | DELETE |     /v1/questions/:id      | 질문 삭제               |
+|  Q-06  |  GET   | /v1/sections/:id/questions | 특정 섹션의 질문들 조회 |
+
+### Q-01: 모든 질문 조회
+
+- **Description**: 모든 질문의 기본 정보를 조회한다. 페이지네이션을 지원한다.
+- **Method**: `GET`
+- **URI**: `/v1/questions`
+- **Query Parameters**: page: `page number`, limit: `items per page`
+- **Response data**: { message: `result message`, questions: [ { id: `question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, section: { id: `section's id`, subject: `section's subject` }, createdAt: `creation date`, saved: `number of times saved` }, { ... }, ... ], totalPages: `total number of pages`, currentPage: `current page number` }
+
+### Q-02: 특정 질문 조회
+
+- **Description**: 특정 질문의 상세 정보를 조회한다.
+- **Method**: `GET`
+- **URI**: `/v1/questions/:id`
+- **Request**: URI 경로에 질문의 ID를 전달한다.
+- **Response data**: { message: `result message`, question: { id: `question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, section: { id: `section's id`, subject: `section's subject` }, createdAt: `creation date`, updatedAt: `last update date`, saved: `number of times saved` } }
+
+### Q-03: 새 질문 생성
+
+- **Description**: 새로운 질문을 생성한다.
+- **Method**: `POST`
+- **URI**: `/v1/questions`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `question content`, sectionId: `section's id` }
+- **Response data**: { message: `result message`, question: { id: `created question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, section: { id: `section's id`, subject: `section's subject` }, createdAt: `creation date` } }
+
+### Q-04: 질문 내용 수정
+
+- **Description**: 특정 질문의 내용을 수정한다. 질문 작성자만 수정 가능하다.
+- **Method**: `PATCH`
+- **URI**: `/v1/questions/:id`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `updated question content` }
+- **Response data**: { message: `result message`, question: { id: `question's id`, content: `updated question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, section: { id: `section's id`, subject: `section's subject` }, createdAt: `creation date`, updatedAt: `update date` } }
+
+### Q-05: 질문 삭제
+
+- **Description**: 특정 질문을 삭제한다. 질문 작성자만 삭제 가능하다.
+- **Method**: `DELETE`
+- **URI**: `/v1/questions/:id`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**: { message: `result message` }
+
+### Q-06: 특정 섹션의 질문들 조회
+
+- **Description**: 특정 섹션에 속한 모든 질문을 조회한다. 페이지네이션을 지원한다.
+- **Method**: `GET`
+- **URI**: `/v1/sections/:id/questions`
+- **Query Parameters**: page: `page number`, limit: `items per page`
+- **Response data**: { message: `result message`, questions: [ { id: `question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, createdAt: `creation date`, saved: `number of times saved` }, { ... }, ... ], totalPages: `total number of pages`, currentPage: `current page number` }
