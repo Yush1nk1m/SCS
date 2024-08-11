@@ -14,8 +14,10 @@ export class QuestionRepository extends Repository<Question> {
         sectionId: number,
         page: number = 1,
         limit: number = 10,
-    ): Promise<Question[]> {
-        return this.find({
+        sort: "createdAt" | "saved" = "createdAt",
+        order: "ASC" | "DESC" = "DESC",
+    ): Promise<{ questions: Question[]; total: number }> {
+        const [questions, total] = await this.findAndCount({
             where: { section: { id: sectionId } },
             relations: ["writer"],
             select: {
@@ -28,9 +30,11 @@ export class QuestionRepository extends Repository<Question> {
                     nickname: true,
                 },
             },
-            order: { createdAt: "DESC" },
+            order: { [sort]: order },
             skip: (page - 1) * limit,
             take: limit,
         });
+
+        return { questions, total };
     }
 }

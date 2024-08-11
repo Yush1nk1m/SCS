@@ -21,7 +21,13 @@
 - **Method**: `POST`
 - **URI**: `/v1/auth/email/verification-code`
 - **Request**: Body = { email: `user email` }
-- **Response data**: { message: `result message` }
+- **Response data**:
+
+```
+{
+    message: `result message`
+}
+```
 
 ### A-02: 인증 코드 검증
 
@@ -29,7 +35,13 @@
 - **Method**: `POST`
 - **URI**: `/v1/auth/email/verify-code`
 - **Request**: Body = { email: `user email`, verificationCode: `verification code` }
-- **Response data**: { message: `result message` }
+- **Response data**:
+
+```
+{
+    message: `result message`
+}
+```
 
 ### A-03: 회원 가입
 
@@ -37,7 +49,20 @@
 - **Method**: `POST`
 - **URI**: `/v1/auth/signup`
 - **Request**: Body = { email: `user email`, password: `user password`, nickname: `user nickname`, affiliation: `user's affiliation`, position: `user's position in the field`, verificationCode: `verified code` }
-- **Response data**: { message: `result message`, user: `created user information with no password` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    user: {
+        id: `user's id`,
+        email: `user's email`,
+        nickname: `user's nickname`,
+        affiliation: `user's affiliation`,
+        position: `position`
+    }
+}
+```
 
 ### A-04: 로그인
 
@@ -45,7 +70,15 @@
 - **Method**:`POST`
 - **URI**: `/v1/auth/jwt/login`
 - **Request**: Body = { email: `user email`, password: `user password` }
-- **Response data**: { message: `result message`, accessToken: `JWT access token`, refreshToken: `JWT refresh token` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    accessToken: `JWT access token`,
+    refreshToken: `JWT refresh token`
+}
+```
 
 ### A-05: 리프레시
 
@@ -53,7 +86,15 @@
 - **Method**: `POST`
 - **URI**: `/v1/auth/jwt/refresh`
 - **Request**: Request header = { Authorization: `Bearer ${refreshToken}` }
-- **Response data**: { message: `result message`, accessToken: `JWT access token`, refreshToken: `JWT refresh token` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    accessToken: `JWT access token`,
+    refreshToken: `JWT refresh token`
+}
+```
 
 ### A-06: 로그아웃
 
@@ -61,7 +102,13 @@
 - **Method**: `POST`
 - **URI**: `/v1/auth/jwt/logout`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
-- **Response data**: { message: `result message` }
+- **Response data**:
+
+```
+{
+    message: `result message`
+}
+```
 
 ### Appendix. 회원 가입 API 사용 절차
 
@@ -94,7 +141,24 @@
 - **Method**: `GET`
 - **URI**: `/v1/users`
 - **Request**: None
-- **Response data**: { message: `result message`, users: [ { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` }, { ... }, ... ] }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    users: [
+        {
+            id: `user's id`,
+            email: `user's email`,
+            nickname: `user's nickname`,
+            affiliation: `user's affiliation`,
+            position: `position`
+        },
+        { ... },
+        ...
+    ]
+}
+```
 
 ### U-02: 특정 사용자 정보 조회
 
@@ -102,7 +166,20 @@
 - **Method**: `GET`
 - **URI**: `/v1/users/:id`
 - **Request**: URI 경로에 사용자의 ID를 전달한다.
-- **Response data**: { message: `result message`, user: { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` } }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    user: {
+        id: `user's id`,
+        email: `user's email`,
+        nickname: `user's nickname`,
+        affiliation: `user's affiliation`,
+        position: `position`
+    }
+}
+```
 
 ### U-03: 로그인한 사용자 정보 조회
 
@@ -110,7 +187,20 @@
 - **Method**: `GET`
 - **URI**: `/v1/users/me`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
-- **Response data**: { message: `result message`, user: { id: `user's id`, email: `user's email`, nickname: `user's nickname`, affiliation: `user's affiliation`, position: `position` } }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    user: {
+        id: `user's id`,
+        email: `user's email`,
+        nickname: `user's nickname`,
+        affiliation: `user's affiliation`,
+        position: `position`
+    }
+}
+```
 
 ### U-04: 로그인한 사용자 비밀번호 변경
 
@@ -118,7 +208,13 @@
 - **Method**: `PATCH`
 - **URI**: `/v1/users/password`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { password: `current password`, newPassword: `new password`, confirmPassword: `new confirm password` }
-- **Response data**: { message: `result message` }
+- **Response data**:
+
+```
+{
+    message: `result message`
+}
+```
 
 ### U-05: 로그인한 사용자 닉네임 변경
 
@@ -126,7 +222,13 @@
 - **Method**: `PATCH`
 - **URI**: `/v1/users/nickname`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { nickname: `new nickname` }
-- **Response data**: { message: `result message` }
+- **Response data**:
+
+```
+{
+    message: `result message`
+}
+```
 
 ### U-06: 로그인한 사용자 회원 탈퇴
 
@@ -134,7 +236,13 @@
 - **Method**: `DELETE`
 - **URI**: `/v1/users`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { password: `user's password`, confirmMessage: `회원 탈퇴를 희망합니다.` }
-- **Response data**: { message: `result message` }
+- **Response data**:
+
+```
+{
+    message: `result message`
+}
+```
 
 ## Section
 
@@ -156,7 +264,27 @@
 - **Method**: `GET`
 - **URI**: `/v1/sections`
 - **Request**: None
-- **Response data**: { message: `result message`, sections: [ { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date`, questionCount: `number of questions` }, { ... }, ... ] }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    sections: [
+        {
+            id: `section's id`,
+            subject: `section's subject`,
+            description: `section's description`,
+            creator: {
+                id: `creator's id`,
+                nickname: `creator's nickname`
+            },
+            createdAt: `creation date`,
+        },
+        { ... },
+        ...
+    ]
+}
+```
 
 ### S-02: 특정 섹션 조회
 
@@ -164,7 +292,23 @@
 - **Method**: `GET`
 - **URI**: `/v1/sections/:id`
 - **Request**: URI 경로에 섹션의 ID를 전달한다.
-- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date` } }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    section: {
+        id: `section's id`,
+        subject: `section's subject`,
+        description: `section's description`,
+        creator: {
+            id: `creator's id`,
+            nickname: `creator's nickname`
+        },
+        createdAt: `creation date`
+    }
+}
+```
 
 ### S-03: 새 섹션 생성
 
@@ -172,7 +316,20 @@
 - **Method**: `POST`
 - **URI**: `/v1/sections`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { subject: `section's subject`, description: `section's description` }
-- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: `creator's id`, createdAt: `creation date` } }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    section: {
+        id: `section's id`,
+        subject: `section's subject`,
+        description: `section's description`,
+        creator: `creator's id`,
+        createdAt: `creation date`
+    }
+}
+```
 
 ### S-04: 섹션 제목 수정
 
@@ -180,7 +337,23 @@
 - **Method**: `PATCH`
 - **URI**: `/v1/sections/:id/subject`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { subject: `new section's subject` }
-- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date` } }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    section: {
+        id: `section's id`,
+        subject: `section's subject`,
+        description: `section's description`,
+        creator: {
+            id: `creator's id`,
+            nickname: `creator's nickname`
+        },
+        createdAt: `creation date`
+    }
+}
+```
 
 ### S-05: 섹션 설명 수정
 
@@ -188,7 +361,23 @@
 - **Method**: `PATCH`
 - **URI**: `/v1/sections/:id/description`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { description: `new section's description` }
-- **Response data**: { message: `result message`, section: { id: `section's id`, subject: `section's subject`, creator: { id: `creator's id`, nickname: `creator's nickname` }, createdAt: `creation date` } }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    section: {
+        id: `section's id`,
+        subject: `section's subject`,
+        description: `section's description`,
+        creator: {
+            id: `creator's id`,
+            nickname: `creator's nickname`
+        },
+        createdAt: `creation date`
+    }
+}
+```
 
 ### S-06: 섹션 삭제
 
@@ -196,16 +385,39 @@
 - **Method**: `DELETE`
 - **URI**: `/v1/sections/:id`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
-- **Response data**: { message: `result message` }
+- **Response data**:
+
+```
+{ message: `result message` }
+```
 
 ### S-07: 특정 섹션의 질문들 조회
 
-- **Description**: 특정 섹션에 속한 모든 질문을 조회한다. 페이지네이션을 지원한다.
+- **Description**: 특정 섹션에 속한 모든 질문을 조회한다. 페이지네이션을 지원한다. 쿼리 파라미터의 기본 값은 { page=1, limit=10, sort=createdAt, order=desc }이다.
 - **Method**: `GET`
-- **URI**: `/v1/sections/:id/questions?page={page number}&limit={items per page}`
-- **Query Parameters**: page: `page number`, limit: `items per page`
+- **URI**: `/v1/sections/:id/questions?page={page number}&limit={items per page}&sort={createdAt or saved}&order={asc or desc}`
+- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `saved`, order: `asc` or `desc`
 - **Request**: URI 경로에 섹션의 ID를 전달한다.
-- **Response data**: { message: `result message`, questions: [ { id: `question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, createdAt: `creation date`, saved: `number of times saved` }, { ... }, ... ], totalPages: `total number of pages`, currentPage: `current page number` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    questions: [
+        {
+            id: `question's id`,
+            content: `question content`,
+            writer: { id: `writer's id`,
+            nickname: `writer's nickname` },
+            createdAt: `creation date`,
+            saved: `number of times saved`
+        },
+        { ... },
+        ...
+        ],
+    total: `total count of questions`
+}
+```
 
 ## Question
 
@@ -226,7 +438,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/questions`
 - **Query Parameters**: page: `page number`, limit: `items per page`
-- **Response data**: { message: `result message`, questions: [ { id: `question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, section: { id: `section's id`, subject: `section's subject` }, createdAt: `creation date`, saved: `number of times saved` }, { ... }, ... ], totalPages: `total number of pages`, currentPage: `current page number` }
+- **Response data**:
 
 ### Q-02: 특정 질문 조회
 
@@ -234,7 +446,7 @@
 - **Method**: `GET`
 - **URI**: `/v1/questions/:id`
 - **Request**: URI 경로에 질문의 ID를 전달한다.
-- **Response data**: { message: `result message`, question: { id: `question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, section: { id: `section's id`, subject: `section's subject` }, createdAt: `creation date`, updatedAt: `last update date`, saved: `number of times saved` } }
+- **Response data**:
 
 ### Q-03: 새 질문 생성
 
@@ -242,7 +454,7 @@
 - **Method**: `POST`
 - **URI**: `/v1/questions`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `question content`, sectionId: `section's id` }
-- **Response data**: { message: `result message`, question: { id: `created question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, section: { id: `section's id`, subject: `section's subject` }, createdAt: `creation date` } }
+- **Response data**:
 
 ### Q-04: 질문 내용 수정
 
@@ -250,7 +462,7 @@
 - **Method**: `PATCH`
 - **URI**: `/v1/questions/:id`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `updated question content` }
-- **Response data**: { message: `result message`, question: { id: `question's id`, content: `updated question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, section: { id: `section's id`, subject: `section's subject` }, createdAt: `creation date`, updatedAt: `update date` } }
+- **Response data**:
 
 ### Q-05: 질문 삭제
 
@@ -258,7 +470,7 @@
 - **Method**: `DELETE`
 - **URI**: `/v1/questions/:id`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
-- **Response data**: { message: `result message` }
+- **Response data**:
 
 ### Q-06: 특정 섹션의 질문들 조회
 
@@ -266,4 +478,4 @@
 - **Method**: `GET`
 - **URI**: `/v1/sections/:id/questions`
 - **Query Parameters**: page: `page number`, limit: `items per page`
-- **Response data**: { message: `result message`, questions: [ { id: `question's id`, content: `question content`, writer: { id: `writer's id`, nickname: `writer's nickname` }, createdAt: `creation date`, saved: `number of times saved` }, { ... }, ... ], totalPages: `total number of pages`, currentPage: `current page number` }
+- **Response data**:

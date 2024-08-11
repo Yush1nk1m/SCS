@@ -2,6 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
@@ -11,6 +12,8 @@ import { User } from "../user/user.entity";
 import { Section } from "../section/section.entity";
 
 @Entity()
+@Index(["section", "saved"])
+@Index(["section", "createdAt"])
 export class Question {
     @PrimaryGeneratedColumn()
     id: number;

@@ -15,13 +15,17 @@ export class QuestionService {
     // [S-07] Service logic
     async getQuestionsBySection(
         sectionId: number,
-        page: number,
-        limit: number,
-    ): Promise<Question[]> {
+        page: number = 1,
+        limit: number = 10,
+        sort: "createdAt" | "saved" = "createdAt",
+        order: "ASC" | "DESC" = "DESC",
+    ): Promise<{ questions: Question[]; total: number }> {
         return this.questionRepository.findQuestionsBySectionId(
             sectionId,
             page,
             limit,
+            sort,
+            order,
         );
     }
 }

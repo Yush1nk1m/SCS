@@ -70,18 +70,24 @@ export class SectionController {
     @HttpCode(HttpStatus.OK)
     async getQuestionsBySection(
         @Param("id", ParseIntPipe) sectionId: number,
-        @Query("page", ParseIntPipe) page: number, // page number
-        @Query("limit", ParseIntPipe) limit: number, // questions per page
+        @Query("page", ParseIntPipe) page: number = 1, // page number
+        @Query("limit", ParseIntPipe) limit: number = 10, // questions per page
+        @Query("sort") sort: "createdAt" | "saved" = "createdAt",
+        @Query("order") order: "ASC" | "DESC" = "DESC",
     ): Promise<QuestionsResponse> {
-        const questions = await this.questionService.getQuestionsBySection(
-            sectionId,
-            page,
-            limit,
-        );
+        const { questions, total } =
+            await this.questionService.getQuestionsBySection(
+                sectionId,
+                page,
+                limit,
+                sort,
+                order,
+            );
 
         return {
             message: `Questions of section ${sectionId} have been found.`,
             questions,
+            total,
         };
     }
 

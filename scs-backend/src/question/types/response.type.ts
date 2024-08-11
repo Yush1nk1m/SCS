@@ -3,6 +3,7 @@ import { Question } from "../question.entity";
 
 export interface QuestionsResponse extends BaseResponse {
     questions: Question[];
+    total: number;
 }
 
 export interface QuestionResponse extends BaseResponse {
