@@ -9,4 +9,28 @@ export class QuestionRepository extends Repository<Question> {
     constructor(private readonly dataSource: DataSource) {
         super(Question, dataSource.createEntityManager());
     }
+
+    async findQuestionsBySectionId(
+        sectionId: number,
+        page: number = 1,
+        limit: number = 10,
+    ): Promise<Question[]> {
+        return this.find({
+            where: { section: { id: sectionId } },
+            relations: ["writer"],
+            select: {
+                id: true,
+                content: true,
+                createdAt: true,
+                saved: true,
+                writer: {
+                    id: true,
+                    nickname: true,
+                },
+            },
+            order: { createdAt: "DESC" },
+            skip: (page - 1) * limit,
+            take: limit,
+        });
+    }
 }

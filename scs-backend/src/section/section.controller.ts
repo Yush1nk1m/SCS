@@ -10,6 +10,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     UseGuards,
 } from "@nestjs/common";
 import { SectionService } from "./section.service";
@@ -24,11 +25,16 @@ import {
     UpdateSectionSubjectDto,
 } from "./dto/update-section.dto";
 import { BaseResponse } from "../common/types/response.type";
+import { QuestionService } from "../question/question.service";
+import { QuestionsResponse } from "../question/types/response.type";
 
 @Controller("v1/sections")
 export class SectionController {
     private logger = new Logger("SectionController");
-    constructor(private readonly sectionService: SectionService) {}
+    constructor(
+        private readonly sectionService: SectionService,
+        private readonly questionService: QuestionService,
+    ) {}
 
     // [S-01] Controller logic
     @Public()
@@ -55,6 +61,27 @@ export class SectionController {
         return {
             message: `Section with id: ${id} has been found.`,
             section,
+        };
+    }
+
+    // [S-07] Controller logic
+    @Public()
+    @Get(":id/questions")
+    @HttpCode(HttpStatus.OK)
+    async getQuestionsBySection(
+        @Param("id", ParseIntPipe) sectionId: number,
+        @Query("page", ParseIntPipe) page: number, // page number
+        @Query("limit", ParseIntPipe) limit: number, // questions per page
+    ): Promise<QuestionsResponse> {
+        const questions = await this.questionService.getQuestionsBySection(
+            sectionId,
+            page,
+            limit,
+        );
+
+        return {
+            message: `Questions of section ${sectionId} have been found.`,
+            questions,
         };
     }
 
