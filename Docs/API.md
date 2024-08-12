@@ -407,8 +407,10 @@
         {
             id: `question's id`,
             content: `question content`,
-            writer: { id: `writer's id`,
-            nickname: `writer's nickname` },
+            writer: {
+                id: `writer's id`,
+                nickname: `writer's nickname`
+            },
             createdAt: `creation date`,
             saved: `number of times saved`
         },
@@ -446,7 +448,16 @@
         content: `question's content`,
         createdAt: `question's created date`,
         updatedAt: `question's updated date`,
-        saved: `question's saved count`
+        saved: `question's saved count`,
+        writer: {
+            id: `writer's id`,
+            nickname: `writer's nickname`
+        },
+        section: {
+            id: `section's id`,
+            subject: `section's subject`,
+            description: `section's description`
+        }
     }
 }
 ```

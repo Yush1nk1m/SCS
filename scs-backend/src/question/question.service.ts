@@ -41,7 +41,7 @@ export class QuestionService {
     async getSpecificQuestion(questionId: number): Promise<Question> {
         // find a question with specified id from DB
         const question =
-            await this.questionRepository.findQuestionById(questionId);
+            await this.questionRepository.findQuestionDetailById(questionId);
 
         // if the question does not exist, it is an error
         if (!question) {

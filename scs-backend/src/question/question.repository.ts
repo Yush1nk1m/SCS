@@ -44,6 +44,29 @@ export class QuestionRepository extends Repository<Question> {
         return this.findOne({ where: { id } });
     }
 
+    async findQuestionDetailById(id: number) {
+        return this.findOne({
+            where: { id },
+            relations: ["writer", "section"],
+            select: {
+                id: true,
+                content: true,
+                createdAt: true,
+                updatedAt: true,
+                saved: true,
+                section: {
+                    id: true,
+                    subject: true,
+                    description: true,
+                },
+                writer: {
+                    id: true,
+                    nickname: true,
+                },
+            },
+        });
+    }
+
     async createQuestion(
         writer: User,
         section: Section,
