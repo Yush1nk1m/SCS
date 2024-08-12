@@ -102,4 +102,8 @@ export class QuestionRepository extends Repository<Question> {
 
         return question;
     }
+
+    async deleteQuestionById(id: number): Promise<void> {
+        await this.delete({ id });
+    }
 }

@@ -10,6 +10,7 @@ import { Question } from "./question.entity";
 import { CreateQuestionDto } from "./dto/create-question.dto";
 import { UserRepository } from "../user/user.repository";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
+import { IsolationLevel, Transactional } from "typeorm-transactional";
 
 @Injectable()
 export class QuestionService {
@@ -84,6 +85,9 @@ export class QuestionService {
     }
 
     // [Q-03] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
     async updateQuestionContent(
         questionId: number,
         updateQuestionContentDto: UpdateQuestionContentDto,
@@ -95,5 +99,13 @@ export class QuestionService {
             questionId,
             content,
         );
+    }
+
+    // [Q-04] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async deleteQuestion(questionId: number): Promise<void> {
+        return this.questionRepository.deleteQuestionById(questionId);
     }
 }

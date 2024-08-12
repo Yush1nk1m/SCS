@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -19,6 +20,7 @@ import { CreateQuestionDto } from "./dto/create-question.dto";
 import { RolesGuard } from "../common/guard/roles.guard";
 import { Roles } from "../common/decorator/roles.decorator";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
+import { BaseResponse } from "../common/types/response.type";
 
 @Controller("v1/questions")
 export class QuestionController {
@@ -77,6 +79,21 @@ export class QuestionController {
         return {
             message: "Question content has been updated.",
             question,
+        };
+    }
+
+    // [Q-04] Controller logic
+    @UseGuards(RolesGuard)
+    @Roles("admin")
+    @Delete(":id")
+    @HttpCode(HttpStatus.OK)
+    async deleteQuestion(
+        @Param("id", ParseIntPipe) questionId: number,
+    ): Promise<BaseResponse> {
+        await this.questionService.deleteQuestion(questionId);
+
+        return {
+            message: `Question with id ${questionId} has been deleted.`,
         };
     }
 }
