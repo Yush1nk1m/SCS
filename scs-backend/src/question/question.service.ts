@@ -9,6 +9,7 @@ import { SectionRepository } from "../section/section.repository";
 import { Question } from "./question.entity";
 import { CreateQuestionDto } from "./dto/create-question.dto";
 import { UserRepository } from "../user/user.repository";
+import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
 
 @Injectable()
 export class QuestionService {
@@ -80,5 +81,19 @@ export class QuestionService {
 
         // create new question
         return this.questionRepository.createQuestion(user, section, content);
+    }
+
+    // [Q-03] Service logic
+    async updateQuestionContent(
+        questionId: number,
+        updateQuestionContentDto: UpdateQuestionContentDto,
+    ): Promise<Question> {
+        // extract content from DTO
+        const { content } = updateQuestionContentDto;
+
+        return this.questionRepository.findAndUpdateQuestionContent(
+            questionId,
+            content,
+        );
     }
 }

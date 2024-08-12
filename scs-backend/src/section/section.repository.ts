@@ -59,7 +59,10 @@ export class SectionRepository extends Repository<Section> {
         return section;
     }
 
-    async updateSectionSubject(id: number, subject: string): Promise<Section> {
+    async findAndUpdateSectionSubject(
+        id: number,
+        subject: string,
+    ): Promise<Section> {
         const section = await this.findSectionById(id);
         if (!section) {
             throw new NotFoundException(`Section ${id} not found.`);
@@ -71,7 +74,7 @@ export class SectionRepository extends Repository<Section> {
         return section;
     }
 
-    async updateSectionDescription(
+    async findAndUpdateSectionDescription(
         id: number,
         description: string,
     ): Promise<Section> {

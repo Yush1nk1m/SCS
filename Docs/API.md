@@ -491,6 +491,19 @@
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `updated question content` }
 - **Response data**:
 
+```
+{
+    message: `result message`,
+    question: {
+        id: `question's id`,
+        content: `question's updated content`,
+        createdAt: `question's created date`,
+        updatedAt: `question's updated date`,
+        saved: 0
+    }
+}
+```
+
 ### Q-04: 질문 삭제
 
 - **Description**: 특정 질문을 삭제한다. 관리자만 삭제 가능하다.

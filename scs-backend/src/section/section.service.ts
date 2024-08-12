@@ -73,7 +73,10 @@ export class SectionService {
         const { subject } = updateSectionSubjectDto;
 
         // change found section's subject and save
-        return this.sectionRepository.updateSectionSubject(sectionId, subject);
+        return this.sectionRepository.findAndUpdateSectionSubject(
+            sectionId,
+            subject,
+        );
     }
 
     // [S-05] Service logic
@@ -87,7 +90,7 @@ export class SectionService {
         const { description } = updateSectionDescriptionDto;
 
         // change found section's description and save
-        return this.sectionRepository.updateSectionDescription(
+        return this.sectionRepository.findAndUpdateSectionDescription(
             sectionId,
             description,
         );

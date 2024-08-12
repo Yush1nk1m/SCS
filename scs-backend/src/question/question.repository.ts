@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { DataSource, Repository } from "typeorm";
 import { Question } from "./question.entity";
 import { User } from "../user/user.entity";
@@ -81,6 +81,24 @@ export class QuestionRepository extends Repository<Question> {
         await this.save(question);
         delete question.writer;
         delete question.section;
+
+        return question;
+    }
+
+    async findAndUpdateQuestionContent(
+        id: number,
+        content: string,
+    ): Promise<Question> {
+        const question = await this.findOne({ where: { id } });
+
+        if (!question) {
+            throw new NotFoundException(
+                `Question with id ${id} does not exist.`,
+            );
+        }
+
+        question.content = content;
+        await this.save(question);
 
         return question;
     }
