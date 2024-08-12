@@ -37,4 +37,8 @@ export class QuestionRepository extends Repository<Question> {
 
         return { questions, total };
     }
+
+    async findQuestionById(id: number) {
+        return this.findOne({ where: { id } });
+    }
 }

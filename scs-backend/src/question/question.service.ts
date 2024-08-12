@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { QuestionRepository } from "./question.repository";
 import { SectionRepository } from "../section/section.repository";
 import { Question } from "./question.entity";
@@ -27,5 +27,19 @@ export class QuestionService {
             sort,
             order,
         );
+    }
+
+    // [Q-01] Service logic
+    async getSpecificQuestion(questionId: number): Promise<Question> {
+        const question =
+            await this.questionRepository.findQuestionById(questionId);
+
+        if (!question) {
+            throw new NotFoundException(
+                `Question with id ${questionId} has not been found.`,
+            );
+        }
+
+        return question;
     }
 }
