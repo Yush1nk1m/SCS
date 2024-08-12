@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { DataSource, Repository } from "typeorm";
+import { DataSource, Like, Repository } from "typeorm";
 import { Question } from "./question.entity";
 import { User } from "../user/user.entity";
 import { Section } from "../section/section.entity";
@@ -18,9 +18,15 @@ export class QuestionRepository extends Repository<Question> {
         limit: number = 10,
         sort: "createdAt" | "saved" = "createdAt",
         order: "ASC" | "DESC" = "DESC",
+        search: string = "",
     ): Promise<{ questions: Question[]; total: number }> {
         const [questions, total] = await this.findAndCount({
-            where: { section: { id: sectionId } },
+            where: {
+                section: {
+                    id: sectionId,
+                    subject: Like(`%${search}%`),
+                },
+            },
             relations: ["writer"],
             select: {
                 id: true,

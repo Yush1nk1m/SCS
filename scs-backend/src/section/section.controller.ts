@@ -40,8 +40,11 @@ export class SectionController {
     @Public()
     @Get()
     @HttpCode(HttpStatus.OK)
-    async getAllSections(): Promise<SectionsResponse> {
-        const sections = await this.sectionService.getAllSections();
+    async getAllSections(
+        @Query("sort") sort: "subject" | "id" = "id",
+        @Query("order") order: "ASC" | "DESC" = "ASC",
+    ): Promise<SectionsResponse> {
+        const sections = await this.sectionService.getAllSections(sort, order);
 
         return {
             message: "All sections have been found.",
@@ -74,6 +77,7 @@ export class SectionController {
         @Query("limit", ParseIntPipe) limit: number = 10, // questions per page
         @Query("sort") sort: "createdAt" | "saved" = "createdAt",
         @Query("order") order: "ASC" | "DESC" = "DESC",
+        @Query("search") search: string = "",
     ): Promise<QuestionsResponse> {
         const { questions, total } =
             await this.questionService.getQuestionsBySection(
@@ -82,6 +86,7 @@ export class SectionController {
                 limit,
                 sort,
                 order,
+                search,
             );
 
         return {

@@ -263,7 +263,8 @@
 - **Description**: 모든 섹션의 기본 정보를 조회한다.
 - **Method**: `GET`
 - **URI**: `/v1/sections`
-- **Request**: None
+- **Query Parameters**: sort: `subject` or `id`, order: `ASC` or `DESC`
+- **Request**: URI 경로에 정렬 조건을 전달한다.
 - **Response data**:
 
 ```
@@ -396,7 +397,7 @@
 - **Description**: 특정 섹션에 속한 모든 질문을 조회한다. 페이지네이션을 지원한다. 쿼리 파라미터의 기본 값은 { page=1, limit=10, sort=createdAt, order=desc }이다.
 - **Method**: `GET`
 - **URI**: `/v1/sections/:id/questions?page={page number}&limit={items per page}&sort={createdAt or saved}&order={asc or desc}`
-- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `saved`, order: `asc` or `desc`
+- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `saved`, order: `asc` or `desc`, search: `searching value`
 - **Request**: URI 경로에 섹션의 ID를 전달한다.
 - **Response data**:
 

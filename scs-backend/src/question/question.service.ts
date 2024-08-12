@@ -29,6 +29,7 @@ export class QuestionService {
         limit: number = 10,
         sort: "createdAt" | "saved" = "createdAt",
         order: "ASC" | "DESC" = "DESC",
+        search: string,
     ): Promise<{ questions: Question[]; total: number }> {
         return this.questionRepository.findQuestionsBySectionId(
             sectionId,
@@ -36,6 +37,7 @@ export class QuestionService {
             limit,
             sort,
             order,
+            search,
         );
     }
 

@@ -48,6 +48,28 @@ export class SectionRepository extends Repository<Section> {
         });
     }
 
+    async findAndSortAllSections(
+        sort: "subject" | "id" = "id",
+        order: "ASC" | "DESC" = "ASC",
+    ): Promise<Section[]> {
+        return this.find({
+            relations: ["creator"],
+            select: {
+                id: true,
+                subject: true,
+                description: true,
+                createdAt: true,
+                creator: {
+                    id: true,
+                    nickname: true,
+                },
+            },
+            order: {
+                [sort]: order,
+            },
+        });
+    }
+
     async createSection(
         creator: User,
         subject: string,

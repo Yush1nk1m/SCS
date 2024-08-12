@@ -19,9 +19,12 @@ export class SectionService {
     ) {}
 
     // [S-01] Service logic
-    async getAllSections(): Promise<Section[]> {
+    async getAllSections(
+        sort: "subject" | "id",
+        order: "ASC" | "DESC",
+    ): Promise<Section[]> {
         // find all sections with no creator information
-        return this.sectionRepository.findAllSections();
+        return this.sectionRepository.findAndSortAllSections(sort, order);
     }
 
     // [S-02] Service logic
