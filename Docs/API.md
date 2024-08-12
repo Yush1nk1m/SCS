@@ -519,7 +519,7 @@
 - **Description**: 특정 질문에 대한 모든 답변을 조회한다. 페이지네이션을 지원한다.
 - **Method**: `GET`
 - **URI**: `/v1/questions/:id/actions`
-- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `like`, order: `ASC` or `DESC`, search: `searching value`
+- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `likeCount`, order: `ASC` or `DESC`, search: `searching value`
 - **Request**: URI 경로에 질문의 ID를 전달하고 쿼리 파라미터로 옵션을 전달한다.
 - **Response data**:
 
@@ -527,10 +527,10 @@
 
 이 섹션은 답변 관련 API에 대한 설계이다.
 
-| API ID | Method |            URI            | Summary        |
-| :----: | :----: | :-----------------------: | :------------- |
-| AC-01  |  GET   |      /v1/actions/:id      | 특정 답변 조회 |
-| AC-02  |  POST  | /v1/questions/:id/actions | 새 답변 생성   |
-| AC-03  | PATCH  |      /v1/actions/:id      | 답변 내용 수정 |
-| AC-04  | DELETE |      /v1/actions/:id      | 답변 삭제      |
-| AC-05  |  POST  |   /v1/actions/:id/like    | 답변 좋아요    |
+| API ID | Method |            URI            | Summary                       |
+| :----: | :----: | :-----------------------: | :---------------------------- |
+| AC-01  |  GET   |      /v1/actions/:id      | 특정 답변 조회                |
+| AC-02  |  POST  | /v1/questions/:id/actions | 새 답변 생성                  |
+| AC-03  | PATCH  |      /v1/actions/:id      | 답변 내용 수정                |
+| AC-04  | DELETE |      /v1/actions/:id      | 답변 삭제                     |
+| AC-05  |  POST  | /v1/actions/:id/interact  | 답변에 대한 사용자의 상호작용 |

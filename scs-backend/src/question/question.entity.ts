@@ -5,11 +5,13 @@ import {
     Index,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
 import { Section } from "../section/section.entity";
+import { Action } from "../action/action.entity";
 
 @Entity()
 @Index(["section", "saved"])
@@ -37,4 +39,7 @@ export class Question {
     @ManyToOne(() => Section, (section) => section.questions)
     @JoinColumn({ name: "section", referencedColumnName: "id" })
     section: Section;
+
+    @OneToMany(() => Action, (action) => action.question)
+    actions: Action[];
 }

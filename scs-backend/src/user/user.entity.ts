@@ -9,6 +9,8 @@ import {
 } from "typeorm";
 import { Section } from "../section/section.entity";
 import { Question } from "../question/question.entity";
+import { Action } from "../action/action.entity";
+import { ActionInteraction } from "../action/action-interaction.entity";
 
 @Entity()
 export class User {
@@ -56,4 +58,13 @@ export class User {
 
     @OneToMany(() => Question, (question) => question.writer)
     questions: Question[];
+
+    @OneToMany(() => Action, (action) => action.writer)
+    actions: Action[];
+
+    @OneToMany(
+        () => ActionInteraction,
+        (actionInteraction) => actionInteraction.user,
+    )
+    actionInteractions: ActionInteraction[];
 }
