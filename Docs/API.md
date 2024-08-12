@@ -534,3 +534,148 @@
 | AC-03  | PATCH  |      /v1/actions/:id      | 답변 내용 수정                |
 | AC-04  | DELETE |      /v1/actions/:id      | 답변 삭제                     |
 | AC-05  |  POST  | /v1/actions/:id/interact  | 답변에 대한 사용자의 상호작용 |
+
+### AC-01: 특정 답변 조회
+
+- **Description**: 특정 답변의 상세 정보를 조회한다.
+- **Method**: `GET`
+- **URI**: `/v1/actions/:id`
+- **Request**: URI 경로에 답변의 ID를 전달한다.
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    action: {
+        id: `action's id`,
+        content: `action's content`,
+        createdAt: `action's created date`,
+        updatedAt: `action's updated date`,
+        likeCount: `number of likes`,
+        writer: {
+            id: `writer's id`,
+            nickname: `writer's nickname`
+        },
+        question: {
+            id: `question's id`,
+            content: `question's content`
+        }
+    }
+}
+```
+
+### AC-02: 새 답변 생성
+
+- **Description**: 특정 질문에 대한 새로운 답변을 생성한다.
+- **Method**: `POST`
+- **URI**: `/v1/questions/:id/actions`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `action content (markdown)` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    action: {
+        id: `created action's id`,
+        content: `action content`,
+        createdAt: `creation date`,
+        likeCount: 0,
+        writer: {
+            id: `writer's id`,
+            nickname: `writer's nickname`
+        }
+    }
+}
+```
+
+### AC-03: 답변 내용 수정
+
+- **Description**: 특정 답변의 내용을 수정한다. 답변 작성자만 수정 가능하다.
+- **Method**: `PATCH`
+- **URI**: `/v1/actions/:id`
+- **Request**: Request header = { Authorization: Bearer ${accessToken} } & Body = { content: updated action content }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    action: {
+        id: `action's id`,
+        content: `updated action content`,
+        updatedAt: `update date`
+    }
+}
+```
+
+### AC-04: 답변 삭제
+
+- **Description**: 특정 답변을 삭제한다. 답변 작성자만 삭제 가능하다.
+- **Method**: `DELETE`
+- **URI**: `/v1/actions/:id`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+{
+    message: `result message`
+}
+```
+
+### AC-05: 답변에 대한 사용자의 상호작용
+
+- **Description**: 답변에 대한 사용자의 상호작용(좋아요, 북마크 등)을 처리한다.
+- **Method**: `POST`
+- **URI**: `/v1/actions/:id/interact`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { type: `interaction type (like, share, etc.)` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    interaction: {
+        id: `interaction id`,
+        type: `interaction type`,
+        createdAt: `creation date`
+    }
+}
+```
+
+## Upload
+
+이 섹션은 파일 업로드 관련 API에 대한 설계이다.
+
+| API ID | Method |           URI            | Summary             |
+| :----: | :----: | :----------------------: | :------------------ |
+| UP-01  |  POST  |    /v1/upload/images     | 이미지 업로드       |
+| UP-02  |  POST  | /v1/upload/presigned-url | Pre-signed URL 생성 |
+
+### UP-01: 이미지 업로드
+
+- **Description**: 이미지 파일을 서버에 업로드한다. 업로드된 이미지의 URL을 반환한다.
+- **Method**: `POST`
+- **URI**: `/v1/upload/images`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}`, Content-Type: `multipart/form-data` } & Body = { image: `image file` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    url: `uploaded image URL`
+}
+```
+
+### UP-02: Presigned URL 생성
+
+- **Description**: S3에 직접 업로드할 수 있는 Presigned URL을 생성한다.
+- **Method**: `POST`
+- **URI**: `/v1/upload/presigned-url`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    url: `presigned URL`,
+    key: `S3 object key`
+}
+```

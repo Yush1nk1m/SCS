@@ -52,6 +52,11 @@
   - like: 좋아요 개수
   - createdAt: 작성 날짜
   - updatedAt: 수정 날짜
+- ActionInteraction: 사용자와 액션 간 상호작용(개인화된 데이터)
+  - id: 고유 부여되는 아이디
+  - user: 사용자 정보
+  - action: 액션 정보
+  - type: enum(좋아요, 공유, 신고)
 - Comment(User & Action 간 다대다 관계): 답변에 대한 댓글
   - id: 고유 부여되는 아이디
   - writer: 작성자의 아이디
@@ -59,11 +64,6 @@
   - content: 댓글 내용
   - createdAt: 작성 날짜
   - updatedAt: 수정 날짜
-- Recommendation(User & Action 간 다대다 관계): 답변에 대한 추천
-  - id: 고유 부여되는 아이디
-  - userId: 추천한 사람
-  - actionId: 추천된 액션 아이디
-  - createdAt: 생성 날짜
 - Book: 질문들을 모아서 만든 문제집
   - id: 고유 부여되는 아이디
   - publisher: 문제집 생성한 사람(사용자) id
