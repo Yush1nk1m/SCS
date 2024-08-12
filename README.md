@@ -38,6 +38,8 @@ SCS는 컴퓨터 과학 전공 지식을 학습하기 위한 웹 서비스입니
 
 ## 현재 개발 현황
 
+![Current usecase](./Docs//UML/Usecase/usecase.png)
+
 - [x] 사용자 인증 (Auth) 모듈 완성
 - [x] 사용자 (User) 모듈 완성
 - [x] 섹션 (Section) 모듈 완성
@@ -49,7 +51,7 @@ SCS는 컴퓨터 과학 전공 지식을 학습하기 위한 웹 서비스입니
 
 ## API 문서
 
-현재 개발된 API에 대한 문서는 [여기](링크)에서 확인할 수 있습니다.
+현재 개발된 API에 대한 문서는 [여기](./Docs/API.md)에서 확인할 수 있습니다.
 
 ## Commit Message Rule
 

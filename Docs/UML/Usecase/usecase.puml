@@ -1,0 +1,77 @@
+@startuml SCS Use Case Diagram
+
+left to right direction
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+
+actor "사용자" as User
+actor "관리자" as Admin
+
+rectangle "SCS (Study Computer Science)" {
+    package "인증" {
+        usecase "회원가입" as UC1
+        usecase "로그인" as UC2
+        usecase "로그아웃" as UC3
+    }
+
+    package "섹션" {
+        usecase "섹션 조회" as UC4
+        usecase "섹션 생성" as UC16
+        usecase "섹션 수정" as UC17
+        usecase "섹션 삭제" as UC18
+    }
+
+    package "질문" {
+        usecase "질문 조회" as UC5
+        usecase "질문 작성" as UC6
+        usecase "질문 수정" as UC7
+        usecase "질문 삭제" as UC8
+    }
+
+    package "답변" {
+        usecase "답변 작성" as UC9
+        usecase "답변 수정" as UC10
+        usecase "답변 삭제" as UC11
+        usecase "답변 추천" as UC12
+    }
+
+    package "댓글" {
+        usecase "댓글 작성" as UC13
+    }
+
+    package "북마크" {
+        usecase "북마크 추가" as UC14
+        usecase "북마크 제거" as UC15
+    }
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC9
+User --> UC10
+User --> UC11
+User --> UC12
+User --> UC13
+User --> UC14
+User --> UC15
+
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC7
+Admin --> UC8
+
+UC6 ..> UC2 : <<include>>
+UC9 ..> UC2 : <<include>>
+UC10 ..> UC2 : <<include>>
+UC11 ..> UC2 : <<include>>
+UC12 ..> UC2 : <<include>>
+UC13 ..> UC2 : <<include>>
+UC14 ..> UC2 : <<include>>
+UC15 ..> UC2 : <<include>>
+
+@enduml
