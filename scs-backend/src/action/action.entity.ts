@@ -26,9 +26,15 @@ export class Action {
     @ManyToOne(() => Question, (question) => question.actions)
     question: Question;
 
-    @OneToMany(() => ActionInteraction, (interaction) => interaction.action)
-    interactions: ActionInteraction[];
+    @Column({ default: 0 })
+    likeCount: number;
 
     @Column({ default: 0 })
-    likeCount: 0;
+    shareCount: number;
+
+    @Column({ default: 0 })
+    reportCount: number;
+
+    @OneToMany(() => ActionInteraction, (interaction) => interaction.action)
+    interactions: ActionInteraction[];
 }
