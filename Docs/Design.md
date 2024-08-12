@@ -49,6 +49,7 @@
   - writer: 작성자의 id
   - questionId: 질문의 id
   - content: 답변 내용
+  - like: 좋아요 개수
   - createdAt: 작성 날짜
   - updatedAt: 수정 날짜
 - Comment(User & Action 간 다대다 관계): 답변에 대한 댓글

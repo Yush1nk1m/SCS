@@ -97,6 +97,7 @@ export class QuestionService {
         // extract content from DTO
         const { content } = updateQuestionContentDto;
 
+        // find question and update content
         return this.questionRepository.findAndUpdateQuestionContent(
             questionId,
             content,

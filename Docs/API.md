@@ -426,12 +426,13 @@
 
 이 섹션은 질문 관련 API에 대한 설계이다.
 
-| API ID | Method |        URI        | Summary        |
-| :----: | :----: | :---------------: | :------------- |
-|  Q-01  |  GET   | /v1/questions/:id | 특정 질문 조회 |
-|  Q-02  |  POST  |   /v1/questions   | 새 질문 생성   |
-|  Q-03  | PATCH  | /v1/questions/:id | 질문 내용 수정 |
-|  Q-04  | DELETE | /v1/questions/:id | 질문 삭제      |
+| API ID | Method |            URI            | Summary                 |
+| :----: | :----: | :-----------------------: | :---------------------- |
+|  Q-01  |  GET   |     /v1/questions/:id     | 특정 질문 조회          |
+|  Q-02  |  POST  |       /v1/questions       | 새 질문 생성            |
+|  Q-03  | PATCH  |     /v1/questions/:id     | 질문 내용 수정          |
+|  Q-04  | DELETE |     /v1/questions/:id     | 질문 삭제               |
+|  Q-05  |  GET   | /v1/questions/:id/actions | 특정 질문의 답변들 조회 |
 
 ### Q-01: 특정 질문 조회
 
@@ -512,3 +513,24 @@
 - **URI**: `/v1/questions/:id`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
 - **Response data**:
+
+### Q-05: 특정 질문의 답변들 조회
+
+- **Description**: 특정 질문에 대한 모든 답변을 조회한다. 페이지네이션을 지원한다.
+- **Method**: `GET`
+- **URI**: `/v1/questions/:id/actions`
+- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `like`, order: `ASC` or `DESC`, search: `searching value`
+- **Request**: URI 경로에 질문의 ID를 전달하고 쿼리 파라미터로 옵션을 전달한다.
+- **Response data**:
+
+## Action
+
+이 섹션은 답변 관련 API에 대한 설계이다.
+
+| API ID | Method |            URI            | Summary        |
+| :----: | :----: | :-----------------------: | :------------- |
+| AC-01  |  GET   |      /v1/actions/:id      | 특정 답변 조회 |
+| AC-02  |  POST  | /v1/questions/:id/actions | 새 답변 생성   |
+| AC-03  | PATCH  |      /v1/actions/:id      | 답변 내용 수정 |
+| AC-04  | DELETE |      /v1/actions/:id      | 답변 삭제      |
+| AC-05  |  POST  |   /v1/actions/:id/like    | 답변 좋아요    |
