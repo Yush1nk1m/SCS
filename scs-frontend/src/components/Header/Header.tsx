@@ -1,16 +1,15 @@
 import logo from "../../assets/logo.png";
+import { useAuth } from "../../hooks/useAuth";
+import { logout } from "../../services/auth";
 import "./Header.css";
-import { Link, useNavigate } from "react-router-dom";
-
-// mock
-const isLoggedIn = false;
+import { Link } from "react-router-dom";
 
 const Header: React.FC = () => {
-  const navigate = useNavigate();
+  const isLoggedIn = useAuth();
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
+    logout();
+    window.dispatchEvent(new Event("storage"));
   };
 
   return (

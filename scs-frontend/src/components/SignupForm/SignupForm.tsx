@@ -1,4 +1,4 @@
-import { sendVerificationCode, signup, verifyCode } from "../../services/api";
+import { sendVerificationCode, signup, verifyCode } from "../../services/auth";
 import React, { useState } from "react";
 import "./SignupForm.css";
 
@@ -23,6 +23,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
       setShowVerification(true);
       alert("인증 코드가 전송되었습니다.");
     } catch (error) {
+      console.error(error);
       alert("인증 코드 전송 실패");
     }
   };
@@ -32,6 +33,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
       await verifyCode(info.email, info.verificationCode);
       alert("인증 성공");
     } catch (error) {
+      console.error(error);
       alert("인증 실패");
     }
   };
@@ -39,10 +41,11 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const user = await signup(info);
+      const response = await signup(info);
       alert("회원가입 성공");
-      onSignupSuccess(user.nickname);
+      onSignupSuccess(response.user.nickname);
     } catch (error) {
+      console.error(error);
       alert("회원가입 실패");
     }
   };
