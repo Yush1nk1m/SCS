@@ -12,6 +12,10 @@ export class SectionRepository extends Repository<Section> {
     }
 
     async findSectionById(id: number): Promise<Section> {
+        return this.findOne({ where: { id } });
+    }
+
+    async findSectionDetailById(id: number): Promise<Section> {
         return this.findOne({
             where: { id },
             relations: ["creator"],

@@ -27,7 +27,7 @@ export class SectionService {
     // [S-02] Service logic
     async getSpecificSection(id: number): Promise<Section> {
         // find specific section with creator information
-        const section = await this.sectionRepository.findSectionById(id);
+        const section = await this.sectionRepository.findSectionDetailById(id);
 
         // if it does not exist, it is an error
         if (!section) {

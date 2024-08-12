@@ -1,6 +1,8 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { DataSource, Repository } from "typeorm";
 import { Question } from "./question.entity";
+import { User } from "../user/user.entity";
+import { Section } from "../section/section.entity";
 
 @Injectable()
 export class QuestionRepository extends Repository<Question> {
@@ -40,5 +42,23 @@ export class QuestionRepository extends Repository<Question> {
 
     async findQuestionById(id: number) {
         return this.findOne({ where: { id } });
+    }
+
+    async createQuestion(
+        writer: User,
+        section: Section,
+        content: string,
+    ): Promise<Question> {
+        const question = this.create({
+            content,
+            section,
+            writer,
+        });
+
+        await this.save(question);
+        delete question.writer;
+        delete question.section;
+
+        return question;
     }
 }

@@ -438,6 +438,19 @@
 - **Request**: URI 경로에 질문의 ID를 전달한다.
 - **Response data**:
 
+```
+{
+    message: `result message`,
+    question: {
+        id: `question's id`,
+        content: `question's content`,
+        createdAt: `question's created date`,
+        updatedAt: `question's updated date`,
+        saved: `question's saved count`
+    }
+}
+```
+
 ### Q-02: 새 질문 생성
 
 - **Description**: 새로운 질문을 생성한다.
@@ -445,6 +458,19 @@
 - **URI**: `/v1/questions`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `question content`, sectionId: `section's id` }
 - **Response data**:
+
+```
+{
+    message: `result message`,
+    question: {
+        id: `question's id`,
+        content: `question's content`,
+        createdAt: `question's created date`,
+        updatedAt: `question's updated date`,
+        saved: `question's saved count`
+    }
+}
+```
 
 ### Q-03: 질문 내용 수정
 
