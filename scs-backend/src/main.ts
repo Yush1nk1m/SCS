@@ -6,15 +6,23 @@ import {
     initializeTransactionalContext,
     StorageDriver,
 } from "typeorm-transactional";
+import { NestExpressApplication } from "@nestjs/platform-express";
+import { join } from "path";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 async function bootstrap() {
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
 
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+    app.useStaticAssets(
+        join(__dirname, "..", process.env.UPLOAD_LOCATION || "uploads"),
+        { prefix: "/v1/uploads/" },
+    );
+
     app.enableCors({
-        origin: ["http://localhost:3000"],
+        origin: ["http://localhost:3000", "http://localhost:5173"],
         methods: ["GET", "POST", "PATCH", "DELETE"],
         credentials: true,
     });

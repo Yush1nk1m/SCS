@@ -18,7 +18,7 @@ const Editor = () => {
     formData.append("image", file);
     try {
       const response = await axios.post(
-        "http://localhost:4000/v1/upload",
+        "http://localhost:4000/v1/upload/images",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

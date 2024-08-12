@@ -14,5 +14,6 @@ import { UserRepository } from "../user/user.repository";
         SectionRepository,
         UserRepository,
     ],
+    exports: [QuestionService, QuestionRepository],
 })
 export class QuestionModule {}
