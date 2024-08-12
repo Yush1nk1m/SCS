@@ -1,0 +1,90 @@
+.question-list {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+}
+
+.question-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-form {
+  display: flex;
+  flex-grow: 1;
+  margin-right: 20px;
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #4c4cff;
+  border-radius: 5px 0 0 5px;
+  font-size: 16px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: #4c4cff;
+  color: white;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.sort-select {
+  padding: 10px;
+  border: 1px solid #4c4cff;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.question-list-header select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #4c4cff;
+}
+
+.question-item {
+  background-color: white; /* 각 질문 요소 배경 */
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.question-item a {
+  color: #333;
+  text-decoration: none;
+  flex-grow: 1;
+}
+
+.save-button {
+  background-color: #4c4cff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  background-color: #3a3aff;
+}
+
+.create-question-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4c4cff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -417,7 +417,7 @@
         { ... },
         ...
         ],
-    total: `total count of questions`
+    total: `total number of the same section's questions`
 }
 ```
 
