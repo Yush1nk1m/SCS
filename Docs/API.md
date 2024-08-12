@@ -423,24 +423,14 @@
 
 이 섹션은 질문 관련 API에 대한 설계이다.
 
-| API ID | Method |            URI             | Summary                 |
-| :----: | :----: | :------------------------: | :---------------------- |
-|  Q-01  |  GET   |       /v1/questions        | 모든 질문 조회          |
-|  Q-02  |  GET   |     /v1/questions/:id      | 특정 질문 조회          |
-|  Q-03  |  POST  |       /v1/questions        | 새 질문 생성            |
-|  Q-04  | PATCH  |     /v1/questions/:id      | 질문 내용 수정          |
-|  Q-05  | DELETE |     /v1/questions/:id      | 질문 삭제               |
-|  Q-06  |  GET   | /v1/sections/:id/questions | 특정 섹션의 질문들 조회 |
+| API ID | Method |        URI        | Summary        |
+| :----: | :----: | :---------------: | :------------- |
+|  Q-01  |  GET   | /v1/questions/:id | 특정 질문 조회 |
+|  Q-02  |  POST  |   /v1/questions   | 새 질문 생성   |
+|  Q-03  | PATCH  | /v1/questions/:id | 질문 내용 수정 |
+|  Q-04  | DELETE | /v1/questions/:id | 질문 삭제      |
 
-### Q-01: 모든 질문 조회
-
-- **Description**: 모든 질문의 기본 정보를 조회한다. 페이지네이션을 지원한다.
-- **Method**: `GET`
-- **URI**: `/v1/questions`
-- **Query Parameters**: page: `page number`, limit: `items per page`
-- **Response data**:
-
-### Q-02: 특정 질문 조회
+### Q-01: 특정 질문 조회
 
 - **Description**: 특정 질문의 상세 정보를 조회한다.
 - **Method**: `GET`
@@ -448,7 +438,7 @@
 - **Request**: URI 경로에 질문의 ID를 전달한다.
 - **Response data**:
 
-### Q-03: 새 질문 생성
+### Q-02: 새 질문 생성
 
 - **Description**: 새로운 질문을 생성한다.
 - **Method**: `POST`
@@ -456,26 +446,18 @@
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `question content`, sectionId: `section's id` }
 - **Response data**:
 
-### Q-04: 질문 내용 수정
+### Q-03: 질문 내용 수정
 
-- **Description**: 특정 질문의 내용을 수정한다. 질문 작성자만 수정 가능하다.
+- **Description**: 특정 질문의 내용을 수정한다. 관리자만 수정 가능하다.
 - **Method**: `PATCH`
 - **URI**: `/v1/questions/:id`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `updated question content` }
 - **Response data**:
 
-### Q-05: 질문 삭제
+### Q-04: 질문 삭제
 
-- **Description**: 특정 질문을 삭제한다. 질문 작성자만 삭제 가능하다.
+- **Description**: 특정 질문을 삭제한다. 관리자만 삭제 가능하다.
 - **Method**: `DELETE`
 - **URI**: `/v1/questions/:id`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
-- **Response data**:
-
-### Q-06: 특정 섹션의 질문들 조회
-
-- **Description**: 특정 섹션에 속한 모든 질문을 조회한다. 페이지네이션을 지원한다.
-- **Method**: `GET`
-- **URI**: `/v1/sections/:id/questions`
-- **Query Parameters**: page: `page number`, limit: `items per page`
 - **Response data**:
