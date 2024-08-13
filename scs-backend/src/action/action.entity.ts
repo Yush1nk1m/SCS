@@ -38,6 +38,8 @@ export class Action {
     @ManyToOne(() => Question, (question) => question.actions)
     question: Question;
 
-    @OneToMany(() => ActionInteraction, (interaction) => interaction.action)
+    @OneToMany(() => ActionInteraction, (interaction) => interaction.action, {
+        cascade: true,
+    })
     interactions: ActionInteraction[];
 }

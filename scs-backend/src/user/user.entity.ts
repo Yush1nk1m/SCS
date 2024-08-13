@@ -65,6 +65,7 @@ export class User {
     @OneToMany(
         () => ActionInteraction,
         (actionInteraction) => actionInteraction.user,
+        { cascade: true },
     )
     actionInteractions: ActionInteraction[];
 }

@@ -2,7 +2,6 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    JoinColumn,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -25,7 +24,6 @@ export class Section {
     createdAt: Date;
 
     @ManyToOne(() => User, (user) => user.sections)
-    @JoinColumn({ name: "creator", referencedColumnName: "id" })
     creator: User;
 
     @OneToMany(() => Question, (question) => question.section)

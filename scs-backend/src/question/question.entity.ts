@@ -3,7 +3,6 @@ import {
     CreateDateColumn,
     Entity,
     Index,
-    JoinColumn,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -33,11 +32,9 @@ export class Question {
     saved: number;
 
     @ManyToOne(() => User, (user) => user.questions)
-    @JoinColumn({ name: "writer", referencedColumnName: "id" })
     writer: User;
 
     @ManyToOne(() => Section, (section) => section.questions)
-    @JoinColumn({ name: "section", referencedColumnName: "id" })
     section: Section;
 
     @OneToMany(() => Action, (action) => action.question)
