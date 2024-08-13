@@ -58,6 +58,6 @@ export class UserRepository extends Repository<User> {
     }
 
     async deleteUserById(id: number): Promise<void> {
-        await this.delete({ id });
+        await this.softDelete({ id });
     }
 }

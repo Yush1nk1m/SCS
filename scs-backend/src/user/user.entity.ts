@@ -2,10 +2,12 @@ import { IsEmail, IsNotEmpty, Length } from "class-validator";
 import {
     Column,
     CreateDateColumn,
+    DeleteDateColumn,
     Entity,
     Index,
     OneToMany,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from "typeorm";
 import { Section } from "../section/section.entity";
 import { Question } from "../question/question.entity";
@@ -43,15 +45,21 @@ export class User {
     @Column({ nullable: true })
     refreshToken: string;
 
-    @CreateDateColumn()
-    createdAt: Date;
-
     @Column({
         type: "enum",
         enum: ["user", "admin"],
         default: "user",
     })
     role: string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @DeleteDateColumn()
+    deletedAt: Date;
 
     @OneToMany(() => Section, (section) => section.creator)
     sections: Section[];
