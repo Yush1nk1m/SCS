@@ -10,6 +10,35 @@ export class ActionRepository extends Repository<Action> {
         super(Action, dataSource.createEntityManager());
     }
 
+    async findActionById(id: number): Promise<Action> {
+        return this.findOne({ where: { id } });
+    }
+
+    async findActionDetailById(id: number): Promise<Action> {
+        return this.findOne({
+            withDeleted: true,
+            where: { id },
+            relations: ["writer", "question"],
+            select: {
+                id: true,
+                title: true,
+                content: true,
+                likeCount: true,
+                shareCount: true,
+                createdAt: true,
+                updatedAt: true,
+                writer: {
+                    id: true,
+                    nickname: true,
+                },
+                question: {
+                    id: true,
+                    content: true,
+                },
+            },
+        });
+    }
+
     async findActionsByQuestionId(
         questionId: number,
         page: number = 1,

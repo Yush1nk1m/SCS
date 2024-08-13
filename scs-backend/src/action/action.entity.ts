@@ -1,9 +1,11 @@
 import {
     Column,
+    CreateDateColumn,
     Entity,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
 import { Question } from "../question/question.entity";
@@ -31,6 +33,12 @@ export class Action {
 
     @Column({ default: 0 })
     reportCount: number;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
 
     @ManyToOne(() => User, (user) => user.actions)
     writer: User;

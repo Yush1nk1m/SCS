@@ -552,10 +552,12 @@
     message: `result message`,
     action: {
         id: `action's id`,
+        title: `action's title`,
         content: `action's content`,
+        likeCount: `number of likes`,
+        shareCount: `number of shares`,
         createdAt: `action's created date`,
         updatedAt: `action's updated date`,
-        likeCount: `number of likes`,
         writer: {
             id: `writer's id`,
             nickname: `writer's nickname`

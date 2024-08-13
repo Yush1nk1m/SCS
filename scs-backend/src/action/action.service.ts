@@ -48,4 +48,19 @@ export class ActionService {
             search,
         );
     }
+
+    // [AC-01] Service logic
+    async getSpecificAction(actionId: number): Promise<Action> {
+        // find an action with the specified id from DB
+        const action = await this.actionRepository.findActionById(actionId);
+
+        // if the action does not exist, it is an error
+        if (!action) {
+            throw new NotFoundException(
+                `Action with id ${actionId} has not been found.`,
+            );
+        }
+
+        return action;
+    }
 }
