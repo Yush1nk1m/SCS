@@ -531,13 +531,14 @@
 
 이 섹션은 답변 관련 API에 대한 설계이다.
 
-| API ID | Method |            URI            | Summary                       |
-| :----: | :----: | :-----------------------: | :---------------------------- |
-| AC-01  |  GET   |      /v1/actions/:id      | 특정 답변 조회                |
-| AC-02  |  POST  | /v1/questions/:id/actions | 새 답변 생성                  |
-| AC-03  | PATCH  |      /v1/actions/:id      | 답변 내용 수정                |
-| AC-04  | DELETE |      /v1/actions/:id      | 답변 삭제                     |
-| AC-05  |  POST  | /v1/actions/:id/interact  | 답변에 대한 사용자의 상호작용 |
+| API ID | Method |             URI             | Summary                              |
+| :----: | :----: | :-------------------------: | :----------------------------------- |
+| AC-01  |  GET   |       /v1/actions/:id       | 특정 답변 조회                       |
+| AC-02  |  POST  |  /v1/questions/:id/actions  | 새 답변 생성                         |
+| AC-03  | PATCH  |       /v1/actions/:id       | 답변 내용 수정                       |
+| AC-04  | DELETE |       /v1/actions/:id       | 답변 삭제                            |
+| AC-05  |  POST  |  /v1/actions/:id/interact   | 답변에 대한 사용자의 상호작용        |
+| AC-06  |  GET   | /v1/actions/:id/raw-content | 특정 답변의 Raw 마크다운 컨텐츠 조회 |
 
 ### AC-01: 특정 답변 조회
 
@@ -643,6 +644,21 @@
         type: `interaction type`,
         createdAt: `creation date`
     }
+}
+```
+
+### AC-06: 특정 답변의 Raw 마크다운 컨텐츠 조회
+
+- **Description**: 특정 답변의 Raw 마크다운 컨텐츠를 조회한다. Action을 수정하는 등의 작업에 필요하다.
+- **Method**: `GET`
+- **URI**: `/v1/actions/:id/raw-content`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    content: `action's raw markdown content`
 }
 ```
 
