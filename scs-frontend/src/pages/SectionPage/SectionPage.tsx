@@ -12,6 +12,7 @@ const SectionPage: React.FC = () => {
     sort: "subject",
     order: "ASC",
   });
+  const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(
@@ -47,6 +48,11 @@ const SectionPage: React.FC = () => {
     fetchSectionsData();
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchTerm(searchInput);
+  };
+
   const filteredSections = sections.filter((section) =>
     section.subject.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -56,13 +62,18 @@ const SectionPage: React.FC = () => {
       <div className="content-wrapper">
         <div className="sticky-header">
           <div className="search-sort-container">
-            <input
-              type="text"
-              placeholder="섹션 검색..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
+            <form onSubmit={handleSearch} className="search-form">
+              <input
+                type="text"
+                placeholder="섹션 검색..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="search-input"
+              />
+              <button type="submit" className="search-button">
+                검색
+              </button>
+            </form>
             <SortingOptions
               sortOption={sortOption}
               onSortChange={setSortOption}
