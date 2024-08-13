@@ -23,16 +23,12 @@ import { Roles } from "../common/decorator/roles.decorator";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
 import { BaseResponse } from "../common/types/response.type";
 import { ActionsResponse } from "../action/types/response.type";
-import { ActionService } from "../action/action.service";
 
 @Controller("v1/questions")
 export class QuestionController {
     private logger = new Logger("QuestionController");
 
-    constructor(
-        private readonly questionService: QuestionService,
-        private readonly actionService: ActionService,
-    ) {}
+    constructor(private readonly questionService: QuestionService) {}
 
     // [Q-01] Controller logic
     @Public()
@@ -116,7 +112,7 @@ export class QuestionController {
         @Query("search") search: string = "",
     ): Promise<ActionsResponse> {
         const { actions, total } =
-            await this.actionService.getActionsByQuestion(
+            await this.questionService.getActionsByQuestion(
                 questionId,
                 page,
                 limit,

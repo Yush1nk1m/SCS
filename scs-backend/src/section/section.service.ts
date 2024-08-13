@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { SectionRepository } from "./section.repository";
+import { SectionRepository } from "../repository/section.repository";
 import { Section } from "./section.entity";
 import { CreateSectionDto } from "./dto/create-section.dto";
 import {
@@ -7,7 +7,9 @@ import {
     UpdateSectionSubjectDto,
 } from "./dto/update-section.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
-import { UserRepository } from "../user/user.repository";
+import { UserRepository } from "../repository/user.repository";
+import { QuestionRepository } from "../repository/question.repository";
+import { Question } from "../question/question.entity";
 
 @Injectable()
 export class SectionService {
@@ -16,6 +18,7 @@ export class SectionService {
     constructor(
         private readonly sectionRepository: SectionRepository,
         private readonly userRepository: UserRepository,
+        private readonly questionRepository: QuestionRepository,
     ) {}
 
     // [S-01] Service logic
@@ -105,5 +108,34 @@ export class SectionService {
     })
     async deleteSection(sectionId: number): Promise<void> {
         return this.sectionRepository.deleteSection(sectionId);
+    }
+
+    // [S-07] Service logic
+    async getQuestionsBySection(
+        sectionId: number,
+        page: number = 1,
+        limit: number = 10,
+        sort: "createdAt" | "saved" = "createdAt",
+        order: "ASC" | "DESC" = "DESC",
+        search: string,
+    ): Promise<{ questions: Question[]; total: number }> {
+        // find a section with the specified id from DB
+        const section = await this.sectionRepository.findSectionById(sectionId);
+
+        // if the section does not exist, it is an error
+        if (!section) {
+            throw new NotFoundException(
+                `Section with id ${sectionId} has not been found.`,
+            );
+        }
+
+        return this.questionRepository.findQuestionsBySectionId(
+            sectionId,
+            page,
+            limit,
+            sort,
+            order,
+            search,
+        );
     }
 }

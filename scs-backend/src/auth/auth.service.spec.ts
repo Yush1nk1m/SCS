@@ -1,6 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { AuthService } from "./auth.service";
-import { AuthRepository } from "./auth.repository";
+import { AuthRepository } from "../repository/auth.repository";
 import { MailerService } from "@nestjs-modules/mailer";
 import { EmailDto } from "./dto/email.dto";
 import { User } from "../user/user.entity";
@@ -12,7 +12,7 @@ import {
 import { VerificationDto } from "./dto/verification.dto";
 import { Verification } from "./verification.entity";
 import { DataSource } from "typeorm";
-import { UserRepository } from "../user/user.repository";
+import { UserRepository } from "../repository/user.repository";
 import { SignupDto } from "./dto/signup.dto";
 
 // mock @Transactional() decorator

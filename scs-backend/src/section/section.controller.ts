@@ -25,16 +25,12 @@ import {
     UpdateSectionSubjectDto,
 } from "./dto/update-section.dto";
 import { BaseResponse } from "../common/types/response.type";
-import { QuestionService } from "../question/question.service";
 import { QuestionsResponse } from "../question/types/response.type";
 
 @Controller("v1/sections")
 export class SectionController {
     private logger = new Logger("SectionController");
-    constructor(
-        private readonly sectionService: SectionService,
-        private readonly questionService: QuestionService,
-    ) {}
+    constructor(private readonly sectionService: SectionService) {}
 
     // [S-01] Controller logic
     @Public()
@@ -89,7 +85,7 @@ export class SectionController {
         );
 
         const { questions, total } =
-            await this.questionService.getQuestionsBySection(
+            await this.sectionService.getQuestionsBySection(
                 sectionId,
                 page,
                 limit,

@@ -4,7 +4,7 @@ import {
     Logger,
     UnauthorizedException,
 } from "@nestjs/common";
-import { UserRepository } from "./user.repository";
+import { UserRepository } from "../repository/user.repository";
 import { User } from "./user.entity";
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";

@@ -5,14 +5,14 @@ import {
     NotFoundException,
     UnauthorizedException,
 } from "@nestjs/common";
-import { ActionRepository } from "./action.repository";
+import { ActionRepository } from "../repository/action.repository";
 import { Action } from "./action.entity";
-import { QuestionRepository } from "../question/question.repository";
+import { QuestionRepository } from "../repository/question.repository";
 import { marked } from "marked";
 import * as sanitizeHtml from "sanitize-html";
 import { sanitizeOptions } from "../config/sanitize-config";
 import { CreateActionDto } from "./dto/create-action.dto";
-import { UserRepository } from "../user/user.repository";
+import { UserRepository } from "../repository/user.repository";
 import { UpdateActionDto } from "./dto/update-action.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 
@@ -56,37 +56,6 @@ export class ActionService {
     private async sanitizeHtmlForClient(html: string): Promise<string> {
         // HTML sanitize again (to prevent XSS attack)
         return sanitizeHtml(html, sanitizeOptions);
-    }
-
-    // [Q-05] Service logic
-    async getActionsByQuestion(
-        questionId: number,
-        page: number,
-        limit: number,
-        sort: "updatedAt" | "likeCount" = "updatedAt",
-        order: "ASC" | "DESC" = "DESC",
-        search: string,
-    ): Promise<{ actions: Action[]; total: number }> {
-        // find a question with the specified id from DB
-        const question =
-            await this.questionRepository.findQuestionById(questionId);
-
-        // if the question does not exist, it is an error
-        if (!question) {
-            throw new NotFoundException(
-                `Question with id ${questionId} has not been found.`,
-            );
-        }
-
-        // find actions with specified conditions
-        return this.actionRepository.findActionsByQuestionId(
-            questionId,
-            page,
-            limit,
-            sort,
-            order,
-            search,
-        );
     }
 
     // [AC-01] Service logic

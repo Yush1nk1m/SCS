@@ -4,13 +4,15 @@ import {
     NotFoundException,
     UnauthorizedException,
 } from "@nestjs/common";
-import { QuestionRepository } from "./question.repository";
-import { SectionRepository } from "../section/section.repository";
+import { QuestionRepository } from "../repository/question.repository";
+import { SectionRepository } from "../repository/section.repository";
 import { Question } from "./question.entity";
 import { CreateQuestionDto } from "./dto/create-question.dto";
-import { UserRepository } from "../user/user.repository";
+import { UserRepository } from "../repository/user.repository";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
+import { ActionRepository } from "../repository/action.repository";
+import { Action } from "../action/action.entity";
 
 @Injectable()
 export class QuestionService {
@@ -20,36 +22,8 @@ export class QuestionService {
         private readonly questionRepository: QuestionRepository,
         private readonly userRepository: UserRepository,
         private readonly sectionRepository: SectionRepository,
+        private readonly actionRepository: ActionRepository,
     ) {}
-
-    // [S-07] Service logic
-    async getQuestionsBySection(
-        sectionId: number,
-        page: number = 1,
-        limit: number = 10,
-        sort: "createdAt" | "saved" = "createdAt",
-        order: "ASC" | "DESC" = "DESC",
-        search: string,
-    ): Promise<{ questions: Question[]; total: number }> {
-        // find a section with the specified id from DB
-        const section = await this.sectionRepository.findSectionById(sectionId);
-
-        // if the section does not exist, it is an error
-        if (!section) {
-            throw new NotFoundException(
-                `Section with id ${sectionId} has not been found.`,
-            );
-        }
-
-        return this.questionRepository.findQuestionsBySectionId(
-            sectionId,
-            page,
-            limit,
-            sort,
-            order,
-            search,
-        );
-    }
 
     // [Q-01] Service logic
     async getSpecificQuestion(questionId: number): Promise<Question> {
@@ -120,5 +94,36 @@ export class QuestionService {
     })
     async deleteQuestion(questionId: number): Promise<void> {
         return this.questionRepository.deleteQuestionById(questionId);
+    }
+
+    // [Q-05] Service logic
+    async getActionsByQuestion(
+        questionId: number,
+        page: number,
+        limit: number,
+        sort: "updatedAt" | "likeCount" = "updatedAt",
+        order: "ASC" | "DESC" = "DESC",
+        search: string,
+    ): Promise<{ actions: Action[]; total: number }> {
+        // find a question with the specified id from DB
+        const question =
+            await this.questionRepository.findQuestionById(questionId);
+
+        // if the question does not exist, it is an error
+        if (!question) {
+            throw new NotFoundException(
+                `Question with id ${questionId} has not been found.`,
+            );
+        }
+
+        // find actions with specified conditions
+        return this.actionRepository.findActionsByQuestionId(
+            questionId,
+            page,
+            limit,
+            sort,
+            order,
+            search,
+        );
     }
 }

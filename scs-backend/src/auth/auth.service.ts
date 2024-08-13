@@ -8,11 +8,11 @@ import {
     UnauthorizedException,
 } from "@nestjs/common";
 import { EmailDto } from "./dto/email.dto";
-import { AuthRepository } from "./auth.repository";
+import { AuthRepository } from "../repository/auth.repository";
 import { VerificationDto } from "./dto/verification.dto";
 import { SignupDto } from "./dto/signup.dto";
 import { User } from "../user/user.entity";
-import { UserRepository } from "../user/user.repository";
+import { UserRepository } from "../repository/user.repository";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";

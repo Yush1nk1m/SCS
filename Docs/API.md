@@ -560,8 +560,9 @@
 | AC-02  |  POST  |  /v1/questions/:id/actions  | 새 답변 생성                         |
 | AC-03  | PATCH  |       /v1/actions/:id       | 답변 내용 수정                       |
 | AC-04  | DELETE |       /v1/actions/:id       | 답변 삭제                            |
-| AC-05  |  POST  |  /v1/actions/:id/interact   | 답변에 대한 사용자의 상호작용        |
-| AC-06  |  GET   | /v1/actions/:id/raw-content | 특정 답변의 Raw 마크다운 컨텐츠 조회 |
+| AC-05  |  GET   | /v1/actions/:id/interaction | 답변에 대한 사용자의 상호작용 조회   |
+| AC-06  |  POST  |  /v1/actions/:id/interact   | 답변에 대한 사용자의 상호작용 등록   |
+| AC-07  |  GET   | /v1/actions/:id/raw-content | 특정 답변의 Raw 마크다운 컨텐츠 조회 |
 
 ### AC-01: 특정 답변 조회
 
@@ -589,6 +590,9 @@
         question: {
             id: `question's id`,
             content: `question's content`
+        },
+        userInteraction: {
+            like: `true` or `false`
         }
     }
 }
@@ -666,7 +670,25 @@
 }
 ```
 
-### AC-05: 답변에 대한 사용자의 상호작용
+### AC-05: 답변에 대한 사용자의 상호작용 조회
+
+- **Description**: 답변에 대한 사용자의 상호작용(좋아요, 공유 횟수 등)을 조회한다.
+- **Method**: `GET`
+- **URI**: `/v1/actions/:id/interaction`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    actionInteraction: {
+        like: `true` or `false`,
+        share: `share count`
+    }
+}
+```
+
+### AC-06: 답변에 대한 사용자의 상호작용 등록
 
 - **Description**: 답변에 대한 사용자의 상호작용(좋아요, 북마크 등)을 처리한다.
 - **Method**: `POST`
@@ -685,7 +707,7 @@
 }
 ```
 
-### AC-06: 특정 답변의 Raw 마크다운 컨텐츠 조회
+### AC-07: 특정 답변의 Raw 마크다운 컨텐츠 조회
 
 - **Description**: 특정 답변의 Raw 마크다운 컨텐츠를 조회한다. Action을 수정하는 등의 작업에 필요하다.
 - **Method**: `GET`

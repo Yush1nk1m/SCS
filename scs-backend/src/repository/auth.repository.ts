@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { Verification } from "./verification.entity";
+import { Verification } from "../auth/verification.entity";
 import { DataSource, Repository } from "typeorm";
 
 @Injectable()

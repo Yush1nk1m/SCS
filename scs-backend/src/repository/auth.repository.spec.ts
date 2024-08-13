@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { AuthRepository } from "./auth.repository";
 import { DataSource, Repository } from "typeorm";
-import { Verification } from "./verification.entity";
+import { Verification } from "../auth/verification.entity";
 import { InternalServerErrorException } from "@nestjs/common";
 
 describe("AuthRepository", () => {

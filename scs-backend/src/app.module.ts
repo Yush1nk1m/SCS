@@ -16,6 +16,7 @@ import { DataSource } from "typeorm";
 import { APP_GUARD } from "@nestjs/core";
 import { AccessTokenGuard } from "./common/guard/access-token.guard";
 import { UploadModule } from "./upload/upload.module";
+import { RepositoryModule } from "./repository/repository.module";
 
 @Module({
     imports: [
@@ -40,6 +41,7 @@ import { UploadModule } from "./upload/upload.module";
         BookModule,
         LibraryModule,
         UploadModule,
+        RepositoryModule,
     ],
     controllers: [AppController],
     providers: [

@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { DataSource, Like, Repository } from "typeorm";
-import { Question } from "./question.entity";
+import { Question } from "../question/question.entity";
 import { User } from "../user/user.entity";
 import { Section } from "../section/section.entity";
 
