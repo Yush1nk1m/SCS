@@ -4,6 +4,8 @@ import { QuestionService } from "./question.service";
 import { QuestionRepository } from "./question.repository";
 import { SectionRepository } from "../section/section.repository";
 import { UserRepository } from "../user/user.repository";
+import { ActionService } from "../action/action.service";
+import { ActionRepository } from "../action/action.repository";
 
 @Module({
     imports: [],
@@ -13,6 +15,8 @@ import { UserRepository } from "../user/user.repository";
         QuestionRepository,
         SectionRepository,
         UserRepository,
+        ActionService,
+        ActionRepository,
     ],
     exports: [QuestionService, QuestionRepository],
 })

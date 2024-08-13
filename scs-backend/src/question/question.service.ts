@@ -31,6 +31,16 @@ export class QuestionService {
         order: "ASC" | "DESC" = "DESC",
         search: string,
     ): Promise<{ questions: Question[]; total: number }> {
+        // find a section with the specified id from DB
+        const section = await this.sectionRepository.findSectionById(sectionId);
+
+        // if the section does not exist, it is an error
+        if (!section) {
+            throw new NotFoundException(
+                `Section with id ${sectionId} has not been found.`,
+            );
+        }
+
         return this.questionRepository.findQuestionsBySectionId(
             sectionId,
             page,

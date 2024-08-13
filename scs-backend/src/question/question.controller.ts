@@ -10,6 +10,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     UseGuards,
 } from "@nestjs/common";
 import { QuestionService } from "./question.service";
@@ -21,12 +22,17 @@ import { RolesGuard } from "../common/guard/roles.guard";
 import { Roles } from "../common/decorator/roles.decorator";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
 import { BaseResponse } from "../common/types/response.type";
+import { ActionsResponse } from "../action/types/response.type";
+import { ActionService } from "../action/action.service";
 
 @Controller("v1/questions")
 export class QuestionController {
     private logger = new Logger("QuestionController");
 
-    constructor(private readonly questionService: QuestionService) {}
+    constructor(
+        private readonly questionService: QuestionService,
+        private readonly actionService: ActionService,
+    ) {}
 
     // [Q-01] Controller logic
     @Public()
@@ -94,6 +100,35 @@ export class QuestionController {
 
         return {
             message: `Question with id ${questionId} has been deleted.`,
+        };
+    }
+
+    // [Q-05] Controller logic
+    @Public()
+    @Get(":id/actions")
+    @HttpCode(HttpStatus.OK)
+    async getActionsByQuestion(
+        @Param("id", ParseIntPipe) questionId: number,
+        @Query("page", ParseIntPipe) page: number = 1,
+        @Query("limit", ParseIntPipe) limit: number = 10,
+        @Query("sort") sort: "createdAt" | "likeCount" = "createdAt",
+        @Query("order") order: "ASC" | "DESC" = "DESC",
+        @Query("search") search: string = "",
+    ): Promise<ActionsResponse> {
+        const { actions, total } =
+            await this.actionService.getActionsByQuestion(
+                questionId,
+                page,
+                limit,
+                sort,
+                order,
+                search,
+            );
+
+        return {
+            message: "Actions of question have been found.",
+            actions,
+            total,
         };
     }
 }

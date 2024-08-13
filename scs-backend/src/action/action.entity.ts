@@ -14,17 +14,14 @@ export class Action {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column()
+    title: string;
+
     @Column("text")
     content: string;
 
     @Column("simple-array", { nullable: true })
     imageUrls: string[];
-
-    @ManyToOne(() => User, (user) => user.actions)
-    writer: User;
-
-    @ManyToOne(() => Question, (question) => question.actions)
-    question: Question;
 
     @Column({ default: 0 })
     likeCount: number;
@@ -34,6 +31,12 @@ export class Action {
 
     @Column({ default: 0 })
     reportCount: number;
+
+    @ManyToOne(() => User, (user) => user.actions)
+    writer: User;
+
+    @ManyToOne(() => Question, (question) => question.actions)
+    question: Question;
 
     @OneToMany(() => ActionInteraction, (interaction) => interaction.action)
     interactions: ActionInteraction[];

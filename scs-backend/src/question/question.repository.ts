@@ -24,8 +24,8 @@ export class QuestionRepository extends Repository<Question> {
             where: {
                 section: {
                     id: sectionId,
-                    subject: Like(`%${search}%`),
                 },
+                content: Like(`%${search}%`),
             },
             relations: ["writer"],
             select: {

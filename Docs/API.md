@@ -514,6 +514,10 @@
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
 - **Response data**:
 
+```
+{ message: `result message` }
+```
+
 ### Q-05: 특정 질문의 답변들 조회
 
 - **Description**: 특정 질문에 대한 모든 답변을 조회한다. 페이지네이션을 지원한다.
