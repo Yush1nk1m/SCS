@@ -1,4 +1,5 @@
 import {
+    ForbiddenException,
     Injectable,
     Logger,
     NotFoundException,
@@ -77,6 +78,7 @@ export class ActionService {
             );
         }
 
+        // find actions with specified conditions
         return this.actionRepository.findActionsByQuestionId(
             questionId,
             page,
@@ -209,5 +211,30 @@ export class ActionService {
         action.rawContent = content;
 
         return this.actionRepository.save(action);
+    }
+
+    // [AC-04] Controller logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async deleteAction(userId: number, actionId: number): Promise<void> {
+        // find action from DB
+        const action =
+            await this.actionRepository.findActionDetailById(actionId);
+
+        // if action does not exist, it is an error
+        if (!action) {
+            throw new NotFoundException(
+                `Action with id ${actionId} does not exist.`,
+            );
+        }
+
+        // if writer is not equal, request is forbidden
+        if (action.writer.id !== userId) {
+            throw new ForbiddenException("Access is not allowed.");
+        }
+
+        // delete action
+        await this.actionRepository.delete({ id: action.id });
     }
 }

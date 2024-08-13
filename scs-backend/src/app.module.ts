@@ -15,7 +15,7 @@ import { addTransactionalDataSource } from "typeorm-transactional";
 import { DataSource } from "typeorm";
 import { APP_GUARD } from "@nestjs/core";
 import { AccessTokenGuard } from "./common/guard/access-token.guard";
-import { UploadModule } from './upload/upload.module';
+import { UploadModule } from "./upload/upload.module";
 
 @Module({
     imports: [

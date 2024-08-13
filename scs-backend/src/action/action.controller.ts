@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -16,6 +17,7 @@ import { ActionResponse } from "./types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateActionDto } from "./dto/create-action.dto";
 import { UpdateActionDto } from "./dto/update-action.dto";
+import { BaseResponse } from "../common/types/response.type";
 
 @Controller("v1/actions")
 export class ActionController {
@@ -73,6 +75,20 @@ export class ActionController {
         return {
             message: "Action has been updated.",
             action,
+        };
+    }
+
+    // [AC-04] Controller logic
+    @Delete(":id")
+    @HttpCode(HttpStatus.OK)
+    async deleteAction(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) actionId: number,
+    ): Promise<BaseResponse> {
+        await this.actionService.deleteAction(userId, actionId);
+
+        return {
+            message: "Action has been deleted.",
         };
     }
 }

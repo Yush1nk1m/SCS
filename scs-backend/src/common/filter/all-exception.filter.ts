@@ -22,6 +22,6 @@ export class AllExceptionFilter implements ExceptionFilter {
                 ? exception.message
                 : "Unexpectable internal server error";
 
-        response.status(status).json(message);
+        response.status(status).json({ message });
     }
 }
