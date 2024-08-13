@@ -19,6 +19,7 @@ export class ActionRepository extends Repository<Action> {
         search: string = "",
     ): Promise<{ actions: Action[]; total: number }> {
         const [actions, total] = await this.findAndCount({
+            withDeleted: true,
             where: {
                 question: {
                     id: questionId,

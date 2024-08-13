@@ -34,7 +34,9 @@ export class Question {
     @ManyToOne(() => User, (user) => user.questions)
     writer: User;
 
-    @ManyToOne(() => Section, (section) => section.questions)
+    @ManyToOne(() => Section, (section) => section.questions, {
+        onDelete: "CASCADE",
+    })
     section: Section;
 
     @OneToMany(() => Action, (action) => action.question)

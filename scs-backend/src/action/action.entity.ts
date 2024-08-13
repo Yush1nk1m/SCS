@@ -35,7 +35,9 @@ export class Action {
     @ManyToOne(() => User, (user) => user.actions)
     writer: User;
 
-    @ManyToOne(() => Question, (question) => question.actions)
+    @ManyToOne(() => Question, (question) => question.actions, {
+        onDelete: "CASCADE",
+    })
     question: Question;
 
     @OneToMany(() => ActionInteraction, (interaction) => interaction.action, {

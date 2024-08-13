@@ -21,6 +21,7 @@ export class QuestionRepository extends Repository<Question> {
         search: string = "",
     ): Promise<{ questions: Question[]; total: number }> {
         const [questions, total] = await this.findAndCount({
+            withDeleted: true,
             where: {
                 section: {
                     id: sectionId,
@@ -52,6 +53,7 @@ export class QuestionRepository extends Repository<Question> {
 
     async findQuestionDetailById(id: number) {
         return this.findOne({
+            withDeleted: true,
             where: { id },
             relations: ["writer", "section"],
             select: {

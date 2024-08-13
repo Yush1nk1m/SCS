@@ -14,12 +14,6 @@ export class ActionInteraction {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, (user) => user.actionInteractions)
-    user: User;
-
-    @ManyToOne(() => Action, (action) => action.interactions)
-    action: Action;
-
     @Column({
         type: "enum",
         enum: ["LIKE", "SHARE", "REPORT"],
@@ -32,4 +26,14 @@ export class ActionInteraction {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @ManyToOne(() => User, (user) => user.actionInteractions, {
+        onDelete: "CASCADE",
+    })
+    user: User;
+
+    @ManyToOne(() => Action, (action) => action.interactions, {
+        onDelete: "CASCADE",
+    })
+    action: Action;
 }
