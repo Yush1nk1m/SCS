@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString } from "class-validator";
+import { IsInt, IsNotEmpty, IsString, MaxLength } from "class-validator";
 
 export class CreateActionDto {
     @IsInt()
@@ -6,5 +6,6 @@ export class CreateActionDto {
 
     @IsString()
     @IsNotEmpty()
+    @MaxLength(100000)
     content: string;
 }

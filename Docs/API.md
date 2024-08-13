@@ -523,9 +523,32 @@
 - **Description**: 특정 질문에 대한 모든 답변을 조회한다. 페이지네이션을 지원한다.
 - **Method**: `GET`
 - **URI**: `/v1/questions/:id/actions`
-- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `likeCount`, order: `ASC` or `DESC`, search: `searching value`
+- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `updatedAt` or `likeCount`, order: `ASC` or `DESC`, search: `searching value`
 - **Request**: URI 경로에 질문의 ID를 전달하고 쿼리 파라미터로 옵션을 전달한다.
 - **Response data**:
+
+```
+{
+    message: `result message`,
+    actions: [
+        {
+            id: `action's id`,
+            title: `action's title`,
+            likeCount: `action's total like`,
+            shareCount: `action's total share`,
+            createdAt: `action's created date`,
+            updatedAt: `action's updated date`,
+            writer: {
+                id: `writer's id`,
+                nickname: `writer's nickname`
+            }
+        },
+        { ... },
+        ...
+    ],
+    total: `total number of found actions`
+}
+```
 
 ## Action
 
@@ -584,9 +607,17 @@
     message: `result message`,
     action: {
         id: `created action's id`,
+        title: `action title`,
         content: `action content`,
         createdAt: `creation date`,
+        updatedAt: `updated date`,
         likeCount: 0,
+        shareCount: 0,
+        reportCount: 0,
+        question: {
+            id: `question's id`,
+            content: `question's content`
+        },
         writer: {
             id: `writer's id`,
             nickname: `writer's nickname`
@@ -608,8 +639,15 @@
     message: `result message`,
     action: {
         id: `action's id`,
-        content: `updated action content`,
-        updatedAt: `update date`
+        title: `action's title`,
+        content: `updated action's sanitized content`,
+        rawContent: `updated action's raw content`,
+        imageUrls: `images' URL array`,
+        likeCount: `action's total like`,
+        shareCount: `action's total share`,
+        reportCount: `action's total report`,
+        createdAt: `action's created date`,
+        updatedAt: `action's updated date`
     }
 }
 ```

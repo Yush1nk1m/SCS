@@ -7,6 +7,7 @@ import {
     Logger,
     Param,
     ParseIntPipe,
+    Patch,
     Post,
 } from "@nestjs/common";
 import { ActionService } from "./action.service";
@@ -14,6 +15,7 @@ import { Public } from "../common/decorator/public.decorator";
 import { ActionResponse } from "./types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateActionDto } from "./dto/create-action.dto";
+import { UpdateActionDto } from "./dto/update-action.dto";
 
 @Controller("v1/actions")
 export class ActionController {
@@ -50,6 +52,26 @@ export class ActionController {
 
         return {
             message: "New action has been created.",
+            action,
+        };
+    }
+
+    // [AC-03] Controller logic
+    @Patch(":id")
+    @HttpCode(HttpStatus.OK)
+    async updateAction(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) actionId: number,
+        @Body() updateActionDto: UpdateActionDto,
+    ): Promise<ActionResponse> {
+        const action = await this.actionService.updateAction(
+            userId,
+            actionId,
+            updateActionDto,
+        );
+
+        return {
+            message: "Action has been updated.",
             action,
         };
     }

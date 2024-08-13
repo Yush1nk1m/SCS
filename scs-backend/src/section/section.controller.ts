@@ -79,6 +79,15 @@ export class SectionController {
         @Query("order") order: "ASC" | "DESC" = "DESC",
         @Query("search") search: string = "",
     ): Promise<QuestionsResponse> {
+        this.logger.verbose(
+            "Query parameters: ",
+            page,
+            limit,
+            sort,
+            order,
+            search,
+        );
+
         const { questions, total } =
             await this.questionService.getQuestionsBySection(
                 sectionId,

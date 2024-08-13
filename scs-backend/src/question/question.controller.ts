@@ -111,7 +111,7 @@ export class QuestionController {
         @Param("id", ParseIntPipe) questionId: number,
         @Query("page", ParseIntPipe) page: number = 1,
         @Query("limit", ParseIntPipe) limit: number = 10,
-        @Query("sort") sort: "createdAt" | "likeCount" = "createdAt",
+        @Query("sort") sort: "updatedAt" | "likeCount" = "updatedAt",
         @Query("order") order: "ASC" | "DESC" = "DESC",
         @Query("search") search: string = "",
     ): Promise<ActionsResponse> {

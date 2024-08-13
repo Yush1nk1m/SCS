@@ -8,10 +8,12 @@ import { ActionRepository } from "./action.repository";
 import { Action } from "./action.entity";
 import { QuestionRepository } from "../question/question.repository";
 import { marked } from "marked";
-import sanitizeHtml from "sanitize-html";
+import * as sanitizeHtml from "sanitize-html";
 import { sanitizeOptions } from "../config/sanitize-config";
 import { CreateActionDto } from "./dto/create-action.dto";
 import { UserRepository } from "../user/user.repository";
+import { UpdateActionDto } from "./dto/update-action.dto";
+import { IsolationLevel, Transactional } from "typeorm-transactional";
 
 @Injectable()
 export class ActionService {
@@ -34,11 +36,19 @@ export class ActionService {
     private async parseAndSanitizeMarkdown(markdown: string): Promise<string> {
         // parse markdown to HTML
         const rawHtml = await marked(markdown);
+        this.logger.verbose(`rawHtml: ${rawHtml}`);
 
         // HTML sanitize (to prevent XSS attack)
-        const sanitizedHtml = sanitizeHtml(rawHtml, sanitizeOptions);
+        try {
+            const sanitizedHtml = sanitizeHtml(rawHtml, sanitizeOptions);
+            this.logger.verbose(`sanitizedHtml: ${sanitizedHtml}`);
 
-        return sanitizedHtml;
+            return sanitizedHtml;
+        } catch (error) {
+            this.logger.error(`Sanitize error: ${error}`);
+            this.logger.error(`Error stack: ${error.stack}`);
+            throw error;
+        }
     }
 
     // Method for delivering markdown content to client
@@ -52,8 +62,8 @@ export class ActionService {
         questionId: number,
         page: number,
         limit: number,
-        sort: "createdAt" | "likeCount",
-        order: "ASC" | "DESC",
+        sort: "updatedAt" | "likeCount" = "updatedAt",
+        order: "ASC" | "DESC" = "DESC",
         search: string,
     ): Promise<{ actions: Action[]; total: number }> {
         // find a question with the specified id from DB
@@ -103,9 +113,12 @@ export class ActionService {
     ): Promise<Action> {
         // extract DTO data
         const { questionId, content } = createActionDto;
+        this.logger.verbose(
+            `Action creation on question ${questionId} with content: ${content}`,
+        );
 
         // find user from DB
-        const writer = await this.userRepository.findUserById(userId);
+        const writer = await this.userRepository.findUserBrieflyById(userId);
 
         // if user does not exist, it is an error
         if (!writer) {
@@ -114,7 +127,7 @@ export class ActionService {
 
         // find a question with the specified id from DB
         const question =
-            await this.questionRepository.findQuestionById(questionId);
+            await this.questionRepository.findQuestionBrieflyById(questionId);
 
         // if the question does not exist, it is an error
         if (!question) {
@@ -129,16 +142,71 @@ export class ActionService {
 
         // parse and sanitize markdown content
         const sanitizedHtml = await this.parseAndSanitizeMarkdown(content);
-        this.logger.verbose("Sanitized HTML:", sanitizeHtml);
+        this.logger.verbose("Sanitized HTML:", sanitizedHtml);
+
+        // create new action's title
+        const title = `${writer.nickname}님께서 ${new Date().toLocaleDateString()} 작성한 액션입니다.`;
 
         // create action
         const action = this.actionRepository.create({
+            title,
             content: sanitizedHtml,
             rawContent: content,
             imageUrls,
             question,
             writer,
         });
+
+        return this.actionRepository.save(action);
+    }
+
+    // [AC-03] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async updateAction(
+        userId: number,
+        actionId: number,
+        updateActionDto: UpdateActionDto,
+    ): Promise<Action> {
+        // extract data from DTO
+        const { content } = updateActionDto;
+
+        // find user from DB
+        const writer = await this.userRepository.findUserBrieflyById(userId);
+
+        // if user does not exist, it is an error
+        if (!writer) {
+            throw new UnauthorizedException("User not exists.");
+        }
+
+        // find an action which is written by user
+        const action = await this.actionRepository.findActionByWriterAndId(
+            writer,
+            actionId,
+        );
+
+        // if the action does not exist, it is an error
+        if (!action) {
+            throw new UnauthorizedException(
+                "User cannot access to the action.",
+            );
+        }
+
+        // extract image URLs from markdown content
+        const imageUrls = this.extractImageUrls(content);
+        this.logger.verbose("Updated extracted image URLs:", imageUrls);
+
+        // parse and sanitize markdown content
+        const sanitizedHtml = await this.parseAndSanitizeMarkdown(content);
+        this.logger.verbose("Updated sanitized HTML:", sanitizedHtml);
+
+        // update action's title
+        action.title = `${writer.nickname}님께서 ${new Date().toLocaleDateString()} 수정한 액션입니다.`;
+
+        // update action information and save
+        action.content = sanitizedHtml;
+        action.rawContent = content;
 
         return this.actionRepository.save(action);
     }

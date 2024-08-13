@@ -28,7 +28,7 @@ export class QuestionRepository extends Repository<Question> {
                 },
                 content: Like(`%${search}%`),
             },
-            relations: ["writer"],
+            relations: ["writer", "section"],
             select: {
                 id: true,
                 content: true,
@@ -49,6 +49,16 @@ export class QuestionRepository extends Repository<Question> {
 
     async findQuestionById(id: number) {
         return this.findOne({ where: { id } });
+    }
+
+    async findQuestionBrieflyById(id: number) {
+        return this.findOne({
+            where: { id },
+            select: {
+                id: true,
+                content: true,
+            },
+        });
     }
 
     async findQuestionDetailById(id: number) {

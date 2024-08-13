@@ -1,6 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { DataSource, Like, Repository } from "typeorm";
 import { Action } from "./action.entity";
+import { User } from "../user/user.entity";
 
 @Injectable()
 export class ActionRepository extends Repository<Action> {
@@ -39,11 +40,20 @@ export class ActionRepository extends Repository<Action> {
         });
     }
 
+    async findActionByWriterAndId(writer: User, id: number): Promise<Action> {
+        return this.findOne({
+            where: {
+                id,
+                writer,
+            },
+        });
+    }
+
     async findActionsByQuestionId(
         questionId: number,
         page: number = 1,
         limit: number = 10,
-        sort: "createdAt" | "likeCount" = "createdAt",
+        sort: "updatedAt" | "likeCount" = "updatedAt",
         order: "ASC" | "DESC" = "DESC",
         search: string = "",
     ): Promise<{ actions: Action[]; total: number }> {
@@ -60,6 +70,9 @@ export class ActionRepository extends Repository<Action> {
                 id: true,
                 title: true,
                 likeCount: true,
+                shareCount: true,
+                createdAt: true,
+                updatedAt: true,
                 writer: {
                     id: true,
                     nickname: true,
