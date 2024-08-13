@@ -22,6 +22,9 @@ export class Action {
     @Column("text")
     content: string;
 
+    @Column("text")
+    rawContent: string;
+
     @Column("simple-array", { nullable: true })
     imageUrls: string[];
 

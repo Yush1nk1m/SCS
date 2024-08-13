@@ -69,7 +69,7 @@ export class QuestionService {
     }
 
     // [Q-02] Service logic
-    async createNewQuestion(
+    async createQuestion(
         userId: number,
         createQuestionDto: CreateQuestionDto,
     ): Promise<Question> {

@@ -53,11 +53,11 @@ export class QuestionController {
     // [Q-02] Controller logic
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    async createNewQuestion(
+    async createQuestion(
         @GetCurrentUserId() userId: number,
         @Body() createQuestionDto: CreateQuestionDto,
     ): Promise<QuestionResponse> {
-        const question = await this.questionService.createNewQuestion(
+        const question = await this.questionService.createQuestion(
             userId,
             createQuestionDto,
         );

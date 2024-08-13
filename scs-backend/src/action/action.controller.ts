@@ -1,4 +1,5 @@
 import {
+    Body,
     Controller,
     Get,
     HttpCode,
@@ -6,10 +7,13 @@ import {
     Logger,
     Param,
     ParseIntPipe,
+    Post,
 } from "@nestjs/common";
 import { ActionService } from "./action.service";
 import { Public } from "../common/decorator/public.decorator";
 import { ActionResponse } from "./types/response.type";
+import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
+import { CreateActionDto } from "./dto/create-action.dto";
 
 @Controller("v1/actions")
 export class ActionController {
@@ -28,6 +32,24 @@ export class ActionController {
 
         return {
             message: `Action with id ${actionId} has been found.`,
+            action,
+        };
+    }
+
+    // [AC-02] Controller logic
+    @Post()
+    @HttpCode(HttpStatus.CREATED)
+    async createAction(
+        @GetCurrentUserId() userId: number,
+        @Body() createActionDto: CreateActionDto,
+    ): Promise<ActionResponse> {
+        const action = await this.actionService.createAction(
+            userId,
+            createActionDto,
+        );
+
+        return {
+            message: "New action has been created.",
             action,
         };
     }

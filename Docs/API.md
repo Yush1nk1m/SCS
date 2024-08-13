@@ -574,8 +574,8 @@
 
 - **Description**: 특정 질문에 대한 새로운 답변을 생성한다.
 - **Method**: `POST`
-- **URI**: `/v1/questions/:id/actions`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `action content (markdown)` }
+- **URI**: `/v1/actions`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `action content (markdown)`, questionId: `question's id` }
 - **Response data**:
 
 ```
