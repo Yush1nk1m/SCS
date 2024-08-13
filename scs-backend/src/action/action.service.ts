@@ -52,7 +52,8 @@ export class ActionService {
     // [AC-01] Service logic
     async getSpecificAction(actionId: number): Promise<Action> {
         // find an action with the specified id from DB
-        const action = await this.actionRepository.findActionById(actionId);
+        const action =
+            await this.actionRepository.findActionDetailById(actionId);
 
         // if the action does not exist, it is an error
         if (!action) {
