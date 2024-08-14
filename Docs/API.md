@@ -561,6 +561,8 @@
 | AC-03  | PATCH  |       /v1/actions/:id       | 답변 내용 수정                       |
 | AC-04  | DELETE |       /v1/actions/:id       | 답변 삭제                            |
 | AC-05  |  GET   | /v1/actions/:id/raw-content | 특정 답변의 Raw 마크다운 컨텐츠 조회 |
+| AC-06  |  POST  |    /v1/actions/:id/like     | 좋아요 등록/취소                     |
+| AC-07  |  GET   |    /v1/actions/:id/like     | 좋아요 여부 조회                     |
 
 ### AC-01: 특정 답변 조회
 
@@ -675,6 +677,37 @@
 {
     message: `result message`,
     content: `action's raw markdown content`
+}
+```
+
+### AC-06: 좋아요 등록/취소
+
+- **Description**: 특정 답변에 대해 사용자의 좋아요 등록 및 취소를 등록한다.
+- **Method**: `POST`
+- **URI**: `/v1/actions/:id/like`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    liked: `true` or `false`,
+    likeCount: `number of like`
+}
+```
+
+### AC-07: 좋아요 여부 조회
+
+- **Description**: 특정 답변에 대해 사용자가 좋아요를 등록했는지 여부를 조회한다.
+- **Method**: `GET`
+- **URI**: `/v1/actions/:id/like`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+{
+    message: `result message`,
+    liked: `true` or `false`
 }
 ```
 
