@@ -9,6 +9,7 @@ import {
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { join } from "path";
 import * as dotenv from "dotenv";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 dotenv.config();
 
 async function bootstrap() {
@@ -29,6 +30,14 @@ async function bootstrap() {
 
     app.useGlobalFilters(new AllExceptionFilter());
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+    const swaggerConfig = new DocumentBuilder()
+        .setTitle("SCS API")
+        .setDescription("Study Computer Science 서비스의 백엔드 API 문서이다.")
+        .setVersion("1.0")
+        .build();
+    const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup("api", app, swaggerDocument);
 
     await app.listen(4000);
 }

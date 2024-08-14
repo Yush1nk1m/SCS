@@ -22,7 +22,9 @@ import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decora
 import { CreateActionDto } from "./dto/create-action.dto";
 import { UpdateActionDto } from "./dto/update-action.dto";
 import { BaseResponse } from "../common/types/response.type";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Action")
 @Controller("v1/actions")
 export class ActionController {
     private logger = new Logger("ActionController");

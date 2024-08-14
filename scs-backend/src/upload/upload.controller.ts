@@ -11,7 +11,9 @@ import {
 import { UploadService } from "./upload.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { PresignedURLResponse, URLResponse } from "./types/response.type";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Upload")
 @Controller("v1/upload")
 export class UploadController {
     private logger = new Logger("UploadController");

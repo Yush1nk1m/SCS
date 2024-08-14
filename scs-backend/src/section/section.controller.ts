@@ -26,7 +26,9 @@ import {
 } from "./dto/update-section.dto";
 import { BaseResponse } from "../common/types/response.type";
 import { QuestionsResponse } from "../question/types/response.type";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Section")
 @Controller("v1/sections")
 export class SectionController {
     private logger = new Logger("SectionController");

@@ -1,6 +1,8 @@
+import { PickType } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, Length } from "class-validator";
+import { User } from "../../user/user.entity";
 
-export class LoginDto {
+export class LoginDto extends PickType(User, ["email", "password"] as const) {
     @IsEmail()
     email: string;
 

@@ -21,7 +21,10 @@ import { JwtPayload } from "./types/jwt-payload.type";
 import { BaseResponse } from "../common/types/response.type";
 import { UserResponse } from "../user/types/response.type";
 import { TokensResponse } from "./types/response.type";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { TokensResponseDto } from "./dto/response.dto";
 
+@ApiTags("Auth")
 @Controller("v1/auth")
 export class AuthController {
     private logger = new Logger("AuthController");
@@ -77,10 +80,16 @@ export class AuthController {
     }
 
     // [A-04] Controller logic
+    @ApiOperation({ summary: "로그인" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "로그인 성공",
+        type: TokensResponseDto,
+    })
     @Public()
     @Post("jwt/login")
     @HttpCode(HttpStatus.OK)
-    async login(@Body() loginDto: LoginDto): Promise<TokensResponse> {
+    async login(@Body() loginDto: LoginDto): Promise<TokensResponseDto> {
         const tokens = await this.authService.login(loginDto);
 
         return {

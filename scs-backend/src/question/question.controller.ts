@@ -23,7 +23,9 @@ import { Roles } from "../common/decorator/roles.decorator";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
 import { BaseResponse } from "../common/types/response.type";
 import { ActionsResponse } from "../action/types/response.type";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Question")
 @Controller("v1/questions")
 export class QuestionController {
     private logger = new Logger("QuestionController");
