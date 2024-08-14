@@ -19,6 +19,7 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 export class Question {
     @ApiProperty({ example: 1, description: "질문 ID" })
     @PrimaryGeneratedColumn()
+    @Index("IDX_QUESTION_ID")
     id: number;
 
     @ApiProperty({

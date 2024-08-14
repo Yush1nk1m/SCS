@@ -20,6 +20,16 @@ export class QuestionRepository extends Repository<Question> {
         order: "ASC" | "DESC" = "DESC",
         search: string = "",
     ): Promise<{ questions: Question[]; total: number }> {
+        const where = {
+            section: {
+                id: sectionId,
+            },
+            content: Like(`%${search}%`),
+        };
+        if (search === "") {
+            delete where.content;
+        }
+
         const [questions, total] = await this.findAndCount({
             withDeleted: true,
             where: {
@@ -28,7 +38,7 @@ export class QuestionRepository extends Repository<Question> {
                 },
                 content: Like(`%${search}%`),
             },
-            relations: ["writer", "section"],
+            relations: ["writer"],
             select: {
                 id: true,
                 content: true,

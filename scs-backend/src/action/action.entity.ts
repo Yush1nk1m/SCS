@@ -2,6 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     JoinTable,
     ManyToMany,
     ManyToOne,
@@ -13,9 +14,12 @@ import { Question } from "../question/question.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 @Entity()
+@Index(["question", "updatedAt"])
+@Index(["question", "likeCount"])
 export class Action {
     @ApiProperty({ example: 1, description: "답변 ID" })
     @PrimaryGeneratedColumn()
+    @Index("IDX_ACTION_ID")
     id: number;
 
     @ApiProperty({

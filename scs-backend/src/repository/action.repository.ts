@@ -56,14 +56,19 @@ export class ActionRepository extends Repository<Action> {
         order: "ASC" | "DESC" = "DESC",
         search: string = "",
     ): Promise<{ actions: Action[]; total: number }> {
+        const where = {
+            question: {
+                id: questionId,
+            },
+            title: Like(`%${search}%`),
+        };
+        if (search === "") {
+            delete where.title;
+        }
+
         const [actions, total] = await this.findAndCount({
             withDeleted: true,
-            where: {
-                question: {
-                    id: questionId,
-                },
-                title: Like(`%${search}%`),
-            },
+            where,
             relations: ["writer"],
             select: {
                 id: true,
