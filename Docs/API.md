@@ -535,7 +535,6 @@
             id: `action's id`,
             title: `action's title`,
             likeCount: `action's total like`,
-            shareCount: `action's total share`,
             createdAt: `action's created date`,
             updatedAt: `action's updated date`,
             writer: {

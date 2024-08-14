@@ -1,9 +1,9 @@
 export interface Question {
   id: number;
   content: string;
-  createdAt: Date;
-  saved: number;
-  writer: {
+  createdAt?: Date;
+  saved?: number;
+  writer?: {
     id: number;
     nickname: string;
   };
