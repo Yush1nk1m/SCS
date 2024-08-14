@@ -83,27 +83,28 @@ const QuestionPage: React.FC = () => {
             sortOption={sortOption}
             onSortChange={setSortOption}
           />
-          <div className="search-container">
+          <form onSubmit={handleSearch} className="search-form">
             <input
               type="text"
               placeholder="액션 검색..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
+              className="search-input"
             />
-            <button onClick={handleSearch} className="search-button">
+            <button type="submit" className="search-button">
               검색
             </button>
-          </div>
+          </form>
         </div>
         <div className="actions-list">
           {actions.map((action) => (
             <ActionCard
               key={action.id}
+              id={action.id}
               title={action.title}
               imageUrl={action.imageUrls?.[0]}
               likeCount={action.likeCount}
               createdAt={action.createdAt}
-              writer={action.writer}
             />
           ))}
         </div>
