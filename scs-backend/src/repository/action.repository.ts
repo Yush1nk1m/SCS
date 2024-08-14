@@ -68,6 +68,7 @@ export class ActionRepository extends Repository<Action> {
             select: {
                 id: true,
                 title: true,
+                imageUrls: true,
                 likeCount: true,
                 createdAt: true,
                 updatedAt: true,

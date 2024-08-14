@@ -534,6 +534,7 @@
         {
             id: `action's id`,
             title: `action's title`,
+            imageUrls: `attached images' url`,
             likeCount: `action's total like`,
             createdAt: `action's created date`,
             updatedAt: `action's updated date`,
