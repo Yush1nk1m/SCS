@@ -1,4 +1,4 @@
-import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsEmail, Length } from "class-validator";
 import {
     Column,

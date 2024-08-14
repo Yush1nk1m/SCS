@@ -22,15 +22,7 @@ export class UserService {
 
     // [U-01] Service logic
     async findAllUsersFiltered(): Promise<User[]> {
-        const users = await this.userRepository.findAllUsers();
-        for (const user of users) {
-            // remove all users' private information
-            delete user.password;
-            delete user.refreshToken;
-            delete user.createdAt;
-        }
-
-        return users;
+        return await this.userRepository.findAllUsers();
     }
 
     // [U-02], [U-03] Service logic

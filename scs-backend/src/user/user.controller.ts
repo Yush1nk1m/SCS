@@ -15,10 +15,16 @@ import { UserService } from "./user.service";
 import { BaseResponse } from "../common/types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { ChangePasswordDto } from "./dto/change-password.dto";
-import { UserResponse, UsersResponse } from "./types/response.type";
 import { ChangeNicknameDto } from "./dto/change-nickname.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
-import { ApiTags } from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiOperation,
+    ApiResponse,
+    ApiTags,
+} from "@nestjs/swagger";
+import { UserResponseDto, UsersResponseDto } from "./dto/response.dto";
+import { BaseResponseDto } from "../common/dto/base-response.dto";
 
 @ApiTags("User")
 @Controller("v1/users")
@@ -27,10 +33,16 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
 
     // [U-01] Controller logic
+    @ApiOperation({ summary: "모든 사용자 정보 조회" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "사용자 정보 조회 성공",
+        type: UsersResponseDto,
+    })
     @Public()
     @Get()
     @HttpCode(HttpStatus.OK)
-    async getAllUsers(): Promise<UsersResponse> {
+    async getAllUsers(): Promise<UsersResponseDto> {
         const users = await this.userService.findAllUsersFiltered();
 
         return {
@@ -40,11 +52,18 @@ export class UserController {
     }
 
     // [U-03] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "로그인한 사용자 정보 조회" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "사용자 정보 조회 성공",
+        type: UserResponseDto,
+    })
     @Get("me")
     @HttpCode(HttpStatus.OK)
     async getCurrentUser(
         @GetCurrentUserId(ParseIntPipe) id: number,
-    ): Promise<UserResponse> {
+    ): Promise<UserResponseDto> {
         this.logger.verbose(
             `An user with id: ${id} has requested to get information`,
         );
@@ -57,12 +76,18 @@ export class UserController {
     }
 
     // [U-02] Controller logic
+    @ApiOperation({ summary: "특정 사용자 정보 조회" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "사용자 정보 조회 성공",
+        type: UserResponseDto,
+    })
     @Public()
     @Get(":id")
     @HttpCode(HttpStatus.OK)
     async getSpecificUser(
         @Param("id", ParseIntPipe) id: number,
-    ): Promise<UserResponse> {
+    ): Promise<UserResponseDto> {
         const user = await this.userService.findUserByIdFiltered(id);
 
         return {
@@ -72,12 +97,19 @@ export class UserController {
     }
 
     // [U-04] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "로그인한 사용자 비밀번호 변경" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "비밀번호 변경 성공",
+        type: BaseResponseDto,
+    })
     @Patch("password")
     @HttpCode(HttpStatus.OK)
     async changeUserPassword(
         @GetCurrentUserId() id: number,
         @Body() changePasswordDto: ChangePasswordDto,
-    ): Promise<BaseResponse> {
+    ): Promise<BaseResponseDto> {
         await this.userService.changeUserPassword(id, changePasswordDto);
 
         return {
@@ -86,6 +118,13 @@ export class UserController {
     }
 
     // [U-05] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "로그인한 사용자 닉네임 변경" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "닉네임 변경 성공",
+        type: BaseResponseDto,
+    })
     @Patch("nickname")
     @HttpCode(HttpStatus.OK)
     async changeUserNickname(
@@ -100,6 +139,13 @@ export class UserController {
     }
 
     // [U-06] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "로그인한 사용자 회원 탈퇴" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "회원 탈퇴 성공",
+        type: BaseResponseDto,
+    })
     @Delete()
     @HttpCode(HttpStatus.OK)
     async deleteCurrentUser(
