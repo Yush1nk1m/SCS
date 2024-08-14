@@ -2,14 +2,14 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
+    ManyToMany,
     ManyToOne,
-    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
 import { Question } from "../question/question.entity";
-import { ActionInteraction } from "./action-interaction.entity";
 
 @Entity()
 export class Action {
@@ -31,12 +31,6 @@ export class Action {
     @Column({ default: 0 })
     likeCount: number;
 
-    @Column({ default: 0 })
-    shareCount: number;
-
-    @Column({ default: 0 })
-    reportCount: number;
-
     @CreateDateColumn()
     createdAt: Date;
 
@@ -51,8 +45,9 @@ export class Action {
     })
     question: Question;
 
-    @OneToMany(() => ActionInteraction, (interaction) => interaction.action, {
-        cascade: true,
+    @ManyToMany(() => User, (user) => user.likedActions, {
+        onDelete: "CASCADE",
     })
-    interactions: ActionInteraction[];
+    @JoinTable({ name: "Like" })
+    likedBy: User[];
 }

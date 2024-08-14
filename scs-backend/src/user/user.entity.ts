@@ -5,6 +5,7 @@ import {
     DeleteDateColumn,
     Entity,
     Index,
+    ManyToMany,
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
@@ -12,7 +13,6 @@ import {
 import { Section } from "../section/section.entity";
 import { Question } from "../question/question.entity";
 import { Action } from "../action/action.entity";
-import { ActionInteraction } from "../action/action-interaction.entity";
 
 @Entity()
 export class User {
@@ -70,10 +70,8 @@ export class User {
     @OneToMany(() => Action, (action) => action.writer)
     actions: Action[];
 
-    @OneToMany(
-        () => ActionInteraction,
-        (actionInteraction) => actionInteraction.user,
-        { cascade: true },
-    )
-    actionInteractions: ActionInteraction[];
+    @ManyToMany(() => Action, (action) => action.likedBy, {
+        onDelete: "CASCADE",
+    })
+    likedActions: Action[];
 }

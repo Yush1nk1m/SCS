@@ -4,7 +4,6 @@ import { AuthRepository } from "./auth.repository";
 import { SectionRepository } from "./section.repository";
 import { QuestionRepository } from "./question.repository";
 import { ActionRepository } from "./action.repository";
-import { ActionInteractionRepository } from "./action-interaction.repository";
 
 @Global()
 @Module({
@@ -14,7 +13,6 @@ import { ActionInteractionRepository } from "./action-interaction.repository";
         SectionRepository,
         QuestionRepository,
         ActionRepository,
-        ActionInteractionRepository,
     ],
     exports: [
         AuthRepository,
@@ -22,7 +20,6 @@ import { ActionInteractionRepository } from "./action-interaction.repository";
         SectionRepository,
         QuestionRepository,
         ActionRepository,
-        ActionInteractionRepository,
     ],
 })
 export class RepositoryModule {}

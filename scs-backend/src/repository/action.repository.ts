@@ -25,7 +25,6 @@ export class ActionRepository extends Repository<Action> {
                 title: true,
                 content: true,
                 likeCount: true,
-                shareCount: true,
                 createdAt: true,
                 updatedAt: true,
                 writer: {
@@ -70,7 +69,6 @@ export class ActionRepository extends Repository<Action> {
                 id: true,
                 title: true,
                 likeCount: true,
-                shareCount: true,
                 createdAt: true,
                 updatedAt: true,
                 writer: {

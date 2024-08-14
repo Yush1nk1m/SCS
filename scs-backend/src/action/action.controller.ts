@@ -13,10 +13,7 @@ import {
 } from "@nestjs/common";
 import { ActionService } from "./action.service";
 import { Public } from "../common/decorator/public.decorator";
-import {
-    ActionInteractionResponse,
-    ActionResponse,
-} from "./types/response.type";
+import { ActionResponse } from "./types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateActionDto } from "./dto/create-action.dto";
 import { UpdateActionDto } from "./dto/update-action.dto";
@@ -92,25 +89,6 @@ export class ActionController {
 
         return {
             message: "Action has been deleted.",
-        };
-    }
-
-    // [AC-05] Controller logic
-    @Get(":id/interaction")
-    @HttpCode(HttpStatus.OK)
-    async getActionInteraction(
-        @GetCurrentUserId() userId: number,
-        @Param("id", ParseIntPipe) actionId: number,
-    ): Promise<ActionInteractionResponse> {
-        const actionInteraction = await this.actionService.getActionInteraction(
-            userId,
-            actionId,
-        );
-
-        return {
-            message:
-                "Interaction information between user and action has been found.",
-            actionInteraction,
         };
     }
 }

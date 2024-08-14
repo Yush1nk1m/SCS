@@ -15,7 +15,6 @@ import { CreateActionDto } from "./dto/create-action.dto";
 import { UserRepository } from "../repository/user.repository";
 import { UpdateActionDto } from "./dto/update-action.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
-import { ActionInteractionRepository } from "../repository/action-interaction.repository";
 
 @Injectable()
 export class ActionService {
@@ -23,7 +22,6 @@ export class ActionService {
 
     constructor(
         private readonly actionRepository: ActionRepository,
-        private readonly actionInteractionRepository: ActionInteractionRepository,
         private readonly questionRepository: QuestionRepository,
         private readonly userRepository: UserRepository,
     ) {}
@@ -207,39 +205,5 @@ export class ActionService {
 
         // delete action
         await this.actionRepository.delete({ id: action.id });
-    }
-
-    // [AC-05] Service logic
-    async getActionInteraction(
-        userId: number,
-        actionId: number,
-    ): Promise<{ like: boolean }> {
-        // find user from DB
-        const user = await this.userRepository.findUserBrieflyById(userId);
-
-        // if user does not exist, it is an error
-        if (!user) {
-            throw new UnauthorizedException("User does not exist.");
-        }
-
-        // find an action from DB
-        const action = await this.actionRepository.findActionById(actionId);
-
-        // if the action does not exist, it is an error
-        if (!action) {
-            throw new NotFoundException(
-                `Action with id ${actionId} has not been found.`,
-            );
-        }
-
-        // find like interaction from DB
-        const like = await this.actionInteractionRepository.findLike(
-            user,
-            action,
-        );
-
-        return {
-            like: like ? true : false,
-        };
     }
 }
