@@ -21,7 +21,10 @@ export class Verification {
     @IsEmail()
     email: string;
 
-    @ApiHideProperty()
+    @ApiProperty({
+        example: "q1w2e3",
+        description: "인증 코드",
+    })
     @Column()
     @Length(6, 6)
     verificationCode: string;

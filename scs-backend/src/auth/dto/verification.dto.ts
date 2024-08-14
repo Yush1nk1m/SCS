@@ -1,10 +1,7 @@
-import { IsEmail, IsString, Length } from "class-validator";
+import { PickType } from "@nestjs/swagger";
+import { Verification } from "../verification.entity";
 
-export class VerificationDto {
-    @IsEmail()
-    email: string;
-
-    @IsString()
-    @Length(6, 6)
-    verificationCode: string;
-}
+export class VerificationDto extends PickType(Verification, [
+    "email",
+    "verificationCode",
+]) {}

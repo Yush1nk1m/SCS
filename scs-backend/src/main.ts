@@ -32,6 +32,7 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
     const swaggerConfig = new DocumentBuilder()
+        .addBearerAuth()
         .setTitle("SCS API")
         .setDescription("Study Computer Science 서비스의 백엔드 API 문서이다.")
         .setVersion("1.0")
