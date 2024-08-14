@@ -15,6 +15,7 @@ import { CreateActionDto } from "./dto/create-action.dto";
 import { UserRepository } from "../repository/user.repository";
 import { UpdateActionDto } from "./dto/update-action.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
+import { LikeCount, Liked } from "./types/like.type";
 
 @Injectable()
 export class ActionService {
@@ -232,5 +233,53 @@ export class ActionService {
 
         // return raw markdown content
         return action.rawContent;
+    }
+
+    // [AC-06] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async toggleLike(
+        userId: number,
+        actionId: number,
+    ): Promise<[Liked, LikeCount]> {
+        // find user from DB
+        const user = await this.userRepository.findUserById(userId);
+
+        // if user does not exist, it is an error
+        if (!user) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        // find action from DB
+        const action =
+            await this.actionRepository.findActionAndLikesById(actionId);
+
+        // if action does not exist, it is an error
+        if (!action) {
+            throw new NotFoundException("Action has not been found.");
+        }
+
+        // save liked status
+        let liked: boolean = null;
+
+        // if user has already liked action
+        if (action.likedBy.some((likedUser) => likedUser.id === user.id)) {
+            action.likedBy = action.likedBy.filter(
+                (likedUser) => likedUser.id !== user.id,
+            );
+            action.likeCount--;
+            liked = false;
+        }
+        // if user has not liked action
+        else {
+            action.likedBy.push(user);
+            action.likeCount++;
+            liked = true;
+        }
+
+        await this.actionRepository.save(action);
+
+        return [liked, action.likeCount];
     }
 }

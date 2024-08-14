@@ -13,7 +13,11 @@ import {
 } from "@nestjs/common";
 import { ActionService } from "./action.service";
 import { Public } from "../common/decorator/public.decorator";
-import { ActionResponse, ContentResponse } from "./types/response.type";
+import {
+    ActionResponse,
+    ContentResponse,
+    ToggleLikeResponse,
+} from "./types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateActionDto } from "./dto/create-action.dto";
 import { UpdateActionDto } from "./dto/update-action.dto";
@@ -107,6 +111,25 @@ export class ActionController {
         return {
             message: "Raw markdown content has been found.",
             content,
+        };
+    }
+
+    // [AC-06] Controller logic
+    @Post(":id/like")
+    @HttpCode(HttpStatus.OK)
+    async toggleActionLike(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) actionId: number,
+    ): Promise<ToggleLikeResponse> {
+        const [liked, likeCount] = await this.actionService.toggleLike(
+            userId,
+            actionId,
+        );
+
+        return {
+            message: "Like to the action has been processed.",
+            liked,
+            likeCount,
         };
     }
 }

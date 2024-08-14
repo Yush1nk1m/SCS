@@ -13,3 +13,8 @@ export interface ActionResponse extends BaseResponse {
 export interface ContentResponse extends BaseResponse {
     content: string;
 }
+
+export interface ToggleLikeResponse extends BaseResponse {
+    liked: boolean;
+    likeCount: number;
+}

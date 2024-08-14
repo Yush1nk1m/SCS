@@ -85,4 +85,11 @@ export class ActionRepository extends Repository<Action> {
 
         return { actions, total };
     }
+
+    async findActionAndLikesById(id: number): Promise<Action> {
+        return this.findOne({
+            where: { id },
+            relations: ["likedBy"],
+        });
+    }
 }
