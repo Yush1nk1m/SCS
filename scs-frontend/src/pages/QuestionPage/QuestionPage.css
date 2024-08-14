@@ -79,6 +79,30 @@
   background-color: #3a3aff;
 }
 
+.search-container {
+  display: flex;
+  align-items: stretch;
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #4c4cff;
+  border-right: none;
+  border-radius: 5px 0 0 5px;
+  font-size: 16px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: #4c4cff;
+  color: white;
+  border: 1px solid #4c4cff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+
 .actions-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

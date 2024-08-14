@@ -6,6 +6,7 @@ import ActionSortingOptions from "../../components/ActionSortingOptions/ActionSo
 import { fetchActions, fetchQuestion } from "../../services/question";
 import "./QuestionPage.css";
 import Pagination from "../../components/Pagination/Pagination";
+import ActionCard from "../../components/ActionCard/ActionCard";
 
 const QuestionPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -82,23 +83,28 @@ const QuestionPage: React.FC = () => {
             sortOption={sortOption}
             onSortChange={setSortOption}
           />
-          <form onSubmit={handleSearch}>
+          <div className="search-container">
             <input
               type="text"
               placeholder="액션 검색..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
             />
-            <button type="submit">검색</button>
-          </form>
+            <button onClick={handleSearch} className="search-button">
+              검색
+            </button>
+          </div>
         </div>
         <div className="actions-list">
           {actions.map((action) => (
-            <div key={action.id} className="action-card">
-              <h2>{action.title}</h2>
-              <p>{action.content?.substring(0, 100) || ""}...</p>
-              <p>❤️: {action.likeCount}</p>
-            </div>
+            <ActionCard
+              key={action.id}
+              title={action.title}
+              imageUrl={action.imageUrls?.[0]}
+              likeCount={action.likeCount}
+              createdAt={action.createdAt}
+              writer={action.writer}
+            />
           ))}
         </div>
         <Pagination
