@@ -3,6 +3,7 @@ import { Section } from "../section.entity";
 import { BaseResponseDto } from "../../common/dto/base-response.dto";
 import { User } from "../../user/user.entity";
 import { Question } from "../../question/question.entity";
+import { WriterDto } from "../../user/dto/writer.dto";
 
 class CreatorDto extends PickType(User, ["id", "nickname"]) {}
 
@@ -26,9 +27,6 @@ export class SectionResponseDto extends BaseResponseDto {
     @ApiProperty({ type: SectionDto })
     section: SectionDto;
 }
-
-class WriterDto extends PickType(User, ["id", "nickname"]) {}
-
 class QuestionDto extends PickType(Question, [
     "id",
     "content",

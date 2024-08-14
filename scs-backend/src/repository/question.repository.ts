@@ -65,18 +65,13 @@ export class QuestionRepository extends Repository<Question> {
         return this.findOne({
             withDeleted: true,
             where: { id },
-            relations: ["writer", "section"],
+            relations: ["writer"],
             select: {
                 id: true,
                 content: true,
                 createdAt: true,
                 updatedAt: true,
                 saved: true,
-                section: {
-                    id: true,
-                    subject: true,
-                    description: true,
-                },
                 writer: {
                     id: true,
                     nickname: true,
@@ -97,8 +92,6 @@ export class QuestionRepository extends Repository<Question> {
         });
 
         await this.save(question);
-        delete question.writer;
-        delete question.section;
 
         return question;
     }

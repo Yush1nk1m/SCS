@@ -15,15 +15,21 @@ import {
 } from "@nestjs/common";
 import { QuestionService } from "./question.service";
 import { Public } from "../common/decorator/public.decorator";
-import { QuestionResponse } from "./types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateQuestionDto } from "./dto/create-question.dto";
 import { RolesGuard } from "../common/guard/roles.guard";
 import { Roles } from "../common/decorator/roles.decorator";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
-import { BaseResponse } from "../common/types/response.type";
 import { ActionsResponse } from "../action/types/response.type";
-import { ApiTags } from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiOperation,
+    ApiResponse,
+    ApiTags,
+} from "@nestjs/swagger";
+import { QuestionResponseDto } from "./dto/response.dto";
+import { BaseResponseDto } from "../common/dto/base-response.dto";
+import { GetActionsQueryDto } from "./dto/get-actions-query.dto";
 
 @ApiTags("Question")
 @Controller("v1/questions")
@@ -33,12 +39,18 @@ export class QuestionController {
     constructor(private readonly questionService: QuestionService) {}
 
     // [Q-01] Controller logic
+    @ApiOperation({ summary: "특정 질문 조회" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "질문 조회 성공",
+        type: QuestionResponseDto,
+    })
     @Public()
     @Get(":id")
     @HttpCode(HttpStatus.OK)
     async getSpecificQuestion(
         @Param("id", ParseIntPipe) questionId: number,
-    ): Promise<QuestionResponse> {
+    ): Promise<QuestionResponseDto> {
         const question =
             await this.questionService.getSpecificQuestion(questionId);
 
@@ -49,12 +61,19 @@ export class QuestionController {
     }
 
     // [Q-02] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "새 질문 생성" })
+    @ApiResponse({
+        status: HttpStatus.CREATED,
+        description: "질문 생성 성공",
+        type: QuestionResponseDto,
+    })
     @Post()
     @HttpCode(HttpStatus.CREATED)
     async createQuestion(
         @GetCurrentUserId() userId: number,
         @Body() createQuestionDto: CreateQuestionDto,
-    ): Promise<QuestionResponse> {
+    ): Promise<QuestionResponseDto> {
         const question = await this.questionService.createQuestion(
             userId,
             createQuestionDto,
@@ -67,6 +86,13 @@ export class QuestionController {
     }
 
     // [Q-03] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "질문 내용 수정" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "질문 내용제 수정 성공",
+        type: QuestionResponseDto,
+    })
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Patch(":id")
@@ -74,7 +100,7 @@ export class QuestionController {
     async updateQuestionContent(
         @Param("id", ParseIntPipe) questionId: number,
         @Body() updateQuestionContentDto: UpdateQuestionContentDto,
-    ): Promise<QuestionResponse> {
+    ): Promise<QuestionResponseDto> {
         const question = await this.questionService.updateQuestionContent(
             questionId,
             updateQuestionContentDto,
@@ -87,13 +113,20 @@ export class QuestionController {
     }
 
     // [Q-04] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "질문 삭제" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "질문 삭제 성공",
+        type: BaseResponseDto,
+    })
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Delete(":id")
     @HttpCode(HttpStatus.OK)
     async deleteQuestion(
         @Param("id", ParseIntPipe) questionId: number,
-    ): Promise<BaseResponse> {
+    ): Promise<BaseResponseDto> {
         await this.questionService.deleteQuestion(questionId);
 
         return {
@@ -102,17 +135,20 @@ export class QuestionController {
     }
 
     // [Q-05] Controller logic
+    @ApiOperation({ summary: "특정 질문의 답변들 조회" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "답변 조회 성공",
+        type: BaseResponseDto,
+    })
     @Public()
     @Get(":id/actions")
     @HttpCode(HttpStatus.OK)
     async getActionsByQuestion(
         @Param("id", ParseIntPipe) questionId: number,
-        @Query("page", ParseIntPipe) page: number = 1,
-        @Query("limit", ParseIntPipe) limit: number = 10,
-        @Query("sort") sort: "updatedAt" | "likeCount" = "updatedAt",
-        @Query("order") order: "ASC" | "DESC" = "DESC",
-        @Query("search") search: string = "",
+        @Query() query: GetActionsQueryDto,
     ): Promise<ActionsResponse> {
+        const { page, limit, sort, order, search } = query;
         const { actions, total } =
             await this.questionService.getActionsByQuestion(
                 questionId,

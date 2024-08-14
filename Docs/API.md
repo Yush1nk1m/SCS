@@ -457,18 +457,13 @@
     question: {
         id: `question's id`,
         content: `question content`,
-        saved: `number of times saved`
         createdAt: `question's created date`,
         updatedAt: `question's updated date`,
+        saved: `number of times saved`,
         writer: {
             id: `writer's id`,
             nickname: `writer's nickname`
         },
-        section: {
-            id: `section's id`,
-            subject: `section's subject`,
-            description: `section's description`
-        }
     }
 }
 ```
@@ -489,7 +484,11 @@
         content: `question's content`,
         createdAt: `question's created date`,
         updatedAt: `question's updated date`,
-        saved: `question's saved count`
+        saved: `question's saved count`,
+        writer: {
+            id: `writer's id`,
+            nickname: `writer's nickname`
+        },
     }
 }
 ```
@@ -510,7 +509,11 @@
         content: `question's updated content`,
         createdAt: `question's created date`,
         updatedAt: `question's updated date`,
-        saved: 0
+        saved: `question's saved count`,
+        writer: {
+            id: `writer's id`,
+            nickname: `writer's nickname`
+        },
     }
 }
 ```
@@ -595,13 +598,6 @@
             id: `writer's id`,
             nickname: `writer's nickname`
         },
-        question: {
-            id: `question's id`,
-            content: `question's content`
-        },
-        userInteraction: {
-            like: `true` or `false`
-        }
     }
 }
 ```
