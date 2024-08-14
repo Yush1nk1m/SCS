@@ -707,7 +707,8 @@
 ```
 {
     message: `result message`,
-    liked: `true` or `false`
+    liked: `true` or `false`,
+    likeCount: `number of like`
 }
 ```
 

@@ -16,7 +16,7 @@ import { Public } from "../common/decorator/public.decorator";
 import {
     ActionResponse,
     ContentResponse,
-    ToggleLikeResponse,
+    LikeResponse,
 } from "./types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateActionDto } from "./dto/create-action.dto";
@@ -120,7 +120,7 @@ export class ActionController {
     async toggleActionLike(
         @GetCurrentUserId() userId: number,
         @Param("id", ParseIntPipe) actionId: number,
-    ): Promise<ToggleLikeResponse> {
+    ): Promise<LikeResponse> {
         const [liked, likeCount] = await this.actionService.toggleLike(
             userId,
             actionId,
@@ -128,6 +128,25 @@ export class ActionController {
 
         return {
             message: "Like to the action has been processed.",
+            liked,
+            likeCount,
+        };
+    }
+
+    // [AC-07] Controller logic
+    @Get(":id/like")
+    @HttpCode(HttpStatus.OK)
+    async getActionLike(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) actionId: number,
+    ): Promise<LikeResponse> {
+        const [liked, likeCount] = await this.actionService.getLike(
+            userId,
+            actionId,
+        );
+
+        return {
+            message: "Like information for the action has been found.",
             liked,
             likeCount,
         };

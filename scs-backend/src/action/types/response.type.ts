@@ -14,7 +14,7 @@ export interface ContentResponse extends BaseResponse {
     content: string;
 }
 
-export interface ToggleLikeResponse extends BaseResponse {
+export interface LikeResponse extends BaseResponse {
     liked: boolean;
     likeCount: number;
 }

@@ -282,4 +282,33 @@ export class ActionService {
 
         return [liked, action.likeCount];
     }
+
+    // [AC-07] Service logic
+    async getLike(
+        userId: number,
+        actionId: number,
+    ): Promise<[Liked, LikeCount]> {
+        // find user from DB
+        const user = await this.userRepository.findUserById(userId);
+
+        // if user does not exist, it is an error
+        if (!user) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        // find action from DB
+        const action =
+            await this.actionRepository.findActionAndLikesById(actionId);
+
+        // if action does not exist, it is an error
+        if (!action) {
+            throw new NotFoundException("Action has not been found.");
+        }
+
+        const liked = action.likedBy.some(
+            (likedUser) => likedUser.id === userId,
+        );
+
+        return [liked, action.likeCount];
+    }
 }
