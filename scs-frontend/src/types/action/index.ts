@@ -1,13 +1,13 @@
 export interface Action {
   id: number;
-  title?: string;
+  title: string;
   content?: string;
   rawContent?: string;
   imageUrls?: string;
-  likeCount?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  writer?: {
+  likeCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+  writer: {
     id: number;
     nickname: string;
   };

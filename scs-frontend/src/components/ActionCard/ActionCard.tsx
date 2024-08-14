@@ -3,9 +3,9 @@ import "./ActionCard.css";
 
 interface ActionCardProps {
   title: string;
-  imageUrl: string;
+  imageUrl?: string;
   likeCount: number;
-  createdAt: string;
+  createdAt: Date;
   writer?: {
     id: number;
     nickname: string;
