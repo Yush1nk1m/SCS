@@ -9,3 +9,7 @@ export interface ActionsResponse extends BaseResponse {
 export interface ActionResponse extends BaseResponse {
     action: Action;
 }
+
+export interface ContentResponse extends BaseResponse {
+    content: string;
+}

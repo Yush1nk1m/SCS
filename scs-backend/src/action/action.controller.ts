@@ -13,7 +13,7 @@ import {
 } from "@nestjs/common";
 import { ActionService } from "./action.service";
 import { Public } from "../common/decorator/public.decorator";
-import { ActionResponse } from "./types/response.type";
+import { ActionResponse, ContentResponse } from "./types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateActionDto } from "./dto/create-action.dto";
 import { UpdateActionDto } from "./dto/update-action.dto";
@@ -89,6 +89,24 @@ export class ActionController {
 
         return {
             message: "Action has been deleted.",
+        };
+    }
+
+    // [AC-05] Controller logic
+    @Get(":id/raw-content")
+    @HttpCode(HttpStatus.OK)
+    async getRawContent(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) actionId: number,
+    ): Promise<ContentResponse> {
+        const content = await this.actionService.getRawContent(
+            userId,
+            actionId,
+        );
+
+        return {
+            message: "Raw markdown content has been found.",
+            content,
         };
     }
 }

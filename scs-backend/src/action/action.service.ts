@@ -206,4 +206,31 @@ export class ActionService {
         // delete action
         await this.actionRepository.delete({ id: action.id });
     }
+
+    // [AC-05] Service logic
+    async getRawContent(userId: number, actionId: number): Promise<string> {
+        // find user from DB
+        const writer = await this.userRepository.findUserById(userId);
+
+        // if user does not exist, it is an error
+        if (!writer) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        // find action from DB
+        const action = await this.actionRepository.findActionByWriterAndId(
+            writer,
+            actionId,
+        );
+
+        // if action does not exist, it is an error
+        if (!action) {
+            throw new NotFoundException(
+                "Action written by user has not been found.",
+            );
+        }
+
+        // return raw markdown content
+        return action.rawContent;
+    }
 }
