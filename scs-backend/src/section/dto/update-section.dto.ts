@@ -1,12 +1,8 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { PickType } from "@nestjs/swagger";
+import { Section } from "../section.entity";
 
-export class UpdateSectionSubjectDto {
-    @IsString()
-    @IsNotEmpty()
-    subject: string;
-}
+export class UpdateSectionSubjectDto extends PickType(Section, ["subject"]) {}
 
-export class UpdateSectionDescriptionDto {
-    @IsString()
-    description: string;
-}
+export class UpdateSectionDescriptionDto extends PickType(Section, [
+    "description",
+]) {}

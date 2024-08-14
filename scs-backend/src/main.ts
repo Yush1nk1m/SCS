@@ -1,6 +1,6 @@
-import { NestFactory } from "@nestjs/core";
+import { NestFactory, Reflector } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { ValidationPipe } from "@nestjs/common";
+import { ClassSerializerInterceptor, ValidationPipe } from "@nestjs/common";
 import { AllExceptionFilter } from "./common/filter/all-exception.filter";
 import {
     initializeTransactionalContext,
@@ -28,6 +28,9 @@ async function bootstrap() {
         credentials: true,
     });
 
+    app.useGlobalInterceptors(
+        new ClassSerializerInterceptor(app.get(Reflector)),
+    );
     app.useGlobalFilters(new AllExceptionFilter());
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 

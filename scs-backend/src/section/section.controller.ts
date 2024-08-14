@@ -15,7 +15,7 @@ import {
 } from "@nestjs/common";
 import { SectionService } from "./section.service";
 import { Public } from "../common/decorator/public.decorator";
-import { SectionResponse, SectionsResponse } from "./types/response.type";
+import { SectionResponse } from "./types/response.type";
 import { RolesGuard } from "../common/guard/roles.guard";
 import { Roles } from "../common/decorator/roles.decorator";
 import { CreateSectionDto } from "./dto/create-section.dto";
@@ -24,9 +24,21 @@ import {
     UpdateSectionDescriptionDto,
     UpdateSectionSubjectDto,
 } from "./dto/update-section.dto";
-import { BaseResponse } from "../common/types/response.type";
-import { QuestionsResponse } from "../question/types/response.type";
-import { ApiTags } from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiOperation,
+    ApiQuery,
+    ApiResponse,
+    ApiTags,
+} from "@nestjs/swagger";
+import { GetSectionsQueryDto } from "./dto/get-sections-query.dto";
+import {
+    QuestionsBySectionResponseDto,
+    SectionResponseDto,
+    SectionsResponseDto,
+} from "./dto/response.dto";
+import { BaseResponseDto } from "../common/dto/base-response.dto";
+import { GetQuestionsQueryDto } from "./dto/get-questions-query.dto";
 
 @ApiTags("Section")
 @Controller("v1/sections")
@@ -35,13 +47,20 @@ export class SectionController {
     constructor(private readonly sectionService: SectionService) {}
 
     // [S-01] Controller logic
+    @ApiOperation({ summary: "모든 섹션 조회" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "섹션 조회 성공",
+        type: SectionsResponseDto,
+    })
+    @ApiQuery({ name: "sort", enum: ["subject", "id"], required: false })
     @Public()
     @Get()
     @HttpCode(HttpStatus.OK)
     async getAllSections(
-        @Query("sort") sort: "subject" | "id" = "id",
-        @Query("order") order: "ASC" | "DESC" = "ASC",
-    ): Promise<SectionsResponse> {
+        @Query() query: GetSectionsQueryDto,
+    ): Promise<SectionsResponseDto> {
+        const { sort, order } = query;
         const sections = await this.sectionService.getAllSections(sort, order);
 
         return {
@@ -51,12 +70,18 @@ export class SectionController {
     }
 
     // [S-02] Controller logic
+    @ApiOperation({ summary: "특정 섹션 조회" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "섹션 조회 성공",
+        type: SectionResponseDto,
+    })
     @Public()
     @Get(":id")
     @HttpCode(HttpStatus.OK)
     async getSpecificSection(
         @Param("id", ParseIntPipe) id: number,
-    ): Promise<SectionResponse> {
+    ): Promise<SectionResponseDto> {
         const section = await this.sectionService.getSpecificSection(id);
 
         return {
@@ -66,26 +91,20 @@ export class SectionController {
     }
 
     // [S-07] Controller logic
+    @ApiOperation({ summary: "특정 섹션의 질문들 조회" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "질문 조회 성공",
+        type: QuestionsBySectionResponseDto,
+    })
     @Public()
     @Get(":id/questions")
     @HttpCode(HttpStatus.OK)
     async getQuestionsBySection(
         @Param("id", ParseIntPipe) sectionId: number,
-        @Query("page", ParseIntPipe) page: number = 1, // page number
-        @Query("limit", ParseIntPipe) limit: number = 10, // questions per page
-        @Query("sort") sort: "createdAt" | "saved" = "createdAt",
-        @Query("order") order: "ASC" | "DESC" = "DESC",
-        @Query("search") search: string = "",
-    ): Promise<QuestionsResponse> {
-        this.logger.verbose(
-            "Query parameters: ",
-            page,
-            limit,
-            sort,
-            order,
-            search,
-        );
-
+        @Query() query: GetQuestionsQueryDto,
+    ): Promise<QuestionsBySectionResponseDto> {
+        const { page, limit, sort, order, search } = query;
         const { questions, total } =
             await this.sectionService.getQuestionsBySection(
                 sectionId,
@@ -104,6 +123,13 @@ export class SectionController {
     }
 
     // [S-03] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "새 섹션 생성" })
+    @ApiResponse({
+        status: HttpStatus.CREATED,
+        description: "섹션 생성 성공",
+        type: SectionResponseDto,
+    })
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Post()
@@ -111,7 +137,7 @@ export class SectionController {
     async createSection(
         @GetCurrentUserId(ParseIntPipe) userId: number,
         @Body() createSectionDto: CreateSectionDto,
-    ): Promise<SectionResponse> {
+    ): Promise<SectionResponseDto> {
         const section = await this.sectionService.createSection(
             userId,
             createSectionDto,
@@ -124,6 +150,13 @@ export class SectionController {
     }
 
     // [S-04] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "섹션 제목 수정" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "섹션 제목 수정 성공",
+        type: SectionResponseDto,
+    })
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Patch(":id/subject")
@@ -144,6 +177,13 @@ export class SectionController {
     }
 
     // [S-05] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "섹션 설명 수정" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "섹션 설명 수정 성공",
+        type: SectionResponseDto,
+    })
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Patch(":id/description")
@@ -164,13 +204,20 @@ export class SectionController {
     }
 
     // [S-06] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "섹션 삭제" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "섹션 삭제 성공",
+        type: BaseResponseDto,
+    })
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Delete(":id")
     @HttpCode(HttpStatus.OK)
     async deleteSection(
         @Param("id", ParseIntPipe) sectionId: number,
-    ): Promise<BaseResponse> {
+    ): Promise<BaseResponseDto> {
         await this.sectionService.deleteSection(sectionId);
 
         return {

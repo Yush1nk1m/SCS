@@ -275,11 +275,12 @@
             id: `section's id`,
             subject: `section's subject`,
             description: `section's description`,
+            createdAt: `section`s updated date`,
+            updatedAt: `section's updated date`,
             creator: {
                 id: `creator's id`,
                 nickname: `creator's nickname`
             },
-            createdAt: `creation date`,
         },
         { ... },
         ...
@@ -302,11 +303,12 @@
         id: `section's id`,
         subject: `section's subject`,
         description: `section's description`,
+        createdAt: `section's created date`,
+        updatedAt: `section's updated date`,
         creator: {
             id: `creator's id`,
             nickname: `creator's nickname`
-        },
-        createdAt: `creation date`
+        }
     }
 }
 ```
@@ -326,8 +328,12 @@
         id: `section's id`,
         subject: `section's subject`,
         description: `section's description`,
-        creator: `creator's id`,
-        createdAt: `creation date`
+        createdAt: `section's created date`,
+        updatedAt: `section's updated date`,
+        creator: {
+            id: `creator's id`,
+            nickname: `creator's nickname`
+        }
     }
 }
 ```
@@ -347,11 +353,12 @@
         id: `section's id`,
         subject: `section's subject`,
         description: `section's description`,
+        createdAt: `section's created date`,
+        updatedAt: `section's updated date`,
         creator: {
             id: `creator's id`,
             nickname: `creator's nickname`
-        },
-        createdAt: `creation date`
+        }
     }
 }
 ```
@@ -371,11 +378,12 @@
         id: `section's id`,
         subject: `section's subject`,
         description: `section's description`,
+        createdAt: `section's created date`,
+        updatedAt: `section's updated date`,
         creator: {
             id: `creator's id`,
             nickname: `creator's nickname`
-        },
-        createdAt: `creation date`
+        }
     }
 }
 ```
@@ -408,12 +416,13 @@
         {
             id: `question's id`,
             content: `question content`,
+            saved: `number of times saved`
+            createdAt: `question's created date`,
+            updatedAt: `question's updated date`,
             writer: {
                 id: `writer's id`,
                 nickname: `writer's nickname`
             },
-            createdAt: `creation date`,
-            saved: `number of times saved`
         },
         { ... },
         ...
@@ -447,10 +456,10 @@
     message: `result message`,
     question: {
         id: `question's id`,
-        content: `question's content`,
+        content: `question content`,
+        saved: `number of times saved`
         createdAt: `question's created date`,
         updatedAt: `question's updated date`,
-        saved: `question's saved count`,
         writer: {
             id: `writer's id`,
             nickname: `writer's nickname`

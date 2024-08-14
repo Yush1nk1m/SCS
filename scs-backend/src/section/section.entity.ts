@@ -5,6 +5,7 @@ import {
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
 import { Question } from "../question/question.entity";
@@ -33,6 +34,13 @@ export class Section {
     })
     @CreateDateColumn()
     createdAt: Date;
+
+    @ApiProperty({
+        example: "2024-08-14T12:34:56Z",
+        description: "섹션 수정 일시",
+    })
+    @UpdateDateColumn()
+    updatedAt: Date;
 
     @ApiProperty({ type: () => User, description: "섹션 생성자" })
     @ManyToOne(() => User, (user) => user.sections)
