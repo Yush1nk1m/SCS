@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { QuestionSortOption } from "../../types/section";
-import { fetchQuestions } from "../../services/section";
+import { fetchQuestions } from "../../services/sectionApi";
 import { Question } from "../../types/question";
 import { Link } from "react-router-dom";
 import "./QuestionList.css";
 import Pagination from "../Pagination/Pagination";
 import { useAuth } from "../../hooks/useAuth";
+import { QuestionDto } from "../../api/swaggerApi";
 
 interface QuestionListProps {
   sectionId: number;
@@ -17,7 +18,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
   onCreateQuestion,
 }) => {
   const isLoggedIn = useAuth();
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState<QuestionDto[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sortOption, setSortOption] = useState<QuestionSortOption>({
@@ -38,8 +39,8 @@ const QuestionList: React.FC<QuestionListProps> = ({
         sortOption,
         searchTerm
       );
-      setQuestions(response.data.questions);
-      setTotalPages(Math.ceil(response.data.total / 10));
+      setQuestions(response.questions);
+      setTotalPages(Math.ceil(response.total / 10));
     } catch (error) {
       console.error("질문 불러오기 실패:", error);
       alert("질문을 불러오는 데 실패했습니다. 다시 조회해 주세요.");
@@ -86,7 +87,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
           <option value="saved-ASC">스크랩 적은순</option>
         </select>
       </div>
-      {questions.map((question: Question) => (
+      {questions.map((question: QuestionDto) => (
         <div key={question.id} className="question-item">
           <Link to={`/question/${question.id}`}>{question.content}</Link>
           <button className="save-button" onClick={() => console.log("스크랩")}>

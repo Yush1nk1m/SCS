@@ -8,6 +8,7 @@ import SignupPage from "./pages/SignupPage/SignupPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SectionPage from "./pages/SectionPage/SectionPage";
 import QuestionPage from "./pages/QuestionPage/QuestionPage";
+import CreateActionPage from "./pages/CreateActionPage/CreateActionPage";
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,10 @@ const App: React.FC = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/section" element={<SectionPage />} />
         <Route path="/question/:id" element={<QuestionPage />} />
+        <Route
+          path="/question/:id/create-action"
+          element={<CreateActionPage />}
+        />
       </Routes>
       <Footer />
     </div>

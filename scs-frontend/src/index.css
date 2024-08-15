@@ -1,0 +1,8 @@
+@font-face {
+  font-family: "KimjungchulGothic";
+  src: url("./assets/KimjungchulGothic-Regular.ttf");
+}
+
+body {
+  font-family: "KimjungchulGothic";
+}

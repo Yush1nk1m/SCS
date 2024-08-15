@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Section } from "../../types/section";
 import "./SectionItem.css";
 import QuestionList from "../QuestionList/QuestionList";
+import { SectionDto } from "../../api/swaggerApi";
 
 interface SectionItemProps {
-  section: Section;
+  section: SectionDto;
   onOpenModal: (sectionId: number) => void;
   isExpanded: boolean;
   onToggle: (sectionId: number) => void;

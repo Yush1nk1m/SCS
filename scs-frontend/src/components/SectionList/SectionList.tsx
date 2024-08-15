@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Section } from "../../types/section";
 import SectionItem from "../SectionItem/SectionItem";
 import "./SectionList.css";
+import { SectionDto } from "../../api/swaggerApi";
 
 interface SectionListProps {
-  sections: Section[];
+  sections: SectionDto[];
   onOpenModal: (sectionId: number) => void;
 }
 
