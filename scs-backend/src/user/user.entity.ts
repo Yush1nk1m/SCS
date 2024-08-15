@@ -1,4 +1,12 @@
-import { IsEmail, IsEnum, IsNotEmpty, Length } from "class-validator";
+import {
+    IsDate,
+    IsEmail,
+    IsEnum,
+    IsInt,
+    IsNotEmpty,
+    IsString,
+    Length,
+} from "class-validator";
 import {
     Column,
     CreateDateColumn,
@@ -24,12 +32,12 @@ export class User {
     @ApiProperty({ example: 1, description: "사용자 고유 ID" })
     @PrimaryGeneratedColumn()
     @Index("IDX_USER_ID", { unique: true })
+    @IsInt()
     id: number;
 
     @ApiProperty({ example: "user@example.com", description: "사용자 이메일" })
     @Column({ unique: true })
     @IsEmail()
-    @IsNotEmpty()
     email: string;
 
     @ApiProperty({
@@ -38,26 +46,31 @@ export class User {
     })
     @Column()
     @Length(8, 32)
+    @IsString()
     @IsNotEmpty()
     password: string;
 
     @ApiProperty({ example: "닉네임", description: "사용자 닉네임" })
     @Column()
+    @IsString()
     @IsNotEmpty()
     nickname: string;
 
     @ApiProperty({ example: "서강대학교", description: "사용자 소속" })
     @Column()
+    @IsString()
     @IsNotEmpty()
     affiliation: string;
 
     @ApiProperty({ example: "백엔드", description: "사용자 포지션" })
     @Column()
+    @IsString()
     @IsNotEmpty()
     position: string;
 
     @ApiHideProperty()
     @Column({ nullable: true })
+    @IsString()
     refreshToken: string;
 
     @ApiProperty({
@@ -78,6 +91,7 @@ export class User {
         description: "계정 생성 일시",
     })
     @CreateDateColumn()
+    @IsDate()
     createdAt: Date;
 
     @ApiProperty({
@@ -85,6 +99,7 @@ export class User {
         description: "계정 정보 수정 일시",
     })
     @UpdateDateColumn()
+    @IsDate()
     updatedAt: Date;
 
     @ApiPropertyOptional({
@@ -92,6 +107,7 @@ export class User {
         description: "계정 삭제 일시",
     })
     @DeleteDateColumn()
+    @IsDate()
     deletedAt: Date;
 
     @ApiPropertyOptional({

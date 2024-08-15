@@ -12,6 +12,7 @@ import { User } from "../user/user.entity";
 import { Section } from "../section/section.entity";
 import { Action } from "../action/action.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsDate, IsInt, IsNotEmpty, IsString } from "class-validator";
 
 @Entity()
 @Index(["section", "saved"])
@@ -20,6 +21,7 @@ export class Question {
     @ApiProperty({ example: 1, description: "질문 ID" })
     @PrimaryGeneratedColumn()
     @Index("IDX_QUESTION_ID")
+    @IsInt()
     id: number;
 
     @ApiProperty({
@@ -27,6 +29,8 @@ export class Question {
         description: "질문 내용",
     })
     @Column()
+    @IsString()
+    @IsNotEmpty()
     content: string;
 
     @ApiProperty({
@@ -34,6 +38,7 @@ export class Question {
         description: "질문 생성 일시",
     })
     @CreateDateColumn()
+    @IsDate()
     createdAt: Date;
 
     @ApiProperty({
@@ -41,10 +46,12 @@ export class Question {
         description: "질문 수정 일시",
     })
     @UpdateDateColumn()
+    @IsDate()
     updatedAt: Date;
 
     @ApiProperty({ example: 5, description: "질문이 스크랩된 횟수" })
     @Column({ default: 0 })
+    @IsInt()
     saved: number;
 
     @ApiProperty({ type: () => User, description: "질문 작성자" })

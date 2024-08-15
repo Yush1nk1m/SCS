@@ -12,6 +12,7 @@ import {
 import { User } from "../user/user.entity";
 import { Question } from "../question/question.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsArray, IsDate, IsInt, IsNotEmpty, IsString } from "class-validator";
 
 @Entity()
 @Index(["question", "updatedAt"])
@@ -20,6 +21,7 @@ export class Action {
     @ApiProperty({ example: 1, description: "답변 ID" })
     @PrimaryGeneratedColumn()
     @Index("IDX_ACTION_ID")
+    @IsInt()
     id: number;
 
     @ApiProperty({
@@ -27,12 +29,16 @@ export class Action {
         description: "답변 제목",
     })
     @Column()
+    @IsString()
+    @IsNotEmpty()
     title: string;
 
     @ApiProperty({
         example: "TCP는 연결 지향적이고...",
         description: "답변 내용",
     })
+    @IsString()
+    @IsNotEmpty()
     @Column("text")
     content: string;
 
@@ -41,6 +47,8 @@ export class Action {
         description: "원본 마크다운 내용",
     })
     @Column("text")
+    @IsString()
+    @IsNotEmpty()
     rawContent: string;
 
     @ApiPropertyOptional({
@@ -48,10 +56,12 @@ export class Action {
         description: "답변에 포함된 이미지 URL들",
     })
     @Column("simple-array", { nullable: true })
+    @IsArray()
     imageUrls: string[];
 
     @ApiProperty({ example: 10, description: "좋아요 수" })
     @Column({ default: 0 })
+    @IsInt()
     likeCount: number;
 
     @ApiProperty({
@@ -59,6 +69,7 @@ export class Action {
         description: "답변 생성 일시",
     })
     @CreateDateColumn()
+    @IsDate()
     createdAt: Date;
 
     @ApiProperty({
@@ -66,6 +77,7 @@ export class Action {
         description: "답변 수정 일시",
     })
     @UpdateDateColumn()
+    @IsDate()
     updatedAt: Date;
 
     @ApiProperty({ type: () => User, description: "답변 작성자" })

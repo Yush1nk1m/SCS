@@ -1,5 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsEmail, Length } from "class-validator";
+import {
+    IsBoolean,
+    IsDate,
+    IsEmail,
+    IsInt,
+    IsNotEmpty,
+    IsString,
+    Length,
+} from "class-validator";
 import {
     Column,
     Entity,
@@ -11,6 +19,7 @@ import {
 export class Verification {
     @ApiProperty({ example: 1, description: "인증 ID" })
     @PrimaryGeneratedColumn()
+    @IsInt()
     id: number;
 
     @ApiProperty({
@@ -27,6 +36,8 @@ export class Verification {
     })
     @Column()
     @Length(6, 6)
+    @IsString()
+    @IsNotEmpty()
     verificationCode: string;
 
     @ApiProperty({ example: false, description: "인증 완료 여부" })
@@ -39,5 +50,6 @@ export class Verification {
         description: "인증 요청 생성 시간",
     })
     @CreateDateColumn()
+    @IsDate()
     createdAt: Date;
 }

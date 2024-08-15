@@ -10,15 +10,18 @@ import {
 import { User } from "../user/user.entity";
 import { Question } from "../question/question.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsDate, IsInt, IsString } from "class-validator";
 
 @Entity()
 export class Section {
     @ApiProperty({ example: 1, description: "섹션 고유 ID" })
     @PrimaryGeneratedColumn()
+    @IsInt()
     id: number;
 
     @ApiProperty({ example: "네트워크", description: "섹션 주제" })
     @Column()
+    @IsString()
     subject: string;
 
     @ApiPropertyOptional({
@@ -26,6 +29,7 @@ export class Section {
         description: "섹션 설명",
     })
     @Column({ nullable: true })
+    @IsString()
     description: string;
 
     @ApiProperty({
@@ -33,6 +37,7 @@ export class Section {
         description: "섹션 생성 일시",
     })
     @CreateDateColumn()
+    @IsDate()
     createdAt: Date;
 
     @ApiProperty({
@@ -40,6 +45,7 @@ export class Section {
         description: "섹션 수정 일시",
     })
     @UpdateDateColumn()
+    @IsDate()
     updatedAt: Date;
 
     @ApiProperty({ type: () => User, description: "섹션 생성자" })
