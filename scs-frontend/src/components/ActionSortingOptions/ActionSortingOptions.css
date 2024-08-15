@@ -4,6 +4,7 @@
 }
 
 .action-sorting-options select {
+  width: 180px;
   padding: 10px;
   border: 1px solid #4c4cff;
   border-radius: 5px;
@@ -11,14 +12,12 @@
   background-color: white;
   color: #333;
   cursor: pointer;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: all 0.3s ease;
 }
 
-.action-sorting-options select:hover,
-.action-sorting-options select:focus {
-  border-color: #3a3aff;
-  box-shadow: 0 0 0 2px rgba(74, 74, 255, 0.2);
-  outline: none;
+.action-sorting-options select:hover {
+  background-color: #4c4cff;
+  color: white;
 }
 
 .action-sorting-options select option {

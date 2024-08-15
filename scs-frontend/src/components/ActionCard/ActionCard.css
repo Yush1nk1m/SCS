@@ -13,6 +13,17 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
+.action-card h2 {
+  padding: 10px;
+  border-bottom: 1px solid rgb(0, 0, 0, 0.5);
+}
+
+.action-card p {
+  padding-top: 5px;
+  padding-right: 10px;
+  text-align: right;
+}
+
 .action-thumbnail {
   width: 100%;
   height: 150px;

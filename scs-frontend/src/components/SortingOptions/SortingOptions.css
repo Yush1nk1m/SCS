@@ -11,7 +11,7 @@
 }
 
 .sorting-options select {
-  width: 100%;
+  width: 180px;
   margin-right: 20px;
   padding: 10px;
   border-radius: 5px;
@@ -20,6 +20,7 @@
   color: #4c4cff;
   font-size: 16px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .sorting-options select:hover {

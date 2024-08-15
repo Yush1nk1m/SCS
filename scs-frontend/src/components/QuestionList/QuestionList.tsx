@@ -5,6 +5,7 @@ import { Question } from "../../types/question";
 import { Link } from "react-router-dom";
 import "./QuestionList.css";
 import Pagination from "../Pagination/Pagination";
+import { useAuth } from "../../hooks/useAuth";
 
 interface QuestionListProps {
   sectionId: number;
@@ -15,6 +16,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
   sectionId,
   onCreateQuestion,
 }) => {
+  const isLoggedIn = useAuth();
   const [questions, setQuestions] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -97,9 +99,11 @@ const QuestionList: React.FC<QuestionListProps> = ({
         totalPages={totalPages}
         onPageChange={setPage}
       />
-      <button className="create-question-button" onClick={onCreateQuestion}>
-        질문 생성
-      </button>
+      {isLoggedIn && (
+        <button className="create-question-button" onClick={onCreateQuestion}>
+          질문 생성
+        </button>
+      )}
     </div>
   );
 };

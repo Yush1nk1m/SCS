@@ -15,7 +15,6 @@ const ActionCard: React.FC<ActionCardProps> = ({
   title,
   imageUrl,
   likeCount,
-  createdAt,
 }) => {
   const navigate = useNavigate();
 
@@ -33,8 +32,7 @@ const ActionCard: React.FC<ActionCardProps> = ({
         )}
       </div>
       <h2>{title}</h2>
-      <p>❤️: {likeCount}</p>
-      <p>작성일: {new Date(createdAt).toLocaleDateString()}</p>
+      <p>❤️ {likeCount}</p>
     </div>
   );
 };

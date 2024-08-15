@@ -36,16 +36,19 @@
 }
 
 .sort-select {
+  width: 180px;
   padding: 10px;
   border: 1px solid #4c4cff;
   border-radius: 5px;
+  background-color: white;
+  color: #4c4cff;
   font-size: 16px;
+  transition: all 0.3s ease;
 }
 
-.question-list-header select {
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #4c4cff;
+.sort-select:hover {
+  background-color: #4c4cff;
+  color: white;
 }
 
 .question-item {
@@ -57,6 +60,13 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.question-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .question-item a {

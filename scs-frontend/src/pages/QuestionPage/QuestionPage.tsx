@@ -7,8 +7,10 @@ import { fetchActions, fetchQuestion } from "../../services/question";
 import "./QuestionPage.css";
 import Pagination from "../../components/Pagination/Pagination";
 import ActionCard from "../../components/ActionCard/ActionCard";
+import { useAuth } from "../../hooks/useAuth";
 
 const QuestionPage: React.FC = () => {
+  const isLoggedIn = useAuth();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [question, setQuestion] = useState<Question>();
@@ -113,12 +115,14 @@ const QuestionPage: React.FC = () => {
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
-        <button
-          className="create-action-button"
-          onClick={() => navigate(`/question/${id}/create-action`)}
-        >
-          새 액션 작성
-        </button>
+        {isLoggedIn && (
+          <button
+            className="create-action-button"
+            onClick={() => navigate(`/question/${id}/create-action`)}
+          >
+            새 액션 작성
+          </button>
+        )}
       </div>
     </div>
   );
