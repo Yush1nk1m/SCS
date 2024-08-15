@@ -7,7 +7,7 @@ interface ActionCardProps {
   title: string;
   imageUrl?: string;
   likeCount: number;
-  createdAt: Date;
+  createdAt: string;
 }
 
 const ActionCard: React.FC<ActionCardProps> = ({

@@ -1,23 +1,32 @@
 .createActionPage {
-  max-width: 100%;
-  margin: 0 auto;
+  min-height: 100vh;
   padding: 20px;
-  background-color: #fff5e6;
+  background: linear-gradient(-45deg, #87ceeb, #1e90ff, #00bfff, #add8e6);
+  background-size: 400% 400%;
+  animation: wave 15s ease infinite;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
+  padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  color: #ff6b6b;
-  text-align: center;
+  font-size: 24px;
   margin-bottom: 20px;
+  color: #333;
+  text-align: center;
 }
 
 .titleInput {
-  width: 100%;
+  width: auto;
   padding: 10px;
   margin-bottom: 20px;
-  border: 2px solid #ffa06b;
+  border: none;
   border-radius: 5px;
   font-size: 16px;
 }
@@ -39,25 +48,37 @@ h1 {
 }
 
 .cancelButton {
-  background-color: #ffa06b;
+  background-color: #ff6b6b;
   color: white;
 }
 
 .submitButton {
-  background-color: #4ecdc4;
+  background-color: #4c4cff;
   color: white;
 }
 
 .cancelButton:hover {
-  background-color: #ff8c4b;
+  background-color: #ff4757;
 }
 
 .submitButton:hover {
-  background-color: #45b7aa;
+  background-color: #3a3aff;
 }
 
 .errorMessage {
   color: #ff6b6b;
   text-align: center;
   margin-top: 10px;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

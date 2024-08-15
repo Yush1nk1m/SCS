@@ -12,6 +12,8 @@ import * as dotenv from "dotenv";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 dotenv.config();
 
+import * as fs from "fs";
+
 async function bootstrap() {
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
 
@@ -42,6 +44,7 @@ async function bootstrap() {
         .build();
     const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup("api", app, swaggerDocument);
+    fs.writeFileSync("./swagger.json", JSON.stringify(swaggerDocument));
 
     await app.listen(4000);
 }

@@ -1,15 +1,17 @@
 import logo from "../../assets/logo.png";
 import { useAuth } from "../../hooks/useAuth";
 import { logout } from "../../services/authApi";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
-import { Link } from "react-router-dom";
 
 const Header: React.FC = () => {
+  const navigate = useNavigate();
   const isLoggedIn = useAuth();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     window.dispatchEvent(new Event("storage"));
+    navigate("/");
   };
 
   return (

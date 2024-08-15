@@ -1,7 +1,18 @@
-import { Api } from "../api/swaggerApi";
+import { ActionResponseDto, Api } from "../api/swaggerApi";
+import {
+  getAccessToken,
+  isTokenExpired,
+  removeTokens,
+} from "../utils/tokenUtils";
+import { refreshTokens } from "./authApi";
 
 const api = new Api({
   baseUrl: "http://localhost:4000",
+  securityWorker: (securityData) => {
+    return securityData
+      ? { headers: { Authorization: `Bearer ${securityData}` } }
+      : {};
+  },
 });
 
 export const createAction = async (
@@ -9,15 +20,40 @@ export const createAction = async (
   title: string,
   content: string
 ) => {
+  return authRequest<
+    ActionResponseDto,
+    { questionId: number; title: string; content: string }
+  >((params) => api.v1.actionControllerCreateAction(params), {
+    questionId,
+    title,
+    content,
+  });
+};
+
+const authRequest = async <T, P>(
+  apiCall: (params: P) => Promise<{ data: T }>,
+  params: P
+): Promise<T> => {
+  let accessToken = getAccessToken();
+
+  if (!accessToken || isTokenExpired(accessToken)) {
+    const refreshed = await refreshTokens();
+    if (!refreshed) {
+      throw new Error("Authentication required");
+    }
+    accessToken = getAccessToken();
+  }
+
+  api.setSecurityData(accessToken);
+
   try {
-    const response = await api.v1.actionControllerCreateAction({
-      questionId,
-      title,
-      content,
-    });
+    const response = await apiCall(params);
     return response.data;
-  } catch (error) {
-    console.error("액션 생성 실패:", error);
+  } catch (error: any) {
+    if (error.status === 401) {
+      removeTokens();
+      throw new Error("Authentication failed");
+    }
     throw error;
   }
 };

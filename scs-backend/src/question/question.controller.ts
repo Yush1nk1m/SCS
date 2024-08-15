@@ -20,14 +20,16 @@ import { CreateQuestionDto } from "./dto/create-question.dto";
 import { RolesGuard } from "../common/guard/roles.guard";
 import { Roles } from "../common/decorator/roles.decorator";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
-import { ActionsResponse } from "../action/types/response.type";
 import {
     ApiBearerAuth,
     ApiOperation,
     ApiResponse,
     ApiTags,
 } from "@nestjs/swagger";
-import { QuestionResponseDto } from "./dto/response.dto";
+import {
+    ActionsByQuestionResponseDto,
+    QuestionResponseDto,
+} from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 import { GetActionsQueryDto } from "./dto/get-actions-query.dto";
 
@@ -139,7 +141,7 @@ export class QuestionController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: "답변 조회 성공",
-        type: BaseResponseDto,
+        type: ActionsByQuestionResponseDto,
     })
     @Public()
     @Get(":id/actions")
@@ -147,7 +149,7 @@ export class QuestionController {
     async getActionsByQuestion(
         @Param("id", ParseIntPipe) questionId: number,
         @Query() query: GetActionsQueryDto,
-    ): Promise<ActionsResponse> {
+    ): Promise<ActionsByQuestionResponseDto> {
         const { page, limit, sort, order, search } = query;
         const { actions, total } =
             await this.questionService.getActionsByQuestion(
@@ -158,6 +160,8 @@ export class QuestionController {
                 order,
                 search,
             );
+
+        this.logger.verbose(actions);
 
         return {
             message: "Actions of question have been found.",

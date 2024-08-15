@@ -3,6 +3,11 @@ import { Api } from "../api/swaggerApi";
 
 const api = new Api({
   baseUrl: "http://localhost:4000",
+  securityWorker: (securityData) => {
+    return securityData
+      ? { headers: { Authorization: `Bearer ${securityData}` } }
+      : {};
+  },
 });
 
 export const uploadImage = async (file: File) => {

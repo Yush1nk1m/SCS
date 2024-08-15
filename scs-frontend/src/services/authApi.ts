@@ -71,7 +71,7 @@ export const refreshTokens = async (): Promise<boolean> => {
   }
 };
 
-export const authRequest = async <T, P>(
+const authRequest = async <T, P>(
   apiCall: (params: P) => Promise<{ data: T }>,
   params: P
 ): Promise<T> => {

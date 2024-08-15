@@ -55,6 +55,7 @@ export class UploadController {
         @GetCurrentUserId() userId: number,
         @UploadedFile(ParseFilePipe) file: Express.Multer.File,
     ): Promise<URLResponseDto> {
+        this.logger.verbose(`User with id ${userId} uploaded image`);
         const uploadedFile = await this.uploadService.uploadImage(userId, file);
 
         return {

@@ -17,7 +17,7 @@ class ActionDto extends PickType(Action, [
     "createdAt",
     "updatedAt",
 ]) {
-    @ApiProperty({ type: WriterDto })
+    @ApiProperty({ type: () => WriterDto })
     writer: WriterDto;
 }
 

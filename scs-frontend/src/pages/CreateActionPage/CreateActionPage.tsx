@@ -51,35 +51,37 @@ const CreateActionPage: React.FC = () => {
 
   return (
     <div className="createActionPage">
-      <h1>새로운 답변 작성하기</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="제목을 입력하세요"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="titleInput"
-        />
-        <MdEditor
-          style={{ height: "500px" }}
-          renderHTML={(text) => mdParser.render(text)}
-          onChange={handleEditorChange}
-          onImageUpload={handleImageUpload}
-        />
-        {error && <p className="errorMessage">{error}</p>}
-        <div className="buttonContainer">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="cancelButton"
-          >
-            취소
-          </button>
-          <button type="submit" disabled={isLoading} className="submitButton">
-            {isLoading ? "저장 중..." : "저장"}
-          </button>
-        </div>
-      </form>
+      <div className="content-wrapper">
+        <h1>액션을 작성해 커뮤니티에 기여하세요!</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="제목을 입력하세요"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="titleInput"
+          />
+          <MdEditor
+            style={{ height: "500px", marginBottom: "20px" }}
+            renderHTML={(text) => mdParser.render(text)}
+            onChange={handleEditorChange}
+            onImageUpload={handleImageUpload}
+          />
+          {error && <p className="errorMessage">{error}</p>}
+          <div className="buttonContainer">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="cancelButton"
+            >
+              취소
+            </button>
+            <button type="submit" disabled={isLoading} className="submitButton">
+              {isLoading ? "저장 중..." : "저장"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

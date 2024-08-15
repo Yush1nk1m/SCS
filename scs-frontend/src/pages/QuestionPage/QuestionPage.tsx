@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Question } from "../../types/question";
-import { Action, ActionSortOption } from "../../types/action";
+import { ActionSortOption } from "../../types/action";
 import ActionSortingOptions from "../../components/ActionSortingOptions/ActionSortingOptions";
 import { fetchActions, fetchQuestion } from "../../services/questionApi";
 import "./QuestionPage.css";
 import Pagination from "../../components/Pagination/Pagination";
 import ActionCard from "../../components/ActionCard/ActionCard";
 import { useAuth } from "../../hooks/useAuth";
+import { ActionDto, QuestionDto } from "../../api/swaggerApi";
 
 const QuestionPage: React.FC = () => {
   const isLoggedIn = useAuth();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [question, setQuestion] = useState<Question>();
-  const [actions, setActions] = useState<Action[]>([]);
+  const [question, setQuestion] = useState<QuestionDto>();
+  const [actions, setActions] = useState<ActionDto[]>([]);
   const [sortOption, setSortOption] = useState<ActionSortOption>({
     sort: "updatedAt",
     order: "DESC",

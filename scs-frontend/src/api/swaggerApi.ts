@@ -390,10 +390,10 @@ export interface ActionDto {
    */
   title: string;
   /**
-   * 답변 내용
-   * @example "TCP는 연결 지향적이고..."
+   * 답변에 포함된 이미지 URL들
+   * @example ["http://example.com/image1.jpg"]
    */
-  content: string;
+  imageUrls?: string[];
   /**
    * 좋아요 수
    * @example 10
@@ -412,6 +412,20 @@ export interface ActionDto {
    */
   updatedAt: string;
   writer: WriterDto;
+}
+
+export interface ActionsByQuestionResponseDto {
+  /**
+   * 응답 메시지
+   * @example "Request has been processed."
+   */
+  message: string;
+  actions: ActionDto[];
+  /**
+   * 검색된 액션의 총 개수
+   * @example 5
+   */
+  total: number;
 }
 
 export interface ActionResponseDto {
@@ -1208,7 +1222,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<BaseResponseDto, any>({
+      this.request<ActionsByQuestionResponseDto, any>({
         path: `/v1/questions/${id}/actions`,
         method: "GET",
         query: query,

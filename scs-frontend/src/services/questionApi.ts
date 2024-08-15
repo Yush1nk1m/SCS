@@ -1,8 +1,18 @@
 import { Api, QuestionResponseDto } from "../api/swaggerApi";
-import { authRequest } from "./authApi";
+import {
+  getAccessToken,
+  isTokenExpired,
+  removeTokens,
+} from "../utils/tokenUtils";
+import { refreshTokens } from "./authApi";
 
 const api = new Api({
   baseUrl: "http://localhost:4000",
+  securityWorker: (securityData) => {
+    return securityData
+      ? { headers: { Authorization: `Bearer ${securityData}` } }
+      : {};
+  },
 });
 
 export const fetchQuestion = async (questionId: string) => {
@@ -54,4 +64,32 @@ export const createQuestion = async (content: string, sectionId: number) => {
     content,
     sectionId,
   });
+};
+
+const authRequest = async <T, P>(
+  apiCall: (params: P) => Promise<{ data: T }>,
+  params: P
+): Promise<T> => {
+  let accessToken = getAccessToken();
+
+  if (!accessToken || isTokenExpired(accessToken)) {
+    const refreshed = await refreshTokens();
+    if (!refreshed) {
+      throw new Error("Authentication required");
+    }
+    accessToken = getAccessToken();
+  }
+
+  api.setSecurityData(accessToken);
+
+  try {
+    const response = await apiCall(params);
+    return response.data;
+  } catch (error: any) {
+    if (error.status === 401) {
+      removeTokens();
+      throw new Error("Authentication failed");
+    }
+    throw error;
+  }
 };
