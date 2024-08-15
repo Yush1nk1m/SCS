@@ -10,8 +10,16 @@ import {
 } from "@nestjs/common";
 import { UploadService } from "./upload.service";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { PresignedURLResponse, URLResponse } from "./types/response.type";
-import { ApiTags } from "@nestjs/swagger";
+import {
+    ApiBearerAuth,
+    ApiBody,
+    ApiConsumes,
+    ApiOperation,
+    ApiResponse,
+    ApiTags,
+} from "@nestjs/swagger";
+import { PresignedURLResponseDto, URLResponseDto } from "./dto/response.dto";
+import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 
 @ApiTags("Upload")
 @Controller("v1/upload")
@@ -20,13 +28,34 @@ export class UploadController {
 
     constructor(private readonly uploadService: UploadService) {}
 
+    // [UP-01] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "이미지 업로드" })
+    @ApiResponse({
+        status: HttpStatus.CREATED,
+        description: "이미지 업로드 성공",
+        type: URLResponseDto,
+    })
+    @ApiConsumes("multipart/form-data")
+    @ApiBody({
+        schema: {
+            type: "object",
+            properties: {
+                file: {
+                    type: "string",
+                    format: "binary",
+                },
+            },
+        },
+    })
     @Post("images")
     @UseInterceptors(FileInterceptor("image"))
     @HttpCode(HttpStatus.CREATED)
     async uploadImage(
+        @GetCurrentUserId() userId: number,
         @UploadedFile(ParseFilePipe) file: Express.Multer.File,
-    ): Promise<URLResponse> {
-        const uploadedFile = await this.uploadService.uploadImage(file);
+    ): Promise<URLResponseDto> {
+        const uploadedFile = await this.uploadService.uploadImage(userId, file);
 
         return {
             message: "An image file has been uploaded.",
@@ -34,9 +63,17 @@ export class UploadController {
         };
     }
 
+    // [UP-02] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "Presigned URL 생성" })
+    @ApiResponse({
+        status: HttpStatus.CREATED,
+        description: "Presigned URL 생성 성공",
+        type: PresignedURLResponseDto,
+    })
     @Post("presigned-url")
     @HttpCode(HttpStatus.CREATED)
-    async getPresignedUrl(): Promise<PresignedURLResponse> {
+    async getPresignedUrl(): Promise<PresignedURLResponseDto> {
         // key can be changed in any way
         const key = `${new Date().getTime()}.jpg`;
 
