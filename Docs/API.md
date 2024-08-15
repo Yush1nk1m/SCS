@@ -607,7 +607,7 @@
 - **Description**: 특정 질문에 대한 새로운 답변을 생성한다.
 - **Method**: `POST`
 - **URI**: `/v1/actions`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `action content (markdown)`, questionId: `question's id` }
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { title: `action title`, content: `action content (markdown)`, questionId: `question's id` }
 - **Response data**:
 
 ```
@@ -617,13 +617,9 @@
         id: `created action's id`,
         title: `action title`,
         content: `action content`,
+        likeCount: `number of likes`,
         createdAt: `creation date`,
         updatedAt: `updated date`,
-        likeCount: 0,
-        question: {
-            id: `question's id`,
-            content: `question's content`
-        },
         writer: {
             id: `writer's id`,
             nickname: `writer's nickname`
@@ -644,14 +640,16 @@
 {
     message: `result message`,
     action: {
-        id: `action's id`,
-        title: `action's title`,
-        content: `updated action's sanitized content`,
-        rawContent: `updated action's raw content`,
-        imageUrls: `images' URL array`,
-        likeCount: `action's total like`,
-        createdAt: `action's created date`,
-        updatedAt: `action's updated date`
+        id: `created action's id`,
+        title: `action title`,
+        content: `action content`,
+        likeCount: `number of likes`,
+        createdAt: `creation date`,
+        updatedAt: `updated date`,
+        writer: {
+            id: `writer's id`,
+            nickname: `writer's nickname`
+        }
     }
 }
 ```

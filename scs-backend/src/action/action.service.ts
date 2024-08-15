@@ -84,7 +84,7 @@ export class ActionService {
         createActionDto: CreateActionDto,
     ): Promise<Action> {
         // extract DTO data
-        const { questionId, content } = createActionDto;
+        const { questionId, title, content } = createActionDto;
         this.logger.verbose(
             `Action creation on question ${questionId} with content: ${content}`,
         );
@@ -115,9 +115,6 @@ export class ActionService {
         // parse and sanitize markdown content
         const sanitizedHtml = await this.parseAndSanitizeMarkdown(content);
         this.logger.verbose("Sanitized HTML:", sanitizedHtml);
-
-        // create new action's title
-        const title = `${writer.nickname}님께서 ${new Date().toLocaleDateString()} 작성한 액션입니다.`;
 
         // create action
         const action = this.actionRepository.create({
