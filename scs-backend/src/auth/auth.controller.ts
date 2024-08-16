@@ -24,6 +24,7 @@ import {
 } from "@nestjs/swagger";
 import { SignupResponseDto, TokensResponseDto } from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
+import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("Auth")
 @Controller("v1/auth")
@@ -38,6 +39,7 @@ export class AuthController {
         description: "인증 코드 전송 완료",
         type: BaseResponseDto,
     })
+    @SetResponseDto(BaseResponseDto)
     @Public()
     @Post("email/verification-code")
     @HttpCode(HttpStatus.CREATED)
@@ -58,6 +60,7 @@ export class AuthController {
         description: "인증 코드 검증 완료",
         type: BaseResponseDto,
     })
+    @SetResponseDto(BaseResponseDto)
     @Public()
     @Post("email/verify-code")
     @HttpCode(HttpStatus.OK)
@@ -85,12 +88,12 @@ export class AuthController {
         description: "회원 가입 완료",
         type: SignupResponseDto,
     })
+    @SetResponseDto(SignupResponseDto)
     @Public()
     @Post("signup")
     @HttpCode(HttpStatus.CREATED)
     async signup(@Body() signupDto: SignupDto): Promise<SignupResponseDto> {
         const user = await this.authService.signup(signupDto);
-        delete user.password;
 
         return {
             message: "A new user has been signed up.",
@@ -105,6 +108,7 @@ export class AuthController {
         description: "로그인 성공",
         type: TokensResponseDto,
     })
+    @SetResponseDto(TokensResponseDto)
     @Public()
     @Post("jwt/login")
     @HttpCode(HttpStatus.OK)
@@ -126,6 +130,7 @@ export class AuthController {
         description: "JWT 토큰 리프레시 성공",
         type: TokensResponseDto,
     })
+    @SetResponseDto(TokensResponseDto)
     @Public()
     @UseGuards(RefreshTokenGuard)
     @Post("jwt/refresh")
@@ -155,6 +160,7 @@ export class AuthController {
         description: "로그아웃 성공",
         type: BaseResponseDto,
     })
+    @SetResponseDto(BaseResponseDto)
     @Post("jwt/logout")
     @HttpCode(HttpStatus.OK)
     async logout(@GetCurrentUserId() userId: number): Promise<BaseResponseDto> {

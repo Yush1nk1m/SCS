@@ -32,13 +32,11 @@ import {
     ApiTags,
 } from "@nestjs/swagger";
 import { GetSectionsQueryDto } from "./dto/get-sections-query.dto";
-import {
-    QuestionsBySectionResponseDto,
-    SectionResponseDto,
-    SectionsResponseDto,
-} from "./dto/response.dto";
+import { SectionResponseDto, SectionsResponseDto } from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 import { GetQuestionsQueryDto } from "./dto/get-questions-query.dto";
+import { QuestionsResponseDto } from "../question/dto/response.dto";
+import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("Section")
 @Controller("v1/sections")
@@ -54,6 +52,7 @@ export class SectionController {
         type: SectionsResponseDto,
     })
     @ApiQuery({ name: "sort", enum: ["subject", "id"], required: false })
+    @SetResponseDto(SectionsResponseDto)
     @Public()
     @Get()
     @HttpCode(HttpStatus.OK)
@@ -76,6 +75,7 @@ export class SectionController {
         description: "섹션 조회 성공",
         type: SectionResponseDto,
     })
+    @SetResponseDto(SectionResponseDto)
     @Public()
     @Get(":id")
     @HttpCode(HttpStatus.OK)
@@ -95,15 +95,16 @@ export class SectionController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: "질문 조회 성공",
-        type: QuestionsBySectionResponseDto,
+        type: QuestionsResponseDto,
     })
+    @SetResponseDto(QuestionsResponseDto)
     @Public()
     @Get(":id/questions")
     @HttpCode(HttpStatus.OK)
     async getQuestionsBySection(
         @Param("id", ParseIntPipe) sectionId: number,
         @Query() query: GetQuestionsQueryDto,
-    ): Promise<QuestionsBySectionResponseDto> {
+    ): Promise<QuestionsResponseDto> {
         const { page, limit, sort, order, search } = query;
         const [questions, total] =
             await this.sectionService.getQuestionsBySection(
@@ -130,6 +131,7 @@ export class SectionController {
         description: "섹션 생성 성공",
         type: SectionResponseDto,
     })
+    @SetResponseDto(SectionResponseDto)
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Post()
@@ -157,6 +159,7 @@ export class SectionController {
         description: "섹션 제목 수정 성공",
         type: SectionResponseDto,
     })
+    @SetResponseDto(SectionResponseDto)
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Patch(":id/subject")
@@ -184,6 +187,7 @@ export class SectionController {
         description: "섹션 설명 수정 성공",
         type: SectionResponseDto,
     })
+    @SetResponseDto(SectionResponseDto)
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Patch(":id/description")
@@ -211,6 +215,7 @@ export class SectionController {
         description: "섹션 삭제 성공",
         type: BaseResponseDto,
     })
+    @SetResponseDto(BaseResponseDto)
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Delete(":id")

@@ -12,7 +12,7 @@ export class SectionRepository extends Repository<Section> {
     }
 
     async findSectionById(id: number): Promise<Section> {
-        return this.findOne({ where: { id } });
+        return this.findOne({ where: { id }, relations: ["creator"] });
     }
 
     async findSectionDetailById(id: number): Promise<Section> {
@@ -20,16 +20,6 @@ export class SectionRepository extends Repository<Section> {
             withDeleted: true,
             where: { id },
             relations: ["creator"],
-            select: {
-                id: true,
-                subject: true,
-                description: true,
-                createdAt: true,
-                creator: {
-                    id: true,
-                    nickname: true,
-                },
-            },
         });
     }
 
@@ -37,16 +27,6 @@ export class SectionRepository extends Repository<Section> {
         return this.find({
             withDeleted: true,
             relations: ["creator"],
-            select: {
-                id: true,
-                subject: true,
-                description: true,
-                createdAt: true,
-                creator: {
-                    id: true,
-                    nickname: true,
-                },
-            },
         });
     }
 
@@ -57,16 +37,6 @@ export class SectionRepository extends Repository<Section> {
         return this.find({
             withDeleted: true,
             relations: ["creator"],
-            select: {
-                id: true,
-                subject: true,
-                description: true,
-                createdAt: true,
-                creator: {
-                    id: true,
-                    nickname: true,
-                },
-            },
             order: {
                 [sort]: order,
             },

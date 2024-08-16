@@ -16,6 +16,7 @@ import { CommentService } from "./comment.service";
 import { CommentResponseDto } from "./dto/response.dto";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateCommentDto } from "./dto/create-comment.dto";
+import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("Comment")
 @Controller("v1/comments")
@@ -32,6 +33,7 @@ export class CommentController {
         description: "댓글 작성 성공",
         type: CommentResponseDto,
     })
+    @SetResponseDto(CommentResponseDto)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     async createComment(

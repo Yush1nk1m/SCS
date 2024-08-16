@@ -2,6 +2,7 @@ import {
     BadRequestException,
     Injectable,
     Logger,
+    NotFoundException,
     UnauthorizedException,
 } from "@nestjs/common";
 import { UserRepository } from "../repository/user.repository";
@@ -21,17 +22,19 @@ export class UserService {
     constructor(private readonly userRepository: UserRepository) {}
 
     // [U-01] Service logic
-    async findAllUsersFiltered(): Promise<User[]> {
-        return await this.userRepository.findAllUsers();
+    async findAllUsers(): Promise<User[]> {
+        return this.userRepository.findAllUsers();
     }
 
     // [U-02], [U-03] Service logic
-    async findUserByIdFiltered(id: number) {
+    async findUser(id: number) {
+        // find user from DB
         const user = await this.userRepository.findUserById(id);
-        // remove the user's private information
-        delete user.password;
-        delete user.refreshToken;
-        delete user.createdAt;
+
+        // if user does not exist, it is an error
+        if (!user) {
+            throw new NotFoundException(`User has not been found.`);
+        }
 
         return user;
     }

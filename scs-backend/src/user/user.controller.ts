@@ -12,7 +12,6 @@ import {
 } from "@nestjs/common";
 import { Public } from "../common/decorator/public.decorator";
 import { UserService } from "./user.service";
-import { BaseResponse } from "../common/types/response.type";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import { ChangeNicknameDto } from "./dto/change-nickname.dto";
@@ -25,6 +24,7 @@ import {
 } from "@nestjs/swagger";
 import { UserResponseDto, UsersResponseDto } from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
+import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("User")
 @Controller("v1/users")
@@ -39,11 +39,12 @@ export class UserController {
         description: "사용자 정보 조회 성공",
         type: UsersResponseDto,
     })
+    @SetResponseDto(UsersResponseDto)
     @Public()
     @Get()
     @HttpCode(HttpStatus.OK)
     async getAllUsers(): Promise<UsersResponseDto> {
-        const users = await this.userService.findAllUsersFiltered();
+        const users = await this.userService.findAllUsers();
 
         return {
             message: "All users have been found.",
@@ -59,6 +60,7 @@ export class UserController {
         description: "사용자 정보 조회 성공",
         type: UserResponseDto,
     })
+    @SetResponseDto(UserResponseDto)
     @Get("me")
     @HttpCode(HttpStatus.OK)
     async getCurrentUser(
@@ -67,7 +69,7 @@ export class UserController {
         this.logger.verbose(
             `An user with id: ${id} has requested to get information`,
         );
-        const user = await this.userService.findUserByIdFiltered(id);
+        const user = await this.userService.findUser(id);
 
         return {
             message: `An user with id: ${id} has been found.`,
@@ -82,13 +84,14 @@ export class UserController {
         description: "사용자 정보 조회 성공",
         type: UserResponseDto,
     })
+    @SetResponseDto(UserResponseDto)
     @Public()
     @Get(":id")
     @HttpCode(HttpStatus.OK)
     async getSpecificUser(
         @Param("id", ParseIntPipe) id: number,
     ): Promise<UserResponseDto> {
-        const user = await this.userService.findUserByIdFiltered(id);
+        const user = await this.userService.findUser(id);
 
         return {
             message: `An user with id: ${id} has been found.`,
@@ -104,6 +107,7 @@ export class UserController {
         description: "비밀번호 변경 성공",
         type: BaseResponseDto,
     })
+    @SetResponseDto(BaseResponseDto)
     @Patch("password")
     @HttpCode(HttpStatus.OK)
     async changeUserPassword(
@@ -125,12 +129,13 @@ export class UserController {
         description: "닉네임 변경 성공",
         type: BaseResponseDto,
     })
+    @SetResponseDto(BaseResponseDto)
     @Patch("nickname")
     @HttpCode(HttpStatus.OK)
     async changeUserNickname(
         @GetCurrentUserId() id: number,
         @Body() changeNicknameDto: ChangeNicknameDto,
-    ): Promise<BaseResponse> {
+    ): Promise<BaseResponseDto> {
         await this.userService.changeUserNickname(id, changeNicknameDto);
 
         return {
@@ -146,12 +151,13 @@ export class UserController {
         description: "회원 탈퇴 성공",
         type: BaseResponseDto,
     })
+    @SetResponseDto(BaseResponseDto)
     @Delete()
     @HttpCode(HttpStatus.OK)
     async deleteCurrentUser(
         @GetCurrentUserId() id: number,
         @Body() deleteUserDto: DeleteUserDto,
-    ): Promise<BaseResponse> {
+    ): Promise<BaseResponseDto> {
         await this.userService.deleteUser(id, deleteUserDto);
 
         return {

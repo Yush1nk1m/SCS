@@ -20,6 +20,7 @@ import {
 } from "@nestjs/swagger";
 import { PresignedURLResponseDto, URLResponseDto } from "./dto/response.dto";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
+import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("Upload")
 @Controller("v1/upload")
@@ -36,6 +37,7 @@ export class UploadController {
         description: "이미지 업로드 성공",
         type: URLResponseDto,
     })
+    @SetResponseDto(URLResponseDto)
     @ApiConsumes("multipart/form-data")
     @ApiBody({
         schema: {
@@ -72,6 +74,7 @@ export class UploadController {
         description: "Presigned URL 생성 성공",
         type: PresignedURLResponseDto,
     })
+    @SetResponseDto(PresignedURLResponseDto)
     @Post("presigned-url")
     @HttpCode(HttpStatus.CREATED)
     async getPresignedUrl(): Promise<PresignedURLResponseDto> {

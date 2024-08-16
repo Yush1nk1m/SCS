@@ -12,7 +12,7 @@ export class ActionRepository extends Repository<Action> {
     }
 
     async findActionById(id: number): Promise<Action> {
-        return this.findOne({ where: { id } });
+        return this.findOne({ where: { id }, relations: ["writer"] });
     }
 
     async findActionDetailById(id: number): Promise<Action> {

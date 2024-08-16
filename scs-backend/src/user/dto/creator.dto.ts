@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
 
-export class WriterDto {
+export class CreatorDto {
     @ApiProperty({ example: 1, description: "사용자 고유 ID" })
     @Expose()
     id: number;

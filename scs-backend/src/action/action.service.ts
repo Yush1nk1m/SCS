@@ -102,7 +102,7 @@ export class ActionService {
 
         // find a question with the specified id from DB
         const question =
-            await this.questionRepository.findQuestionBrieflyById(questionId);
+            await this.questionRepository.findQuestionById(questionId);
 
         // if the question does not exist, it is an error
         if (!question) {
@@ -219,15 +219,19 @@ export class ActionService {
         }
 
         // find action from DB
-        const action = await this.actionRepository.findActionByWriterAndId(
-            writer,
-            actionId,
-        );
+        const action = await this.actionRepository.findActionById(actionId);
 
         // if action does not exist, it is an error
         if (!action) {
             throw new NotFoundException(
                 "Action written by user has not been found.",
+            );
+        }
+
+        // if action has not been written by user, it is an error
+        if (action.writer.id !== writer.id) {
+            throw new UnauthorizedException(
+                "Action has not been written by user",
             );
         }
 

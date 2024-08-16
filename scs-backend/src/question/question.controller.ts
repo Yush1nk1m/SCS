@@ -26,12 +26,11 @@ import {
     ApiResponse,
     ApiTags,
 } from "@nestjs/swagger";
-import {
-    ActionsByQuestionResponseDto,
-    QuestionResponseDto,
-} from "./dto/response.dto";
+import { QuestionResponseDto } from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 import { GetActionsQueryDto } from "./dto/get-actions-query.dto";
+import { ActionsResponseDto } from "../action/dto/response.dto";
+import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("Question")
 @Controller("v1/questions")
@@ -47,6 +46,7 @@ export class QuestionController {
         description: "질문 조회 성공",
         type: QuestionResponseDto,
     })
+    @SetResponseDto(QuestionResponseDto)
     @Public()
     @Get(":id")
     @HttpCode(HttpStatus.OK)
@@ -70,6 +70,7 @@ export class QuestionController {
         description: "질문 생성 성공",
         type: QuestionResponseDto,
     })
+    @SetResponseDto(QuestionResponseDto)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     async createQuestion(
@@ -95,6 +96,7 @@ export class QuestionController {
         description: "질문 내용제 수정 성공",
         type: QuestionResponseDto,
     })
+    @SetResponseDto(QuestionResponseDto)
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Patch(":id")
@@ -122,6 +124,7 @@ export class QuestionController {
         description: "질문 삭제 성공",
         type: BaseResponseDto,
     })
+    @SetResponseDto(BaseResponseDto)
     @UseGuards(RolesGuard)
     @Roles("admin")
     @Delete(":id")
@@ -141,15 +144,16 @@ export class QuestionController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: "답변 조회 성공",
-        type: ActionsByQuestionResponseDto,
+        type: ActionsResponseDto,
     })
+    @SetResponseDto(ActionsResponseDto)
     @Public()
     @Get(":id/actions")
     @HttpCode(HttpStatus.OK)
     async getActionsByQuestion(
         @Param("id", ParseIntPipe) questionId: number,
         @Query() query: GetActionsQueryDto,
-    ): Promise<ActionsByQuestionResponseDto> {
+    ): Promise<ActionsResponseDto> {
         const { page, limit, sort, order, search } = query;
         const [actions, total] =
             await this.questionService.getActionsByQuestion(
@@ -160,8 +164,6 @@ export class QuestionController {
                 order,
                 search,
             );
-
-        this.logger.verbose(actions);
 
         return {
             message: "Actions of question have been found.",

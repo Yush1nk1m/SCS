@@ -1,47 +1,18 @@
-import { ApiProperty, PickType } from "@nestjs/swagger";
-import { Section } from "../section.entity";
+import { ApiProperty } from "@nestjs/swagger";
 import { BaseResponseDto } from "../../common/dto/base-response.dto";
-import { User } from "../../user/user.entity";
-import { Question } from "../../question/question.entity";
-import { WriterDto } from "../../user/dto/writer.dto";
-
-class CreatorDto extends PickType(User, ["id", "nickname"]) {}
-
-class SectionDto extends PickType(Section, [
-    "id",
-    "subject",
-    "description",
-    "createdAt",
-    "updatedAt",
-]) {
-    @ApiProperty({ type: CreatorDto })
-    creator: CreatorDto;
-}
+import { SectionDto } from "./section.dto";
+import { Expose, Type } from "class-transformer";
 
 export class SectionsResponseDto extends BaseResponseDto {
     @ApiProperty({ type: [SectionDto] })
+    @Type(() => SectionDto)
+    @Expose()
     sections: SectionDto[];
 }
 
 export class SectionResponseDto extends BaseResponseDto {
     @ApiProperty({ type: SectionDto })
+    @Type(() => SectionDto)
+    @Expose()
     section: SectionDto;
-}
-class QuestionDto extends PickType(Question, [
-    "id",
-    "content",
-    "saved",
-    "createdAt",
-    "updatedAt",
-]) {
-    @ApiProperty({ type: WriterDto })
-    writer: WriterDto;
-}
-
-export class QuestionsBySectionResponseDto extends BaseResponseDto {
-    @ApiProperty({ type: [QuestionDto] })
-    questions: QuestionDto[];
-
-    @ApiProperty({ example: 5, description: "검색된 질문의 총 개수" })
-    total: number;
 }

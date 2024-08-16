@@ -11,6 +11,7 @@ import { join } from "path";
 import * as fs from "fs";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as dotenv from "dotenv";
+import { DtoInterceptor } from "./common/interceptor/dto.interceptor";
 dotenv.config();
 
 async function bootstrap() {
@@ -30,11 +31,7 @@ async function bootstrap() {
     });
 
     const reflector = app.get(Reflector);
-    app.useGlobalInterceptors(
-        new ClassSerializerInterceptor(reflector, {
-            excludeExtraneousValues: true,
-        }),
-    );
+    app.useGlobalInterceptors(new DtoInterceptor(reflector));
 
     app.useGlobalFilters(new AllExceptionFilter());
 

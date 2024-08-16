@@ -39,16 +39,6 @@ export class QuestionRepository extends Repository<Question> {
                 content: Like(`%${search}%`),
             },
             relations: ["writer"],
-            select: {
-                id: true,
-                content: true,
-                createdAt: true,
-                saved: true,
-                writer: {
-                    id: true,
-                    nickname: true,
-                },
-            },
             order: { [sort]: order },
             skip: (page - 1) * limit,
             take: limit,
@@ -56,36 +46,7 @@ export class QuestionRepository extends Repository<Question> {
     }
 
     async findQuestionById(id: number) {
-        return this.findOne({ where: { id } });
-    }
-
-    async findQuestionBrieflyById(id: number) {
-        return this.findOne({
-            where: { id },
-            select: {
-                id: true,
-                content: true,
-            },
-        });
-    }
-
-    async findQuestionDetailById(id: number) {
-        return this.findOne({
-            withDeleted: true,
-            where: { id },
-            relations: ["writer"],
-            select: {
-                id: true,
-                content: true,
-                createdAt: true,
-                updatedAt: true,
-                saved: true,
-                writer: {
-                    id: true,
-                    nickname: true,
-                },
-            },
-        });
+        return this.findOne({ where: { id }, relations: ["writer"] });
     }
 
     async createQuestion(

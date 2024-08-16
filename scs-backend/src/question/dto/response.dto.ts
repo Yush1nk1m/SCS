@@ -1,30 +1,22 @@
-import { ApiProperty, PickType } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import { BaseResponseDto } from "../../common/dto/base-response.dto";
 import { QuestionDto } from "./question.dto";
-import { Action } from "../../action/action.entity";
-import { WriterDto } from "../../user/dto/writer.dto";
+import { Expose, Type } from "class-transformer";
+
+export class QuestionsResponseDto extends BaseResponseDto {
+    @ApiProperty({ type: [QuestionDto] })
+    @Type(() => QuestionDto)
+    @Expose()
+    questions: QuestionDto[];
+
+    @ApiProperty({ example: 5, description: "검색된 질문의 총 개수" })
+    @Expose()
+    total: number;
+}
 
 export class QuestionResponseDto extends BaseResponseDto {
     @ApiProperty({ type: QuestionDto })
+    @Type(() => QuestionDto)
+    @Expose()
     question: QuestionDto;
-}
-
-class ActionDto extends PickType(Action, [
-    "id",
-    "title",
-    "imageUrls",
-    "likeCount",
-    "createdAt",
-    "updatedAt",
-]) {
-    @ApiProperty({ type: () => WriterDto })
-    writer: WriterDto;
-}
-
-export class ActionsByQuestionResponseDto extends BaseResponseDto {
-    @ApiProperty({ type: [ActionDto] })
-    actions: ActionDto[];
-
-    @ApiProperty({ example: 5, description: "검색된 액션의 총 개수" })
-    total: number;
 }

@@ -138,7 +138,6 @@ export class AuthService {
                 position,
             );
 
-            delete user.password;
             return user;
         } else {
             throw new UnauthorizedException(

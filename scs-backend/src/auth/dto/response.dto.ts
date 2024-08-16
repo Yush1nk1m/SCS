@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { BaseResponseDto } from "../../common/dto/base-response.dto";
-import { Expose } from "class-transformer";
+import { Expose, Type } from "class-transformer";
 import { UserDto } from "../../user/dto/user.dto";
 
 export class TokensResponseDto extends BaseResponseDto {
@@ -21,6 +21,7 @@ export class TokensResponseDto extends BaseResponseDto {
 
 export class SignupResponseDto extends BaseResponseDto {
     @ApiProperty({ type: UserDto, description: "사용자 정보" })
+    @Type(() => UserDto)
     @Expose()
     user: UserDto;
 }

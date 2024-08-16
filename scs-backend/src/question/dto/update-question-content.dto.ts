@@ -1,4 +1,12 @@
-import { Question } from "../question.entity";
-import { PickType } from "@nestjs/swagger";
+import { IsNotEmpty, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
-export class UpdateQuestionContentDto extends PickType(Question, ["content"]) {}
+export class UpdateQuestionContentDto {
+    @ApiProperty({
+        example: "TCP와 UDP의 차이점은 무엇인가요?",
+        description: "질문 내용",
+    })
+    @IsString()
+    @IsNotEmpty()
+    content: string;
+}

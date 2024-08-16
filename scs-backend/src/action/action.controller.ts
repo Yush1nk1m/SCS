@@ -25,12 +25,13 @@ import {
 } from "@nestjs/swagger";
 import {
     ActionResponseDto,
-    CommentsResponseDto,
     ContentResponseDto,
     LikeResponseDto,
 } from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 import { GetCommentsQueryDto } from "../comment/dto/get-comments-query.dto";
+import { CommentsResponseDto } from "../comment/dto/response.dto";
+import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("Action")
 @Controller("v1/actions")
@@ -46,6 +47,7 @@ export class ActionController {
         description: "답변 조회 성공",
         type: ActionResponseDto,
     })
+    @SetResponseDto(ActionResponseDto)
     @Public()
     @Get(":id")
     @HttpCode(HttpStatus.OK)
@@ -68,6 +70,7 @@ export class ActionController {
         description: "답변 생성 성공",
         type: ActionResponseDto,
     })
+    @SetResponseDto(ActionResponseDto)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     async createAction(
@@ -93,6 +96,7 @@ export class ActionController {
         description: "답변 수정 성공",
         type: ActionResponseDto,
     })
+    @SetResponseDto(ActionResponseDto)
     @Patch(":id")
     @HttpCode(HttpStatus.OK)
     async updateAction(
@@ -120,6 +124,7 @@ export class ActionController {
         description: "답변 삭제 성공",
         type: BaseResponseDto,
     })
+    @SetResponseDto(BaseResponseDto)
     @Delete(":id")
     @HttpCode(HttpStatus.OK)
     async deleteAction(
@@ -141,6 +146,7 @@ export class ActionController {
         description: "마크다운 컨텐츠 조회 성공",
         type: ContentResponseDto,
     })
+    @SetResponseDto(ContentResponseDto)
     @Get(":id/raw-content")
     @HttpCode(HttpStatus.OK)
     async getRawContent(
@@ -166,6 +172,7 @@ export class ActionController {
         description: "좋아요 등록/취소 성공",
         type: LikeResponseDto,
     })
+    @SetResponseDto(LikeResponseDto)
     @Post(":id/like")
     @HttpCode(HttpStatus.OK)
     async toggleActionLike(
@@ -192,6 +199,7 @@ export class ActionController {
         description: "좋아요 여부 조회 성공",
         type: LikeResponseDto,
     })
+    @SetResponseDto(LikeResponseDto)
     @Get(":id/like")
     @HttpCode(HttpStatus.OK)
     async getActionLike(
@@ -217,6 +225,7 @@ export class ActionController {
         description: "댓글 목록 조회 성공",
         type: CommentsResponseDto,
     })
+    @SetResponseDto(CommentsResponseDto)
     @Public()
     @Get(":id/comments")
     @HttpCode(HttpStatus.OK)
