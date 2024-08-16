@@ -6,6 +6,7 @@ import {
     JoinTable,
     ManyToMany,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
@@ -13,6 +14,7 @@ import { User } from "../user/user.entity";
 import { Question } from "../question/question.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsArray, IsDate, IsInt, IsNotEmpty, IsString } from "class-validator";
+import { Comment } from "../comment/comment.entity";
 
 @Entity()
 @Index(["question", "updatedAt"])
@@ -99,4 +101,11 @@ export class Action {
     })
     @JoinTable({ name: "Like" })
     likedBy: User[];
+
+    @ApiPropertyOptional({
+        type: () => [Comment],
+        description: "액션에 작성된 댓글 목록",
+    })
+    @OneToMany(() => Comment, (comment) => comment.action)
+    comments: Comment[];
 }

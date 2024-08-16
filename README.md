@@ -17,44 +17,59 @@ SCS는 컴퓨터 과학 전공 지식을 학습하기 위한 웹 서비스입니
 
 ## 기술 스택
 
-### 프론트엔드
+### Front-end
 
 - React
 - TypeScript
 - Vite
 
-### 백엔드
+### Back-end
 
 - NestJS
 - TypeORM
 - PostgreSQL
 - JWT 인증
 
-### 공통
+### Common
 
+- Swagger API
+- AWS S3
 - Docker
 - Docker-compose
 - Git
 
 ## 현재 개발 현황
 
-![Current usecase](./Docs//UML/Usecase/usecase.png)
+### Back-end
 
-- [x] 사용자 인증 (Auth) 모듈 완성
-- [x] 사용자 (User) 모듈 완성
-- [x] 섹션 (Section) 모듈 완성
-- [x] 질문 (Question) 모듈 완성
-- [x] 업로드 (Upload) 모듈 완성
-- [ ] 답변 (Action) 모듈 개발 중
-- [ ] 댓글 (Comment) 모듈 예정
-- [ ] 북 (Book) 모듈 예정
-- [ ] 프론트엔드 개발 진행 중
+- [x] 사용자 인증 (Auth) 모듈
+- [x] 사용자 (User) 모듈
+- [x] 섹션 (Section) 모듈
+- [x] 질문 (Question) 모듈
+- [x] 업로드 (Upload) 모듈
+- [x] 답변 (Action) 모듈
+- [ ] 댓글 (Comment) 모듈
+- [ ] 북 (Book) 모듈
+- [ ] 문의사항 (Board) 모듈
 
-## API 문서
+### Front-end
+
+- [x] 홈페이지, 헤더, 푸터
+- [x] 회원 가입 페이지 및 이메일 인증 회원가입 기능
+- [x] 로그인 페이지 및 JWT 로그인 기능
+- [x] 섹션 목록 페이지 (Section page)
+- [x] 액션 목록 페이지 (Question page)
+- [x] 액션 작성 페이지 및 마크다운 리치 텍스트 에디터 글 작성 기능
+- [ ] 액션 상세 페이지 및 댓글 기능
+- [ ] 문제집 페이지
+- [ ] 마이페이지
+- [ ] 최적화
+
+## API Documentation
 
 현재 개발된 API에 대한 문서는 [여기](./Docs/API.md)에서 확인할 수 있습니다.
 
-## Commit Message Rule
+## Commit Convention
 
 - 초기 커밋: Init
 - 기능 추가: Feat
@@ -69,11 +84,11 @@ SCS는 컴퓨터 과학 전공 지식을 학습하기 위한 웹 서비스입니
 - 데이터베이스 마이그레이션: DB
 - 오타 수정: Typo
 
-## 라이선스
+## Licenses
 
-이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 `LICENSE` 파일을 참조하세요.
+프로젝트의 라이센스와 관련한 부분은 [LICENSES](./LICENSES.md)에서 확인할 수 있습니다.
 
-## 연락처
+## Contact
 
 프로젝트 관리자 - [@youth_1nn](https://www.instagram.com/youth_1nn/) - kys010306@sogang.ac.kr
 

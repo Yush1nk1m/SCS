@@ -26,6 +26,7 @@ import {
     ApiProperty,
     ApiPropertyOptional,
 } from "@nestjs/swagger";
+import { Comment } from "../comment/comment.entity";
 
 @Entity()
 export class User {
@@ -139,4 +140,11 @@ export class User {
         onDelete: "CASCADE",
     })
     likedActions: Action[];
+
+    @ApiPropertyOptional({
+        type: () => [Comment],
+        description: "작성한 댓글 목록",
+    })
+    @OneToMany(() => Comment, (comment) => comment.writer)
+    comments: Comment[];
 }
