@@ -12,6 +12,7 @@ import { UserRepository } from "../repository/user.repository";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 import { ActionRepository } from "../repository/action.repository";
+import { Action } from "../action/action.entity";
 
 @Injectable()
 export class QuestionService {
@@ -103,7 +104,7 @@ export class QuestionService {
         sort: "updatedAt" | "likeCount" = "updatedAt",
         order: "ASC" | "DESC" = "DESC",
         search: string,
-    ): Promise<{ actions: any; total: number }> {
+    ): Promise<[Action[], number]> {
         // find a question with the specified id from DB
         const question =
             await this.questionRepository.findQuestionById(questionId);

@@ -118,7 +118,7 @@ export class SectionService {
         sort: "createdAt" | "saved" = "createdAt",
         order: "ASC" | "DESC" = "DESC",
         search: string,
-    ): Promise<{ questions: Question[]; total: number }> {
+    ): Promise<[Question[], number]> {
         // find a section with the specified id from DB
         const section = await this.sectionRepository.findSectionById(sectionId);
 

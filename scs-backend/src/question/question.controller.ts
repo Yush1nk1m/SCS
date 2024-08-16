@@ -151,7 +151,7 @@ export class QuestionController {
         @Query() query: GetActionsQueryDto,
     ): Promise<ActionsByQuestionResponseDto> {
         const { page, limit, sort, order, search } = query;
-        const { actions, total } =
+        const [actions, total] =
             await this.questionService.getActionsByQuestion(
                 questionId,
                 page,

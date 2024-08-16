@@ -19,7 +19,7 @@ export class QuestionRepository extends Repository<Question> {
         sort: "createdAt" | "saved" = "createdAt",
         order: "ASC" | "DESC" = "DESC",
         search: string = "",
-    ): Promise<{ questions: Question[]; total: number }> {
+    ): Promise<[Question[], number]> {
         const where = {
             section: {
                 id: sectionId,
@@ -30,7 +30,7 @@ export class QuestionRepository extends Repository<Question> {
             delete where.content;
         }
 
-        const [questions, total] = await this.findAndCount({
+        return this.findAndCount({
             withDeleted: true,
             where: {
                 section: {
@@ -53,8 +53,6 @@ export class QuestionRepository extends Repository<Question> {
             skip: (page - 1) * limit,
             take: limit,
         });
-
-        return { questions, total };
     }
 
     async findQuestionById(id: number) {

@@ -10,6 +10,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
 } from "@nestjs/common";
 import { ActionService } from "./action.service";
 import { Public } from "../common/decorator/public.decorator";
@@ -24,10 +25,12 @@ import {
 } from "@nestjs/swagger";
 import {
     ActionResponseDto,
+    CommentsResponseDto,
     ContentResponseDto,
     LikeResponseDto,
 } from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
+import { GetCommentsQueryDto } from "../comment/dto/get-comments-query.dto";
 
 @ApiTags("Action")
 @Controller("v1/actions")
@@ -204,6 +207,36 @@ export class ActionController {
             message: "Like information for the action has been found.",
             liked,
             likeCount,
+        };
+    }
+
+    // [AC-08] Controller logic
+    @ApiOperation({ summary: "댓글 목록 조회" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "댓글 목록 조회 성공",
+        type: CommentsResponseDto,
+    })
+    @Public()
+    @Get(":id/comments")
+    @HttpCode(HttpStatus.OK)
+    async getComments(
+        @Param("id", ParseIntPipe) actionId: number,
+        @Query() query: GetCommentsQueryDto,
+    ): Promise<CommentsResponseDto> {
+        const { page, limit, sort, order } = query;
+        const [comments, total] = await this.actionService.getComments(
+            actionId,
+            page,
+            limit,
+            sort,
+            order,
+        );
+
+        return {
+            message: "Comments have been found.",
+            comments,
+            total,
         };
     }
 }

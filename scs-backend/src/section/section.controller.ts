@@ -105,7 +105,7 @@ export class SectionController {
         @Query() query: GetQuestionsQueryDto,
     ): Promise<QuestionsBySectionResponseDto> {
         const { page, limit, sort, order, search } = query;
-        const { questions, total } =
+        const [questions, total] =
             await this.sectionService.getQuestionsBySection(
                 sectionId,
                 page,

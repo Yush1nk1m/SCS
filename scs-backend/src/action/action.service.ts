@@ -16,6 +16,8 @@ import { UserRepository } from "../repository/user.repository";
 import { UpdateActionDto } from "./dto/update-action.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 import { LikeCount, Liked } from "./types/like.type";
+import { Comment } from "../comment/comment.entity";
+import { CommentRepository } from "../repository/comment.repository";
 
 @Injectable()
 export class ActionService {
@@ -25,6 +27,7 @@ export class ActionService {
         private readonly actionRepository: ActionRepository,
         private readonly questionRepository: QuestionRepository,
         private readonly userRepository: UserRepository,
+        private readonly commentRepository: CommentRepository,
     ) {}
 
     // extract image URLs from markdown text
@@ -307,5 +310,32 @@ export class ActionService {
         );
 
         return [liked, action.likeCount];
+    }
+
+    // [AC-08] Service logic
+    async getComments(
+        actionId: number,
+        page: number = 1,
+        limit: number = 1,
+        sort: "createdAt" = "createdAt",
+        order: "ASC" | "DESC" = "DESC",
+    ): Promise<[Comment[], number]> {
+        // find an action from DB
+        const action = await this.actionRepository.findActionById(actionId);
+
+        // if the action does not exist, it is an error
+        if (!action) {
+            throw new NotFoundException(
+                `Action with id ${actionId} has not been found.`,
+            );
+        }
+
+        return this.commentRepository.findCommentsByActionId(
+            actionId,
+            page,
+            limit,
+            sort,
+            order,
+        );
     }
 }

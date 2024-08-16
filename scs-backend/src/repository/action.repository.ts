@@ -55,7 +55,7 @@ export class ActionRepository extends Repository<Action> {
         sort: "updatedAt" | "likeCount" = "updatedAt",
         order: "ASC" | "DESC" = "DESC",
         search: string = "",
-    ): Promise<{ actions: Action[]; total: number }> {
+    ): Promise<[Action[], number]> {
         const where = {
             question: {
                 id: questionId,
@@ -66,7 +66,7 @@ export class ActionRepository extends Repository<Action> {
             delete where.title;
         }
 
-        const [actions, total] = await this.findAndCount({
+        return this.findAndCount({
             withDeleted: true,
             where,
             relations: ["writer"],
@@ -88,8 +88,6 @@ export class ActionRepository extends Repository<Action> {
             skip: (page - 1) * limit,
             take: limit,
         });
-
-        return { actions, total };
     }
 
     async findActionAndLikesById(id: number): Promise<Action> {

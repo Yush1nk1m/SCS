@@ -23,7 +23,7 @@ class ActionDto extends PickType(Action, [
 
 export class ActionsByQuestionResponseDto extends BaseResponseDto {
     @ApiProperty({ type: [ActionDto] })
-    actions: [ActionDto];
+    actions: ActionDto[];
 
     @ApiProperty({ example: 5, description: "검색된 액션의 총 개수" })
     total: number;
