@@ -1,8 +1,8 @@
-import { PickType } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail } from "class-validator";
-import { Verification } from "../verification.entity";
 
-export class EmailDto extends PickType(Verification, ["email"]) {
+export class EmailDto {
+    @ApiProperty({ example: "user@example.com", description: "사용자 이메일" })
     @IsEmail()
     email: string;
 }
