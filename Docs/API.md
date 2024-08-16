@@ -575,6 +575,7 @@
 | AC-05  |  GET   | /v1/actions/:id/raw-content | 특정 답변의 Raw 마크다운 컨텐츠 조회 |
 | AC-06  |  POST  |    /v1/actions/:id/like     | 좋아요 등록/취소                     |
 | AC-07  |  GET   |    /v1/actions/:id/like     | 좋아요 여부 조회                     |
+| AC-08  |  GET   |  /v1/actions/:id/comments   | 댓글 목록 조회                       |
 
 ### AC-01: 특정 답변 조회
 
@@ -715,6 +716,36 @@
 }
 ```
 
+### AC-08: 댓글 목록 조회
+
+댓글 목록 조회
+
+- **Description**: 특정 답변에 달린 댓글들을 조회한다.
+- **Method**: `GET`
+- **URI**: `/v1/actions/:id/comments`
+- **Request**: URI 경로에 Action의 ID를 전달한다.
+- **Response data**:
+
+```
+{
+    message: result message,
+    comments: [
+        {
+            id: comment's id,
+            content: comment content,
+            createdAt: comment's created date,
+            updatedAt: comment's updated date,
+            writer: {
+                id: writer's id,
+                nickname: writer's nickname
+            }
+        },
+        { ... },
+        ...
+    ]
+}
+```
+
 ## Upload
 
 이 섹션은 파일 업로드 관련 API에 대한 설계이다.
@@ -752,5 +783,77 @@
     message: `result message`,
     url: `presigned URL`,
     key: `S3 object key`
+}
+```
+
+## Comment
+
+이 섹션은 댓글 관련 API에 대한 설계다.
+
+| API ID | Method |           URI            | Summary      |
+| :----: | :----: | :----------------------: | :----------- |
+| CM-01  |  POST  | /v1/actions/:id/comments | 새 댓글 작성 |
+| CM-02  | PATCH  |     /v1/comments/:id     | 댓글 수정    |
+| CM-03  | DELETE |     /v1/comments/:id     | 댓글 삭제    |
+
+### CM-01: 새 댓글 작성
+
+- **Description**: 특정 답변에 새로운 댓글을 작성한다.
+- **Method**: `POST`
+- **URI**: `/v1/actions/:id/comments`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `comment content` }
+- **Response data**:
+
+```
+{
+    message: result message,
+    comment: {
+        id: comment's id,
+        content: comment content,
+        createdAt: comment's created date,
+        updatedAt: comment's updated date,
+        writer: {
+            id: writer's id,
+            nickname: writer's nickname
+        }
+    }
+}
+```
+
+### CM-02: 댓글 수정
+
+- **Description**: 사용자가 작성한 댓글을 수정한다.
+- **Method**: `PATCH`
+- **URI**: `/v1/comments/:id`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `updated comment content` }
+- **Response data**:
+
+```
+{
+    message: result message,
+    comment: {
+        id: comment's id,
+        content: comment content,
+        createdAt: comment's created date,
+        updatedAt: comment's updated date,
+        writer: {
+            id: writer's id,
+            nickname: writer's nickname
+        }
+    }
+}
+```
+
+### CM-03: 댓글 삭제
+
+- **Description**: 사용자가 작성한 댓글을 삭제한다.
+- **Method**: `DELETE`
+- **URI**: `/v1/comments/:id`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+{
+    message: result message
 }
 ```
