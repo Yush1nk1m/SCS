@@ -1,6 +1,6 @@
 import React from "react";
-import "./ActionCard.css";
 import { useNavigate } from "react-router-dom";
+import "./ActionCard.css";
 
 interface ActionCardProps {
   id: number;
