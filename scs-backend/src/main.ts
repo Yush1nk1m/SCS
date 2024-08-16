@@ -8,11 +8,10 @@ import {
 } from "typeorm-transactional";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { join } from "path";
-import * as dotenv from "dotenv";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-dotenv.config();
-
 import * as fs from "fs";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 async function bootstrap() {
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
@@ -30,10 +29,15 @@ async function bootstrap() {
         credentials: true,
     });
 
+    const reflector = app.get(Reflector);
     app.useGlobalInterceptors(
-        new ClassSerializerInterceptor(app.get(Reflector)),
+        new ClassSerializerInterceptor(reflector, {
+            excludeExtraneousValues: true,
+        }),
     );
+
     app.useGlobalFilters(new AllExceptionFilter());
+
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
     const swaggerConfig = new DocumentBuilder()
@@ -44,7 +48,7 @@ async function bootstrap() {
         .build();
     const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup("api", app, swaggerDocument);
-    fs.writeFileSync("./swagger.json", JSON.stringify(swaggerDocument));
+    // fs.writeFileSync("./swagger.json", JSON.stringify(swaggerDocument));
 
     await app.listen(4000);
 }

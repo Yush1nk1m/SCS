@@ -15,6 +15,7 @@ import { Question } from "../question/question.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsArray, IsDate, IsInt, IsNotEmpty, IsString } from "class-validator";
 import { Comment } from "../comment/comment.entity";
+import { Exclude, Expose } from "class-transformer";
 
 @Entity()
 @Index(["question", "updatedAt"])
@@ -24,6 +25,7 @@ export class Action {
     @PrimaryGeneratedColumn()
     @Index("IDX_ACTION_ID")
     @IsInt()
+    @Expose()
     id: number;
 
     @ApiProperty({
@@ -33,6 +35,7 @@ export class Action {
     @Column()
     @IsString()
     @IsNotEmpty()
+    @Expose()
     title: string;
 
     @ApiProperty({
@@ -42,6 +45,7 @@ export class Action {
     @IsString()
     @IsNotEmpty()
     @Column("text")
+    @Expose()
     content: string;
 
     @ApiProperty({
@@ -51,6 +55,7 @@ export class Action {
     @Column("text")
     @IsString()
     @IsNotEmpty()
+    @Expose()
     rawContent: string;
 
     @ApiPropertyOptional({
@@ -59,11 +64,13 @@ export class Action {
     })
     @Column("simple-array", { nullable: true })
     @IsArray()
+    @Expose()
     imageUrls: string[];
 
     @ApiProperty({ example: 10, description: "좋아요 수" })
     @Column({ default: 0 })
     @IsInt()
+    @Expose()
     likeCount: number;
 
     @ApiProperty({
@@ -72,6 +79,7 @@ export class Action {
     })
     @CreateDateColumn()
     @IsDate()
+    @Expose()
     createdAt: Date;
 
     @ApiProperty({
@@ -80,16 +88,19 @@ export class Action {
     })
     @UpdateDateColumn()
     @IsDate()
+    @Expose()
     updatedAt: Date;
 
     @ApiProperty({ type: () => User, description: "답변 작성자" })
     @ManyToOne(() => User, (user) => user.actions)
+    @Expose()
     writer: User;
 
     @ApiProperty({ type: () => Question, description: "답변이 속한 질문" })
     @ManyToOne(() => Question, (question) => question.actions, {
         onDelete: "CASCADE",
     })
+    @Expose()
     question: Question;
 
     @ApiPropertyOptional({
@@ -100,6 +111,7 @@ export class Action {
         onDelete: "CASCADE",
     })
     @JoinTable({ name: "Like" })
+    @Exclude()
     likedBy: User[];
 
     @ApiPropertyOptional({
@@ -107,5 +119,6 @@ export class Action {
         description: "액션에 작성된 댓글 목록",
     })
     @OneToMany(() => Comment, (comment) => comment.action)
+    @Exclude()
     comments: Comment[];
 }

@@ -11,17 +11,20 @@ import { User } from "../user/user.entity";
 import { Question } from "../question/question.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsDate, IsInt, IsString } from "class-validator";
+import { Exclude, Expose } from "class-transformer";
 
 @Entity()
 export class Section {
     @ApiProperty({ example: 1, description: "섹션 고유 ID" })
     @PrimaryGeneratedColumn()
     @IsInt()
+    @Expose()
     id: number;
 
     @ApiProperty({ example: "네트워크", description: "섹션 주제" })
     @Column()
     @IsString()
+    @Expose()
     subject: string;
 
     @ApiPropertyOptional({
@@ -30,6 +33,7 @@ export class Section {
     })
     @Column({ nullable: true })
     @IsString()
+    @Expose()
     description: string;
 
     @ApiProperty({
@@ -38,6 +42,7 @@ export class Section {
     })
     @CreateDateColumn()
     @IsDate()
+    @Expose()
     createdAt: Date;
 
     @ApiProperty({
@@ -46,10 +51,12 @@ export class Section {
     })
     @UpdateDateColumn()
     @IsDate()
+    @Expose()
     updatedAt: Date;
 
     @ApiProperty({ type: () => User, description: "섹션 생성자" })
     @ManyToOne(() => User, (user) => user.sections)
+    @Expose()
     creator: User;
 
     @ApiPropertyOptional({
@@ -57,5 +64,6 @@ export class Section {
         description: "섹션에 포함된 질문들",
     })
     @OneToMany(() => Question, (question) => question.section)
+    @Exclude()
     questions: Question[];
 }

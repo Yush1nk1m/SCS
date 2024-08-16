@@ -13,6 +13,7 @@ import { Section } from "../section/section.entity";
 import { Action } from "../action/action.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsDate, IsInt, IsNotEmpty, IsString } from "class-validator";
+import { Exclude, Expose } from "class-transformer";
 
 @Entity()
 @Index(["section", "saved"])
@@ -22,6 +23,7 @@ export class Question {
     @PrimaryGeneratedColumn()
     @Index("IDX_QUESTION_ID")
     @IsInt()
+    @Expose()
     id: number;
 
     @ApiProperty({
@@ -31,6 +33,7 @@ export class Question {
     @Column()
     @IsString()
     @IsNotEmpty()
+    @Expose()
     content: string;
 
     @ApiProperty({
@@ -39,6 +42,7 @@ export class Question {
     })
     @CreateDateColumn()
     @IsDate()
+    @Expose()
     createdAt: Date;
 
     @ApiProperty({
@@ -47,21 +51,25 @@ export class Question {
     })
     @UpdateDateColumn()
     @IsDate()
+    @Expose()
     updatedAt: Date;
 
     @ApiProperty({ example: 5, description: "질문이 스크랩된 횟수" })
     @Column({ default: 0 })
     @IsInt()
+    @Expose()
     saved: number;
 
     @ApiProperty({ type: () => User, description: "질문 작성자" })
     @ManyToOne(() => User, (user) => user.questions)
+    @Expose()
     writer: User;
 
     @ApiProperty({ type: () => Section, description: "질문이 속한 섹션" })
     @ManyToOne(() => Section, (section) => section.questions, {
         onDelete: "CASCADE",
     })
+    @Expose()
     section: Section;
 
     @ApiPropertyOptional({
@@ -69,5 +77,6 @@ export class Question {
         description: "질문에 대한 답변들",
     })
     @OneToMany(() => Action, (action) => action.question)
+    @Exclude()
     actions: Action[];
 }

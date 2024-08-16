@@ -10,12 +10,14 @@ import {
 } from "typeorm";
 import { User } from "../user/user.entity";
 import { Action } from "../action/action.entity";
+import { Exclude, Expose } from "class-transformer";
 
 @Entity()
 export class Comment {
     @ApiProperty({ example: 1, description: "댓글 고유 ID" })
     @PrimaryGeneratedColumn()
     @IsInt()
+    @Expose()
     id: number;
 
     @ApiProperty({
@@ -25,6 +27,7 @@ export class Comment {
     @Column()
     @IsString()
     @IsNotEmpty()
+    @Expose()
     content: string;
 
     @ApiProperty({
@@ -33,6 +36,7 @@ export class Comment {
     })
     @CreateDateColumn()
     @IsDate()
+    @Expose()
     createdAt: Date;
 
     @ApiProperty({
@@ -41,13 +45,16 @@ export class Comment {
     })
     @UpdateDateColumn()
     @IsDate()
+    @Expose()
     updatedAt: Date;
 
     @ApiProperty({ type: () => User, description: "댓글 작성자" })
     @ManyToOne(() => User, (user) => user.comments)
+    @Expose()
     writer: User;
 
     @ApiProperty({ type: () => Action, description: "댓글이 작성된 액션" })
     @ManyToOne(() => Action, (action) => action.comments)
+    @Exclude()
     action: Action;
 }

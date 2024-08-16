@@ -1,33 +1,24 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsString, Length } from "class-validator";
+import { Expose } from "class-transformer";
 
-export class CreateUserDto {
+export class UserDto {
+    @ApiProperty({ example: 1, description: "사용자 고유 ID" })
+    @Expose()
+    id: number;
+
     @ApiProperty({ example: "user@example.com", description: "사용자 이메일" })
-    @IsEmail()
-    @IsNotEmpty()
+    @Expose()
     email: string;
 
-    @ApiProperty({
-        example: "password123",
-        description: "사용자 비밀번호 (8-32자)",
-    })
-    @Length(8, 32)
-    @IsString()
-    @IsNotEmpty()
-    password: string;
-
     @ApiProperty({ example: "닉네임", description: "사용자 닉네임" })
-    @IsString()
-    @IsNotEmpty()
+    @Expose()
     nickname: string;
 
     @ApiProperty({ example: "서강대학교", description: "사용자 소속" })
-    @IsString()
-    @IsNotEmpty()
+    @Expose()
     affiliation: string;
 
     @ApiProperty({ example: "백엔드", description: "사용자 포지션" })
-    @IsString()
-    @IsNotEmpty()
+    @Expose()
     position: string;
 }

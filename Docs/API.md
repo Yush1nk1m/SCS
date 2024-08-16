@@ -800,8 +800,8 @@
 
 - **Description**: 특정 답변에 새로운 댓글을 작성한다.
 - **Method**: `POST`
-- **URI**: `/v1/actions/:id/comments`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { content: `comment content` }
+- **URI**: `/v1/comments`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { actionId: `action's id`, content: `comment content` }
 - **Response data**:
 
 ```
