@@ -9,6 +9,17 @@
   animation: wave 15s ease infinite;
 }
 
+.leftGroup {
+  display: flex;
+  align-items: center;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
 .logo {
   height: 10vh;
   width: auto;
@@ -19,7 +30,7 @@
   gap: 20px;
 }
 
-.nav-item {
+.navItem {
   color: white;
   text-decoration: none;
   font-weight: bold;

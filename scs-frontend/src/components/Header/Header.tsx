@@ -16,21 +16,24 @@ const Header: React.FC = () => {
 
   return (
     <header className="header">
-      <Link to={"/"}>
-        <img src={logo} alt="logo" className="logo" />
-      </Link>
-
-      <nav className="nav">
-        <Link to={"/"} className="nav-item">
-          Home
-        </Link>
-        <Link to={"/section"} className="nav-item">
-          Sections
-        </Link>
-        <Link to={"/library"} className="nav-item">
-          Libraries
-        </Link>
-      </nav>
+      <div className="leftGroup">
+        <div className="logoContainer">
+          <Link to={"/"}>
+            <img src={logo} alt="logo" className="logo" />
+          </Link>
+        </div>
+        <nav className="nav">
+          <Link to={"/"} className="navItem">
+            Home
+          </Link>
+          <Link to={"/section"} className="navItem">
+            Sections
+          </Link>
+          <Link to={"/library"} className="navItem">
+            Libraries
+          </Link>
+        </nav>
+      </div>
 
       <div className="buttons">
         {isLoggedIn ? (
