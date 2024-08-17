@@ -38,7 +38,7 @@ const SectionItem: React.FC<SectionItemProps> = ({
       >
         <p className="section-description">{section.description}</p>
         <QuestionList
-          sectionId={section.id}
+          section={section}
           onCreateQuestion={() => onOpenModal(section.id)}
         />
       </div>

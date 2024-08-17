@@ -5,16 +5,16 @@ import { Link } from "react-router-dom";
 import "./QuestionList.css";
 import Pagination from "../Pagination/Pagination";
 import { useAuth } from "../../hooks/useAuth";
-import { QuestionDto } from "../../api/swaggerApi";
+import { QuestionDto, SectionDto } from "../../api/swaggerApi";
 import toast from "react-hot-toast";
 
 interface QuestionListProps {
-  sectionId: number;
+  section: SectionDto;
   onCreateQuestion: () => void;
 }
 
 const QuestionList: React.FC<QuestionListProps> = ({
-  sectionId,
+  section,
   onCreateQuestion,
 }) => {
   const isLoggedIn = useAuth();
@@ -29,12 +29,12 @@ const QuestionList: React.FC<QuestionListProps> = ({
 
   useEffect(() => {
     fetchQuestionsData();
-  }, [sectionId, page, sortOption]);
+  }, [section, page, sortOption]);
 
   const fetchQuestionsData = async () => {
     try {
       const response = await fetchQuestions(
-        sectionId,
+        section.id,
         page,
         sortOption,
         searchTerm

@@ -26,9 +26,8 @@ export const uploadImage = async (file: File) => {
     );
     return response.data.url;
   } catch (error: any) {
-    console.error("이미지 업로드 실패:", error);
     throw {
-      status: error.status,
+      status: error.response?.status,
     };
   }
 };

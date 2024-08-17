@@ -21,20 +21,22 @@ const CreateActionPage: React.FC = () => {
     setContent(text);
   };
 
-  const handleImageUpload = async (file: File): Promise<string> => {
+  const handleImageUpload = async (file: File): Promise<string | undefined> => {
     try {
       const url = await uploadImage(file);
       return url;
     } catch (error: any) {
       console.error("이미지 업로드 실패:", error);
       switch (error.status) {
+        case 400:
+          toast.error("이미지만 업로드할 수 있습니다.");
+          break;
         case 401:
           toast.error("로그인이 필요합니다.");
           break;
         default:
           toast.error("예기치 못한 에러가 발생했습니다.");
       }
-      throw error;
     }
   };
 
@@ -48,6 +50,9 @@ const CreateActionPage: React.FC = () => {
       navigate(`/question/${questionId}`);
     } catch (error: any) {
       switch (error.status) {
+        case 400:
+          toast.error("내용을 작성해야 합니다.", { id: loadingToast });
+          break;
         case 401:
           toast.error("로그인이 필요합니다.", { id: loadingToast });
           break;
@@ -73,6 +78,7 @@ const CreateActionPage: React.FC = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="titleInput"
+            required
           />
           <MdEditor
             style={{ height: "500px", marginBottom: "20px" }}

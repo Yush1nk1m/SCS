@@ -17,21 +17,17 @@ const ActionPage: React.FC = () => {
 
   useEffect(() => {
     const fetchAction = async () => {
-      const loadingToast = toast.loading("액션을 불러오는 중 ...");
       try {
         const data = await getAction(Number(id));
         setAction(data.action);
-        toast.dismiss(loadingToast);
       } catch (error: any) {
         console.error("액션 데이터 가져오기 실패:", error);
         switch (error.status) {
           case 404:
-            toast.error("존재하지 않는 액션입니다.", { id: loadingToast });
+            toast.error("존재하지 않는 액션입니다.");
             break;
           default:
-            toast.error("예기치 못한 에러가 발생했습니다.", {
-              id: loadingToast,
-            });
+            toast.error("예기치 못한 에러가 발생했습니다.");
         }
       }
     };
@@ -58,7 +54,7 @@ const ActionPage: React.FC = () => {
         prev ? { ...prev, likeCount: data.likeCount } : null
       );
 
-      if (isLiked) {
+      if (data.liked) {
         toast.success("좋아요가 등록되었습니다.");
       } else {
         toast.success("좋아요가 취소되었습니다.");
@@ -84,7 +80,7 @@ const ActionPage: React.FC = () => {
       const data = await createComment(Number(id), newComment);
       setComments((prev) => [...prev, data.comment]);
       setNewComment("");
-      toast.success("댓글 작성 성공!");
+      toast.success("댓글이 작성되었습니다.");
     } catch (error: any) {
       console.error("댓글 작성 중 에러 발생:", error);
       switch (error.status) {
