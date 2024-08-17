@@ -5,7 +5,7 @@ import {
   SignupDto,
   SignupResponseDto,
   TokensResponseDto,
-} from "../api/swaggerApi";
+} from "./swaggerApi";
 import {
   getAccessToken,
   getRefreshToken,

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { QuestionSortOption } from "../../types/section";
-import { fetchQuestions } from "../../services/sectionApi";
-import { Question } from "../../types/question";
+import { fetchQuestions } from "../../api/sectionApi";
 import { Link } from "react-router-dom";
 import "./QuestionList.css";
 import Pagination from "../Pagination/Pagination";

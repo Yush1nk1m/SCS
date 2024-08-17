@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createQuestion } from "../../services/questionApi";
+import { createQuestion } from "../../api/questionApi";
 import "./CreateQuestionModal.css";
 
 interface CreateQuestionModalProps {

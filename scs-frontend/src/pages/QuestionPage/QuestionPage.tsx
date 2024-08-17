@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ActionSortOption } from "../../types/action";
 import ActionSortingOptions from "../../components/ActionSortingOptions/ActionSortingOptions";
-import { fetchActions, fetchQuestion } from "../../services/questionApi";
+import { fetchActions, fetchQuestion } from "../../api/questionApi";
 import "./QuestionPage.css";
 import Pagination from "../../components/Pagination/Pagination";
 import ActionCard from "../../components/ActionCard/ActionCard";

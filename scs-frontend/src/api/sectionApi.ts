@@ -1,4 +1,4 @@
-import { Api } from "../api/swaggerApi";
+import { Api } from "./swaggerApi";
 
 const api = new Api({
   baseUrl: "http://localhost:4000",

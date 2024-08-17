@@ -1,6 +1,6 @@
 import logo from "../../assets/logo.png";
 import { useAuth } from "../../hooks/useAuth";
-import { logout } from "../../services/authApi";
+import { logout } from "../../api/authApi";
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchSections } from "../../services/sectionApi";
+import { fetchSections } from "../../api/sectionApi";
 import { SectionSortOption } from "../../types/section";
 import "./SectionPage.css";
 import SortingOptions from "../../components/SortingOptions/SortingOptions";
@@ -44,9 +44,9 @@ const SectionPage: React.FC = () => {
     setSelectedSectionId(null);
   };
 
-  const handleQuestionSubmit = () => {
+  const handleQuestionSubmit = async () => {
     handleCloseModal();
-    fetchSectionsData();
+    await fetchSectionsData();
   };
 
   const handleSearch = (e: React.FormEvent) => {

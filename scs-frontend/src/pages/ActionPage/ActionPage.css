@@ -1,0 +1,148 @@
+.action-detail {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  font-family: Arial, sans-serif;
+}
+
+.action-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.action-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid gray;
+}
+
+.author-info {
+  text-align: right;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.action-content {
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.like-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.like-button {
+  width: 60px;
+  height: 60px;
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.like-button::before,
+.like-button::after {
+  content: "";
+  position: absolute;
+  top: 27%;
+  width: 20px;
+  height: 32px;
+  background-color: #ffffff;
+  border-radius: 50px 50px 0 0;
+  transition: all 0.3s ease;
+}
+
+.like-button::before {
+  left: 50%;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+.like-button::after {
+  right: 50%;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+.like-button.liked {
+  background-color: #ff4136;
+}
+
+.like-button.liked::before,
+.like-button.liked::after {
+  background-color: #ffffff;
+}
+
+.like-button:hover {
+  background-color: #ff7167;
+}
+
+.like-count {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.comment-section {
+  margin-top: 30px;
+  margin-bottom: 20px; /* Footer와의 간격 */
+}
+
+.comment {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 40px; /* Footer와의 간격 더 확보 */
+  padding-right: 20px;
+  box-sizing: border-box;
+}
+
+.comment-form textarea {
+  width: 100%;
+  height: 100px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+.comment-form button {
+  align-self: flex-end;
+  width: auto;
+  padding: 10px 20px;
+  margin-top: 10px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.comment-form button:hover {
+  background-color: #27ae60;
+}
+
+@media (max-width: 600px) {
+  .comment-form button {
+    width: 100%;
+  }
+}

@@ -1,4 +1,4 @@
-import { ActionResponseDto, Api } from "../api/swaggerApi";
+import { ActionResponseDto, Api, LikeResponseDto } from "./swaggerApi";
 import {
   getAccessToken,
   isTokenExpired,
@@ -28,6 +28,30 @@ export const createAction = async (
     title,
     content,
   });
+};
+
+export const getAction = async (id: number) => {
+  const response = await api.v1.actionControllerGetSpecificAction(id);
+  return response.data;
+};
+
+export const getComments = async (
+  id: number,
+  page: number = 1,
+  limit: number = 10
+) => {
+  const response = await api.v1.actionControllerGetComments(id, {
+    page,
+    limit,
+  });
+  return response.data;
+};
+
+export const likeAction = async (id: number): Promise<LikeResponseDto> => {
+  return authRequest<LikeResponseDto, number>(
+    (actionId) => api.v1.actionControllerToggleActionLike(actionId),
+    id
+  );
 };
 
 const authRequest = async <T, P>(

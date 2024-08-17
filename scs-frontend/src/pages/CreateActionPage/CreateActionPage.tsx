@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import MarkdownIt from "markdown-it";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
-import { createAction } from "../../services/actionApi";
-import { uploadImage } from "../../services/uploadApi";
+import { createAction } from "../../api/actionApi";
+import { uploadImage } from "../../api/uploadApi";
 import "./CreateActionPage.css";
 
 const mdParser = new MarkdownIt();

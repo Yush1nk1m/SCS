@@ -1,4 +1,4 @@
-import { Api, QuestionResponseDto } from "../api/swaggerApi";
+import { Api, QuestionResponseDto } from "./swaggerApi";
 import {
   getAccessToken,
   isTokenExpired,

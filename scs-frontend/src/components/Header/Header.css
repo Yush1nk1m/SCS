@@ -3,6 +3,7 @@
   justify-content: space-between;
   align-items: center;
   height: 15vh;
+  width: 100% - 40px;
   padding: 0 20px;
   background: linear-gradient(-45deg, #87ceeb, #1e90ff, #00bfff, #add8e6);
   background-size: 400% 400%;

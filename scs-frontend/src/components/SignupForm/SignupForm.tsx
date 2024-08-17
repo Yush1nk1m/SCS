@@ -1,8 +1,4 @@
-import {
-  sendVerificationCode,
-  signup,
-  verifyCode,
-} from "../../services/authApi";
+import { sendVerificationCode, signup, verifyCode } from "../../api/authApi";
 import React, { useState } from "react";
 import "./SignupForm.css";
 

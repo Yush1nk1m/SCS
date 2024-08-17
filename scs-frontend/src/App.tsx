@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import SectionPage from "./pages/SectionPage/SectionPage";
 import QuestionPage from "./pages/QuestionPage/QuestionPage";
 import CreateActionPage from "./pages/CreateActionPage/CreateActionPage";
+import ActionPage from "./pages/ActionPage/ActionPage";
 
 const App: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ const App: React.FC = () => {
           path="/question/:id/create-action"
           element={<CreateActionPage />}
         />
+        <Route path="/action/:id" element={<ActionPage />} />
       </Routes>
       <Footer />
     </div>

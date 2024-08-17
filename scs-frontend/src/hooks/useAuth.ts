@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAccessToken, isTokenExpired } from "../utils/tokenUtils";
-import { refreshTokens } from "../services/authApi";
+import { refreshTokens } from "../api/authApi";
 
 export const useAuth = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);

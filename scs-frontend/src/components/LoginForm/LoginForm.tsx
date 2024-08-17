@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LoginData } from "../../types/auth";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../services/authApi";
+import { login } from "../../api/authApi";
 import "./LoginForm.css";
 
 const LoginForm: React.FC = () => {
