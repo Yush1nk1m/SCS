@@ -4,6 +4,8 @@ import {
     HttpCode,
     HttpStatus,
     Logger,
+    Param,
+    Patch,
     Post,
 } from "@nestjs/common";
 import {
@@ -17,6 +19,7 @@ import { CommentResponseDto } from "./dto/response.dto";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
+import { UpdateCommentDto } from "./dto/update-comment.dto";
 
 @ApiTags("Comment")
 @Controller("v1/comments")
@@ -49,6 +52,35 @@ export class CommentController {
 
         return {
             message: "New comment has been created.",
+            comment,
+        };
+    }
+
+    // [CM-02] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "댓글 수정" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "댓글 수정 성공",
+        type: CommentResponseDto,
+    })
+    @SetResponseDto(CommentResponseDto)
+    @Patch(":id")
+    @HttpCode(HttpStatus.OK)
+    async updateComment(
+        @GetCurrentUserId() userId: number,
+        @Param("id") commentId: number,
+        @Body() updateCommentDto: UpdateCommentDto,
+    ): Promise<CommentResponseDto> {
+        const { content } = updateCommentDto;
+        const comment = await this.commentService.updateComment(
+            userId,
+            commentId,
+            content,
+        );
+
+        return {
+            message: "Comment has been updated.",
             comment,
         };
     }

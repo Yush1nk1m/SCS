@@ -11,7 +11,7 @@
 
 export interface EmailDto {
   /**
-   * 인증할 이메일 주소
+   * 사용자 이메일
    * @example "user@example.com"
    */
   email: string;
@@ -45,8 +45,8 @@ export interface SignupDto {
    */
   email: string;
   /**
-   * 사용자 비밀번호 (8-32자)
-   * @example "password123"
+   * 사용자 비밀번호
+   * @example "q1w2e3r4"
    */
   password: string;
   /**
@@ -71,7 +71,7 @@ export interface SignupDto {
   verificationCode: string;
 }
 
-export interface UserFields {
+export interface UserDto {
   /**
    * 사용자 고유 ID
    * @example 1
@@ -106,7 +106,7 @@ export interface SignupResponseDto {
    */
   message: string;
   /** 사용자 정보 */
-  user: UserFields;
+  user: UserDto;
 }
 
 export interface LoginDto {
@@ -116,8 +116,8 @@ export interface LoginDto {
    */
   email: string;
   /**
-   * 사용자 비밀번호 (8-32자)
-   * @example "password123"
+   * 사용자 비밀번호
+   * @example "q1w2e3r4"
    */
   password: string;
 }
@@ -147,7 +147,7 @@ export interface UsersResponseDto {
    */
   message: string;
   /** 사용자 정보 목록 */
-  users: UserFields[];
+  users: UserDto[];
 }
 
 export interface UserResponseDto {
@@ -157,15 +157,10 @@ export interface UserResponseDto {
    */
   message: string;
   /** 사용자 정보 */
-  user: UserFields;
+  user: UserDto;
 }
 
 export interface ChangePasswordDto {
-  /**
-   * 사용자 비밀번호 (8-32자)
-   * @example "password123"
-   */
-  password: string;
   /**
    * 사용자의 새로운 비밀번호
    * @example "newpassword123"
@@ -305,7 +300,7 @@ export interface QuestionDto {
   writer: WriterDto;
 }
 
-export interface QuestionsBySectionResponseDto {
+export interface QuestionsResponseDto {
   /**
    * 응답 메시지
    * @example "Request has been processed."
@@ -414,7 +409,7 @@ export interface ActionDto {
   writer: WriterDto;
 }
 
-export interface ActionsByQuestionResponseDto {
+export interface ActionsResponseDto {
   /**
    * 응답 메시지
    * @example "Request has been processed."
@@ -428,16 +423,12 @@ export interface ActionsByQuestionResponseDto {
   total: number;
 }
 
-export interface ActionResponseDto {
+export interface ActionDetailDto {
   /**
-   * 응답 메시지
-   * @example "Request has been processed."
+   * 답변 ID
+   * @example 1
    */
-  message: string;
-  action: ActionDto;
-}
-
-export interface CreateActionDto {
+  id: number;
   /**
    * 답변 제목
    * @example "관리자님이 2024. 08. 14. 작성한 답변입니다."
@@ -449,13 +440,59 @@ export interface CreateActionDto {
    */
   content: string;
   /**
+   * 좋아요 수
+   * @example 10
+   */
+  likeCount: number;
+  /**
+   * 답변 생성 일시
+   * @format date-time
+   * @example "2024-08-14T12:34:56Z"
+   */
+  createdAt: string;
+  /**
+   * 답변 수정 일시
+   * @format date-time
+   * @example "2024-08-14T12:34:56Z"
+   */
+  updatedAt: string;
+  writer: WriterDto;
+}
+
+export interface ActionResponseDto {
+  /**
+   * 응답 메시지
+   * @example "Request has been processed."
+   */
+  message: string;
+  action: ActionDetailDto;
+}
+
+export interface CreateActionDto {
+  /**
    * 질문 고유 ID
    * @example 1
    */
   questionId: number;
+  /**
+   * 답변 제목
+   * @example "관리자님이 2024. 08. 14. 작성한 답변입니다."
+   */
+  title: string;
+  /**
+   * 답변 내용
+   * @example "TCP는 연결 지향적이고..."
+   */
+  content: string;
 }
 
-export type UpdateActionDto = object;
+export interface UpdateActionDto {
+  /**
+   * 답변 내용
+   * @example "TCP는 연결 지향적이고..."
+   */
+  content: string;
+}
 
 export interface ContentResponseDto {
   /**
@@ -488,6 +525,68 @@ export interface LikeResponseDto {
    * @example false
    */
   liked: boolean;
+}
+
+export interface CommentDto {
+  /**
+   * 댓글 고유 ID
+   * @example 1
+   */
+  id: number;
+  /**
+   * 댓글 내용
+   * @example "이 게시물은 큰 도움이 되었습니다 ..."
+   */
+  content: string;
+  /**
+   * 댓글 작성 일시
+   * @format date-time
+   * @example "2024-08-14T12:34:56Z"
+   */
+  createdAt: string;
+  /**
+   * 댓글 수정 일시
+   * @format date-time
+   * @example "2024-08-14T12:34:56Z"
+   */
+  updatedAt: string;
+  writer: WriterDto;
+}
+
+export interface CommentsResponseDto {
+  /**
+   * 응답 메시지
+   * @example "Request has been processed."
+   */
+  message: string;
+  comments: CommentDto[];
+  /**
+   * 총 댓글 개수
+   * @example 15
+   */
+  total: number;
+}
+
+export interface CreateCommentDto {
+  /**
+   * 댓글이 작성되는 액션의 고유 ID
+   * @example 2
+   */
+  actionId: number;
+  /**
+   * 댓글 내용
+   * @example "이 게시물은 큰 도움이 되었습니다 ..."
+   */
+  content: string;
+}
+
+export interface CommentResponseDto {
+  /**
+   * 응답 메시지
+   * @example "Request has been processed."
+   */
+  message: string;
+  comment: CommentDto;
 }
 
 export interface URLResponseDto {
@@ -1072,7 +1171,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<QuestionsBySectionResponseDto, any>({
+      this.request<QuestionsResponseDto, any>({
         path: `/v1/sections/${id}/questions`,
         method: "GET",
         query: query,
@@ -1222,7 +1321,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<ActionsByQuestionResponseDto, any>({
+      this.request<ActionsResponseDto, any>({
         path: `/v1/questions/${id}/actions`,
         method: "GET",
         query: query,
@@ -1354,6 +1453,56 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/v1/actions/${id}/like`,
         method: "GET",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Action
+     * @name ActionControllerGetComments
+     * @summary 댓글 목록 조회
+     * @request GET:/v1/actions/{id}/comments
+     */
+    actionControllerGetComments: (
+      id: number,
+      query?: {
+        /** @default 1 */
+        page?: number;
+        /** @default 10 */
+        limit?: number;
+        /** @default "createdAt" */
+        sort?: "createdAt";
+        /** @default "DESC" */
+        order?: "ASC" | "DESC";
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<CommentsResponseDto, any>({
+        path: `/v1/actions/${id}/comments`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Comment
+     * @name CommentControllerCreateComment
+     * @summary 새 댓글 작성
+     * @request POST:/v1/comments
+     * @secure
+     */
+    commentControllerCreateComment: (data: CreateCommentDto, params: RequestParams = {}) =>
+      this.request<CommentResponseDto, any>({
+        path: `/v1/comments`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

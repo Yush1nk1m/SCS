@@ -1,6 +1,6 @@
 import { NestFactory, Reflector } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { ClassSerializerInterceptor, ValidationPipe } from "@nestjs/common";
+import { ValidationPipe } from "@nestjs/common";
 import { AllExceptionFilter } from "./common/filter/all-exception.filter";
 import {
     initializeTransactionalContext,

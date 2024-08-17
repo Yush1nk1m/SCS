@@ -10,6 +10,13 @@ export class CommentRepository extends Repository<Comment> {
         super(Comment, dataSource.createEntityManager());
     }
 
+    async findCommentById(id: number): Promise<Comment> {
+        return this.findOne({
+            where: { id },
+            relations: ["writer"],
+        });
+    }
+
     async findCommentsByActionId(
         actionId: number,
         page: number = 1,
@@ -17,23 +24,13 @@ export class CommentRepository extends Repository<Comment> {
         sort: "createdAt" = "createdAt",
         order: "ASC" | "DESC" = "DESC",
     ): Promise<[Comment[], number]> {
-        return await this.findAndCount({
+        return this.findAndCount({
             where: {
                 action: {
                     id: actionId,
                 },
             },
             relations: ["writer"],
-            select: {
-                id: true,
-                content: true,
-                createdAt: true,
-                updatedAt: true,
-                writer: {
-                    id: true,
-                    nickname: true,
-                },
-            },
             order: {
                 [sort]: order,
             },

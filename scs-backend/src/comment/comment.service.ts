@@ -8,6 +8,7 @@ import { CommentRepository } from "../repository/comment.repository";
 import { UserRepository } from "../repository/user.repository";
 import { ActionRepository } from "../repository/action.repository";
 import { Comment } from "./comment.entity";
+import { IsolationLevel, Transactional } from "typeorm-transactional";
 
 @Injectable()
 export class CommentService {
@@ -19,6 +20,7 @@ export class CommentService {
         private readonly actionRepository: ActionRepository,
     ) {}
 
+    // [CM-01] Service logic
     async createComment(
         userId: number,
         actionId: number,
@@ -49,6 +51,37 @@ export class CommentService {
             action,
         });
 
+        return this.commentRepository.save(comment);
+    }
+
+    // [CM-02] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async updateComment(
+        userId: number,
+        commentId: number,
+        content: string,
+    ): Promise<Comment> {
+        // find a comment from DB
+        const comment = await this.commentRepository.findCommentById(commentId);
+
+        // if the comment does not exist, it is an error
+        if (!comment) {
+            throw new NotFoundException(
+                `Comment with id ${commentId} has not been found.`,
+            );
+        }
+
+        // if writer's id is not equal to user id
+        if (comment.writer.id !== userId) {
+            throw new UnauthorizedException(
+                "Comment has not been written by user.",
+            );
+        }
+
+        // update content of the comment
+        comment.content = content;
         return this.commentRepository.save(comment);
     }
 }
