@@ -1,5 +1,6 @@
 import { MailerService } from "@nestjs-modules/mailer";
 import {
+    BadRequestException,
     ConflictException,
     ForbiddenException,
     Injectable,
@@ -93,7 +94,7 @@ export class AuthService {
 
             return true;
         } else {
-            return false;
+            throw new BadRequestException("Verification code is not valid.");
         }
     }
 

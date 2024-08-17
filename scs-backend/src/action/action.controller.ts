@@ -86,7 +86,7 @@ export class ActionController {
         type: BaseResponseDto,
     })
     @ApiNotFoundResponse({
-        description: "답변이 존재하지 않음",
+        description: "질문이 존재하지 않음",
         type: BaseResponseDto,
     })
     @SetResponseDto(ActionResponseDto)

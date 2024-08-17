@@ -3,6 +3,7 @@ import { LoginData } from "../../types/auth";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
 import "./LoginForm.css";
+import toast from "react-hot-toast";
 
 const LoginForm: React.FC = () => {
   const [loginData, setLoginData] = useState<LoginData>({
@@ -15,11 +16,18 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     try {
       await login(loginData);
+      toast.success("로그인 성공!");
       window.dispatchEvent(new Event("storage"));
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       console.error("로그인 실패:", error);
-      alert("로그인에 실패했습니다. 이메일과 비밀번호를 확인해 주세요.");
+      switch (error.status) {
+        case 403:
+          toast.error("이메일과 비밀번호를 확인해 주세요.");
+          break;
+        default:
+          toast.error("예기치 못한 에러가 발생했습니다.");
+      }
     }
   };
 

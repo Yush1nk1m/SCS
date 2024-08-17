@@ -10,25 +10,38 @@ import SectionPage from "./pages/SectionPage/SectionPage";
 import QuestionPage from "./pages/QuestionPage/QuestionPage";
 import CreateActionPage from "./pages/CreateActionPage/CreateActionPage";
 import ActionPage from "./pages/ActionPage/ActionPage";
+import { Toaster } from "react-hot-toast";
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <Header />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/section" element={<SectionPage />} />
-        <Route path="/question/:id" element={<QuestionPage />} />
-        <Route
-          path="/question/:id/create-action"
-          element={<CreateActionPage />}
-        />
-        <Route path="/action/:id" element={<ActionPage />} />
-      </Routes>
-      <Footer />
-    </div>
+    <>
+      <Toaster
+        gutter={100000}
+        toastOptions={{
+          style: {
+            fontSize: "20px",
+            padding: "16px 24px",
+            marginTop: "15vh",
+          },
+        }}
+      />
+      <div className="App">
+        <Header />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/section" element={<SectionPage />} />
+          <Route path="/question/:id" element={<QuestionPage />} />
+          <Route
+            path="/question/:id/create-action"
+            element={<CreateActionPage />}
+          />
+          <Route path="/action/:id" element={<ActionPage />} />
+        </Routes>
+        <Footer />
+      </div>
+    </>
   );
 };
 

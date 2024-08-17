@@ -14,13 +14,16 @@ import {
     ApiBearerAuth,
     ApiBody,
     ApiConsumes,
+    ApiCreatedResponse,
     ApiOperation,
     ApiResponse,
     ApiTags,
+    ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { PresignedURLResponseDto, URLResponseDto } from "./dto/response.dto";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
+import { BaseResponseDto } from "../common/dto/base-response.dto";
 
 @ApiTags("Upload")
 @Controller("v1/upload")
@@ -32,10 +35,13 @@ export class UploadController {
     // [UP-01] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "이미지 업로드" })
-    @ApiResponse({
-        status: HttpStatus.CREATED,
+    @ApiCreatedResponse({
         description: "이미지 업로드 성공",
         type: URLResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(URLResponseDto)
     @ApiConsumes("multipart/form-data")
@@ -69,10 +75,13 @@ export class UploadController {
     // [UP-02] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "Presigned URL 생성" })
-    @ApiResponse({
-        status: HttpStatus.CREATED,
+    @ApiCreatedResponse({
         description: "Presigned URL 생성 성공",
         type: PresignedURLResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(PresignedURLResponseDto)
     @Post("presigned-url")

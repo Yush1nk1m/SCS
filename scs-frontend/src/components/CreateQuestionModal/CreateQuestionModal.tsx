@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createQuestion } from "../../api/questionApi";
 import "./CreateQuestionModal.css";
+import toast from "react-hot-toast";
 
 interface CreateQuestionModalProps {
   sectionId: number;
@@ -19,10 +20,20 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
     e.preventDefault();
     try {
       await createQuestion(content, sectionId);
+      toast.success("질문 생성 성공!");
       onSubmit();
-    } catch (error) {
+    } catch (error: any) {
       console.error("질문 생성 실패:", error);
-      alert("질문을 등록하는 데 실패했습니다. 다시 한번 시도해 주세요.");
+      switch (error.status) {
+        case 401:
+          toast.error("사용자 인증에 실패했습니다.");
+          break;
+        case 404:
+          toast.error("존재하지 않는 섹션입니다.");
+          break;
+        default:
+          toast.error("예기치 못한 에러가 발생했습니다.");
+      }
     }
   };
 

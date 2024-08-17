@@ -23,20 +23,51 @@ const api = new Api({
   },
 });
 
-export const sendVerificationCode = (email: string) =>
-  api.v1.authControllerSendVerificationMail({ email });
+// 인증 코드 전송
+export const sendVerificationCode = async (email: string): Promise<void> => {
+  try {
+    await api.v1.authControllerSendVerificationMail({ email });
+  } catch (error: any) {
+    throw {
+      status: error.status,
+    };
+  }
+};
 
-export const verifyCode = (email: string, verificationCode: string) =>
-  api.v1.authControllerVerifySignupCode({ email, verificationCode });
+// 인증 코드 검증
+export const verifyCode = async (
+  email: string,
+  verificationCode: string
+): Promise<void> => {
+  try {
+    await api.v1.authControllerVerifySignupCode({ email, verificationCode });
+  } catch (error: any) {
+    throw {
+      status: error.status,
+    };
+  }
+};
 
 export const signup = async (data: SignupDto): Promise<SignupResponseDto> => {
-  const response = await api.v1.authControllerSignup(data);
-  return response.data;
+  try {
+    const response = await api.v1.authControllerSignup(data);
+    return response.data;
+  } catch (error: any) {
+    throw {
+      status: error.status,
+    };
+  }
 };
 
 export const login = async (data: LoginDto): Promise<void> => {
-  const response = await api.v1.authControllerLogin(data);
-  setTokens(response.data.accessToken, response.data.refreshToken);
+  try {
+    const response = await api.v1.authControllerLogin(data);
+    setTokens(response.data.accessToken, response.data.refreshToken);
+  } catch (error: any) {
+    throw {
+      status: error.status,
+    };
+  }
 };
 
 export const logout = async (): Promise<void> => {
@@ -77,24 +108,34 @@ const authRequest = async <T, P>(
 ): Promise<T> => {
   let accessToken = getAccessToken();
 
-  if (!accessToken || isTokenExpired(accessToken)) {
-    const refreshed = await refreshTokens();
-    if (!refreshed) {
-      throw new Error("Authentication required");
+  // Refresh tokens
+  const refreshTokensIfNeeded = async () => {
+    if (!accessToken || isTokenExpired(accessToken)) {
+      const refreshed = await refreshTokens();
+      if (!refreshed) {
+        throw {
+          status: 401,
+        };
+      }
+      accessToken = getAccessToken();
     }
-    accessToken = getAccessToken();
-  }
-
-  api.setSecurityData(accessToken);
+  };
 
   try {
+    await refreshTokensIfNeeded();
+    api.setSecurityData(accessToken);
     const response = await apiCall(params);
     return response.data;
   } catch (error: any) {
     if (error.status === 401) {
       removeTokens();
-      throw new Error("Authentication failed");
+      throw {
+        status: 401,
+      };
     }
-    throw error;
+
+    throw {
+      status: error.status || 500,
+    };
   }
 };

@@ -1,6 +1,7 @@
 import { sendVerificationCode, signup, verifyCode } from "../../api/authApi";
 import React, { useState } from "react";
 import "./SignupForm.css";
+import toast from "react-hot-toast";
 
 interface SignupFormProps {
   onSignupSuccess: (nickname: string) => void;
@@ -16,25 +17,41 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
     verificationCode: "",
   });
   const [showVerification, setShowVerification] = useState(false);
+  const [verified, setVerified] = useState(false);
 
   const handleSendVerification = async () => {
+    const loadingToast = toast.loading("인증 코드 전송 중 ...");
+
     try {
       await sendVerificationCode(info.email);
       setShowVerification(true);
-      alert("인증 코드가 전송되었습니다.");
-    } catch (error) {
+      toast.success("인증 코드 전송 성공!", { id: loadingToast });
+    } catch (error: any) {
       console.error(error);
-      alert("인증 코드 전송 실패");
+      switch (error.status) {
+        case 409:
+          toast.error("이미 존재하는 이메일입니다.", { id: loadingToast });
+          break;
+        default:
+          toast.error("예기치 못한 에러가 발생했습니다.", { id: loadingToast });
+      }
     }
   };
 
   const handleVerifyCode = async () => {
     try {
       await verifyCode(info.email, info.verificationCode);
-      alert("인증 성공");
-    } catch (error) {
+      setVerified(true);
+      toast.success("인증 코드 검증 성공!");
+    } catch (error: any) {
       console.error(error);
-      alert("인증 실패");
+      switch (error.status) {
+        case 400:
+          toast.error("인증 코드가 일치하지 않습니다.");
+          break;
+        default:
+          toast.error("예기치 못한 에러가 발생했습니다.");
+      }
     }
   };
 
@@ -42,11 +59,17 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
     e.preventDefault();
     try {
       const response = await signup(info);
-      alert("회원가입 성공");
+      toast.success("회원가입 성공!");
       onSignupSuccess(response.user.nickname);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("회원가입 실패");
+      switch (error.status) {
+        case 401:
+          toast.error("이메일을 인증해 주세요.");
+          break;
+        default:
+          toast.error("예기치 못한 에러가 발생했습니다.");
+      }
     }
   };
 
@@ -58,6 +81,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
           <input
             type="email"
             placeholder="이메일"
+            disabled={showVerification}
             value={info.email}
             onChange={(e) => setInfo({ ...info, email: e.target.value })}
             required
@@ -65,6 +89,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
           <button
             type="button"
             className="verify-button"
+            disabled={showVerification}
             onClick={handleSendVerification}
           >
             인증
@@ -77,6 +102,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
                 type="text"
                 placeholder="인증 코드"
                 value={info.verificationCode}
+                disabled={verified}
                 onChange={(e) =>
                   setInfo({ ...info, verificationCode: e.target.value })
                 }
@@ -85,6 +111,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
               <button
                 type="button"
                 className="verify-button"
+                disabled={verified}
                 onClick={handleVerifyCode}
               >
                 확인
@@ -96,6 +123,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
           className="single-input"
           type="password"
           placeholder="비밀번호"
+          minLength={8}
           value={info.password}
           onChange={(e) => setInfo({ ...info, password: e.target.value })}
           required

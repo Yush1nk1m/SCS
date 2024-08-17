@@ -9,20 +9,20 @@
  * ---------------------------------------------------------------
  */
 
-export interface EmailDto {
-  /**
-   * 사용자 이메일
-   * @example "user@example.com"
-   */
-  email: string;
-}
-
 export interface BaseResponseDto {
   /**
    * 응답 메시지
    * @example "Request has been processed."
    */
   message: string;
+}
+
+export interface EmailDto {
+  /**
+   * 사용자 이메일
+   * @example "user@example.com"
+   */
+  email: string;
 }
 
 export interface VerificationDto {
@@ -589,6 +589,14 @@ export interface CommentResponseDto {
   comment: CommentDto;
 }
 
+export interface UpdateCommentDto {
+  /**
+   * 댓글 내용
+   * @example "이 게시물은 큰 도움이 되었습니다 ..."
+   */
+  content: string;
+}
+
 export interface URLResponseDto {
   /**
    * 응답 메시지
@@ -861,7 +869,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/v1/auth/email/verification-code
      */
     authControllerSendVerificationMail: (data: EmailDto, params: RequestParams = {}) =>
-      this.request<BaseResponseDto, any>({
+      this.request<BaseResponseDto, BaseResponseDto>({
         path: `/v1/auth/email/verification-code`,
         method: "POST",
         body: data,
@@ -879,7 +887,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/v1/auth/email/verify-code
      */
     authControllerVerifySignupCode: (data: VerificationDto, params: RequestParams = {}) =>
-      this.request<BaseResponseDto, any>({
+      this.request<BaseResponseDto, BaseResponseDto>({
         path: `/v1/auth/email/verify-code`,
         method: "POST",
         body: data,
@@ -897,7 +905,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/v1/auth/signup
      */
     authControllerSignup: (data: SignupDto, params: RequestParams = {}) =>
-      this.request<SignupResponseDto, any>({
+      this.request<SignupResponseDto, BaseResponseDto>({
         path: `/v1/auth/signup`,
         method: "POST",
         body: data,
@@ -915,7 +923,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/v1/auth/jwt/login
      */
     authControllerLogin: (data: LoginDto, params: RequestParams = {}) =>
-      this.request<TokensResponseDto, any>({
+      this.request<TokensResponseDto, BaseResponseDto>({
         path: `/v1/auth/jwt/login`,
         method: "POST",
         body: data,
@@ -934,7 +942,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     authControllerRefresh: (params: RequestParams = {}) =>
-      this.request<TokensResponseDto, any>({
+      this.request<TokensResponseDto, BaseResponseDto>({
         path: `/v1/auth/jwt/refresh`,
         method: "POST",
         secure: true,
@@ -952,7 +960,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     authControllerLogout: (params: RequestParams = {}) =>
-      this.request<BaseResponseDto, any>({
+      this.request<BaseResponseDto, BaseResponseDto>({
         path: `/v1/auth/jwt/logout`,
         method: "POST",
         secure: true,
@@ -969,7 +977,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/v1/users
      */
     userControllerGetAllUsers: (params: RequestParams = {}) =>
-      this.request<UsersResponseDto, any>({
+      this.request<UsersResponseDto, BaseResponseDto>({
         path: `/v1/users`,
         method: "GET",
         format: "json",
@@ -986,7 +994,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     userControllerDeleteCurrentUser: (data: DeleteUserDto, params: RequestParams = {}) =>
-      this.request<BaseResponseDto, any>({
+      this.request<BaseResponseDto, BaseResponseDto>({
         path: `/v1/users`,
         method: "DELETE",
         body: data,
@@ -1006,7 +1014,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     userControllerGetCurrentUser: (params: RequestParams = {}) =>
-      this.request<UserResponseDto, any>({
+      this.request<UserResponseDto, BaseResponseDto>({
         path: `/v1/users/me`,
         method: "GET",
         secure: true,
@@ -1023,7 +1031,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/v1/users/{id}
      */
     userControllerGetSpecificUser: (id: number, params: RequestParams = {}) =>
-      this.request<UserResponseDto, any>({
+      this.request<UserResponseDto, BaseResponseDto>({
         path: `/v1/users/${id}`,
         method: "GET",
         format: "json",
@@ -1040,7 +1048,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     userControllerChangeUserPassword: (data: ChangePasswordDto, params: RequestParams = {}) =>
-      this.request<BaseResponseDto, any>({
+      this.request<BaseResponseDto, BaseResponseDto>({
         path: `/v1/users/password`,
         method: "PATCH",
         body: data,
@@ -1060,7 +1068,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     userControllerChangeUserNickname: (data: ChangeNicknameDto, params: RequestParams = {}) =>
-      this.request<BaseResponseDto, any>({
+      this.request<BaseResponseDto, BaseResponseDto>({
         path: `/v1/users/nickname`,
         method: "PATCH",
         body: data,
@@ -1085,7 +1093,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<SectionsResponseDto, any>({
+      this.request<SectionsResponseDto, BaseResponseDto>({
         path: `/v1/sections`,
         method: "GET",
         query: query,
@@ -1103,7 +1111,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     sectionControllerCreateSection: (data: CreateSectionDto, params: RequestParams = {}) =>
-      this.request<SectionResponseDto, any>({
+      this.request<SectionResponseDto, BaseResponseDto>({
         path: `/v1/sections`,
         method: "POST",
         body: data,
@@ -1122,7 +1130,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/v1/sections/{id}
      */
     sectionControllerGetSpecificSection: (id: number, params: RequestParams = {}) =>
-      this.request<SectionResponseDto, any>({
+      this.request<SectionResponseDto, BaseResponseDto>({
         path: `/v1/sections/${id}`,
         method: "GET",
         format: "json",
@@ -1139,7 +1147,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     sectionControllerDeleteSection: (id: number, params: RequestParams = {}) =>
-      this.request<BaseResponseDto, any>({
+      this.request<BaseResponseDto, BaseResponseDto>({
         path: `/v1/sections/${id}`,
         method: "DELETE",
         secure: true,
@@ -1171,7 +1179,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<QuestionsResponseDto, any>({
+      this.request<QuestionsResponseDto, BaseResponseDto>({
         path: `/v1/sections/${id}/questions`,
         method: "GET",
         query: query,
@@ -1189,7 +1197,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     sectionControllerUpdateSectionSubject: (id: number, data: UpdateSectionSubjectDto, params: RequestParams = {}) =>
-      this.request<SectionResponseDto, any>({
+      this.request<SectionResponseDto, BaseResponseDto>({
         path: `/v1/sections/${id}/subject`,
         method: "PATCH",
         body: data,
@@ -1213,7 +1221,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       data: UpdateSectionDescriptionDto,
       params: RequestParams = {},
     ) =>
-      this.request<SectionResponseDto, any>({
+      this.request<SectionResponseDto, BaseResponseDto>({
         path: `/v1/sections/${id}/description`,
         method: "PATCH",
         body: data,
@@ -1232,7 +1240,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/v1/questions/{id}
      */
     questionControllerGetSpecificQuestion: (id: number, params: RequestParams = {}) =>
-      this.request<QuestionResponseDto, any>({
+      this.request<QuestionResponseDto, BaseResponseDto>({
         path: `/v1/questions/${id}`,
         method: "GET",
         format: "json",
@@ -1249,7 +1257,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     questionControllerUpdateQuestionContent: (id: number, data: UpdateQuestionContentDto, params: RequestParams = {}) =>
-      this.request<QuestionResponseDto, any>({
+      this.request<QuestionResponseDto, BaseResponseDto>({
         path: `/v1/questions/${id}`,
         method: "PATCH",
         body: data,
@@ -1269,7 +1277,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     questionControllerDeleteQuestion: (id: number, params: RequestParams = {}) =>
-      this.request<BaseResponseDto, any>({
+      this.request<BaseResponseDto, BaseResponseDto>({
         path: `/v1/questions/${id}`,
         method: "DELETE",
         secure: true,
@@ -1287,7 +1295,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     questionControllerCreateQuestion: (data: CreateQuestionDto, params: RequestParams = {}) =>
-      this.request<QuestionResponseDto, any>({
+      this.request<QuestionResponseDto, BaseResponseDto>({
         path: `/v1/questions`,
         method: "POST",
         body: data,
@@ -1321,7 +1329,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<ActionsResponseDto, any>({
+      this.request<ActionsResponseDto, BaseResponseDto>({
         path: `/v1/questions/${id}/actions`,
         method: "GET",
         query: query,
@@ -1338,7 +1346,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/v1/actions/{id}
      */
     actionControllerGetSpecificAction: (id: number, params: RequestParams = {}) =>
-      this.request<ActionResponseDto, any>({
+      this.request<ActionResponseDto, BaseResponseDto>({
         path: `/v1/actions/${id}`,
         method: "GET",
         format: "json",
@@ -1355,7 +1363,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     actionControllerUpdateAction: (id: number, data: UpdateActionDto, params: RequestParams = {}) =>
-      this.request<ActionResponseDto, any>({
+      this.request<ActionResponseDto, BaseResponseDto>({
         path: `/v1/actions/${id}`,
         method: "PATCH",
         body: data,
@@ -1375,7 +1383,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     actionControllerDeleteAction: (id: number, params: RequestParams = {}) =>
-      this.request<BaseResponseDto, any>({
+      this.request<BaseResponseDto, BaseResponseDto>({
         path: `/v1/actions/${id}`,
         method: "DELETE",
         secure: true,
@@ -1393,7 +1401,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     actionControllerCreateAction: (data: CreateActionDto, params: RequestParams = {}) =>
-      this.request<ActionResponseDto, any>({
+      this.request<ActionResponseDto, BaseResponseDto>({
         path: `/v1/actions`,
         method: "POST",
         body: data,
@@ -1413,7 +1421,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     actionControllerGetRawContent: (id: number, params: RequestParams = {}) =>
-      this.request<ContentResponseDto, any>({
+      this.request<ContentResponseDto, BaseResponseDto>({
         path: `/v1/actions/${id}/raw-content`,
         method: "GET",
         secure: true,
@@ -1431,7 +1439,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     actionControllerToggleActionLike: (id: number, params: RequestParams = {}) =>
-      this.request<LikeResponseDto, any>({
+      this.request<LikeResponseDto, BaseResponseDto>({
         path: `/v1/actions/${id}/like`,
         method: "POST",
         secure: true,
@@ -1449,7 +1457,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     actionControllerGetActionLike: (id: number, params: RequestParams = {}) =>
-      this.request<LikeResponseDto, any>({
+      this.request<LikeResponseDto, BaseResponseDto>({
         path: `/v1/actions/${id}/like`,
         method: "GET",
         secure: true,
@@ -1479,7 +1487,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<CommentsResponseDto, any>({
+      this.request<CommentsResponseDto, BaseResponseDto>({
         path: `/v1/actions/${id}/comments`,
         method: "GET",
         query: query,
@@ -1497,12 +1505,50 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     commentControllerCreateComment: (data: CreateCommentDto, params: RequestParams = {}) =>
-      this.request<CommentResponseDto, any>({
+      this.request<CommentResponseDto, BaseResponseDto>({
         path: `/v1/comments`,
         method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Comment
+     * @name CommentControllerUpdateComment
+     * @summary 댓글 수정
+     * @request PATCH:/v1/comments/{id}
+     * @secure
+     */
+    commentControllerUpdateComment: (id: number, data: UpdateCommentDto, params: RequestParams = {}) =>
+      this.request<CommentResponseDto, BaseResponseDto>({
+        path: `/v1/comments/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Comment
+     * @name CommentControllerDeleteComment
+     * @summary 댓글 삭제
+     * @request DELETE:/v1/comments/{id}
+     * @secure
+     */
+    commentControllerDeleteComment: (id: number, params: RequestParams = {}) =>
+      this.request<BaseResponseDto, BaseResponseDto>({
+        path: `/v1/comments/${id}`,
+        method: "DELETE",
+        secure: true,
         format: "json",
         ...params,
       }),

@@ -17,6 +17,7 @@ import { RefreshTokenGuard } from "../common/guard/refresh-token.guard";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { GetCurrentUser } from "../common/decorator/get-current-user.decorator";
 import {
+    ApiBadRequestResponse,
     ApiBearerAuth,
     ApiConflictResponse,
     ApiCreatedResponse,
@@ -71,6 +72,10 @@ export class AuthController {
         description: "인증 코드 검증 완료",
         type: BaseResponseDto,
     })
+    @ApiBadRequestResponse({
+        description: "인증 코드 불일치",
+        type: BaseResponseDto,
+    })
     @SetResponseDto(BaseResponseDto)
     @Public()
     @Post("email/verify-code")
@@ -84,10 +89,6 @@ export class AuthController {
         if (isVerified) {
             return {
                 message: "Verified.",
-            };
-        } else {
-            return {
-                message: "Not verified.",
             };
         }
     }

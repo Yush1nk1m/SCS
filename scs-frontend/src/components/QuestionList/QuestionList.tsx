@@ -6,6 +6,7 @@ import "./QuestionList.css";
 import Pagination from "../Pagination/Pagination";
 import { useAuth } from "../../hooks/useAuth";
 import { QuestionDto } from "../../api/swaggerApi";
+import toast from "react-hot-toast";
 
 interface QuestionListProps {
   sectionId: number;
@@ -40,9 +41,15 @@ const QuestionList: React.FC<QuestionListProps> = ({
       );
       setQuestions(response.questions);
       setTotalPages(Math.ceil(response.total / 10));
-    } catch (error) {
+    } catch (error: any) {
       console.error("질문 불러오기 실패:", error);
-      alert("질문을 불러오는 데 실패했습니다. 다시 조회해 주세요.");
+      switch (error.status) {
+        case 404:
+          toast.error("존재하지 않는 섹션입니다.");
+          break;
+        default:
+          toast.error("예기치 못한 에러가 발생했습니다.");
+      }
     }
   };
 

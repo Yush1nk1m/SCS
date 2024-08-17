@@ -8,6 +8,7 @@ import Pagination from "../../components/Pagination/Pagination";
 import ActionCard from "../../components/ActionCard/ActionCard";
 import { useAuth } from "../../hooks/useAuth";
 import { ActionDto, QuestionDto } from "../../api/swaggerApi";
+import toast from "react-hot-toast";
 
 const QuestionPage: React.FC = () => {
   const isLoggedIn = useAuth();
@@ -34,9 +35,15 @@ const QuestionPage: React.FC = () => {
     try {
       const response = await fetchQuestion(questionId);
       setQuestion(response.question);
-    } catch (error) {
-      console.error("질문을 불러오기 실패:", error);
-      alert("질문을 불러오는 데 실패했습니다. 다시 한번 시도해 주세요.");
+    } catch (error: any) {
+      console.error("질문 불러오기 실패:", error);
+      switch (error.status) {
+        case 404:
+          toast.error("존재하지 않는 질문입니다.");
+          break;
+        default:
+          toast.error("예기치 못한 에러가 발생했습니다.");
+      }
     }
   };
 
@@ -50,9 +57,15 @@ const QuestionPage: React.FC = () => {
       });
       setActions(response.actions);
       setTotalPages(Math.ceil(response.total / 12));
-    } catch (error) {
+    } catch (error: any) {
       console.error("액션 불러오기 실패:", error);
-      alert("액션을 불러오는 데 실패했습니다. 다시 한번 시도해 주세요.");
+      switch (error.status) {
+        case 404:
+          toast.error("존재하지 않는 질문입니다.");
+          break;
+        default:
+          toast.error("예기치 못한 에러가 발생했습니다.");
+      }
     }
   };
 

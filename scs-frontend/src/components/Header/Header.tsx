@@ -5,13 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 
 const Header: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const isLoggedIn = useAuth();
 
   const handleLogout = async () => {
     await logout();
     window.dispatchEvent(new Event("storage"));
-    navigate("/");
+    // navigate("/"); // 추후 리팩터링
   };
 
   return (

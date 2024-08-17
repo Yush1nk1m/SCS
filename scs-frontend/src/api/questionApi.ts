@@ -21,9 +21,11 @@ export const fetchQuestion = async (questionId: string) => {
       parseInt(questionId)
     );
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching question:", error);
-    throw error;
+    throw {
+      status: error.status,
+    };
   }
 };
 
@@ -50,9 +52,11 @@ export const fetchActions = async (
       }
     );
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching actions:", error);
-    throw error;
+    throw {
+      status: error.status,
+    };
   }
 };
 
@@ -72,24 +76,34 @@ const authRequest = async <T, P>(
 ): Promise<T> => {
   let accessToken = getAccessToken();
 
-  if (!accessToken || isTokenExpired(accessToken)) {
-    const refreshed = await refreshTokens();
-    if (!refreshed) {
-      throw new Error("Authentication required");
+  // Refresh tokens
+  const refreshTokensIfNeeded = async () => {
+    if (!accessToken || isTokenExpired(accessToken)) {
+      const refreshed = await refreshTokens();
+      if (!refreshed) {
+        throw {
+          status: 401,
+        };
+      }
+      accessToken = getAccessToken();
     }
-    accessToken = getAccessToken();
-  }
-
-  api.setSecurityData(accessToken);
+  };
 
   try {
+    await refreshTokensIfNeeded();
+    api.setSecurityData(accessToken);
     const response = await apiCall(params);
     return response.data;
   } catch (error: any) {
     if (error.status === 401) {
       removeTokens();
-      throw new Error("Authentication failed");
+      throw {
+        status: 401,
+      };
     }
-    throw error;
+
+    throw {
+      status: error.status || 500,
+    };
   }
 };

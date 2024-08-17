@@ -6,6 +6,7 @@ import SortingOptions from "../../components/SortingOptions/SortingOptions";
 import SectionList from "../../components/SectionList/SectionList";
 import CreateQuesitonModal from "../../components/CreateQuestionModal/CreateQuestionModal";
 import { SectionDto } from "../../api/swaggerApi";
+import toast from "react-hot-toast";
 
 const SectionPage: React.FC = () => {
   const [sections, setSections] = useState<SectionDto[]>([]);
@@ -30,7 +31,7 @@ const SectionPage: React.FC = () => {
       setSections(response.sections);
     } catch (error) {
       console.error("섹션 불러오기 실패:", error);
-      alert("섹션을 불러오는 데 실패했습니다. 다시 한번 시도해 주세요.");
+      toast.error("예기치 못한 에러가 발생했습니다.");
     }
   };
 
