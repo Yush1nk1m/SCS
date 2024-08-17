@@ -1,4 +1,5 @@
 import {
+    ForbiddenException,
     Injectable,
     Logger,
     NotFoundException,
@@ -75,7 +76,7 @@ export class CommentService {
 
         // if writer's id is not equal to user id
         if (comment.writer.id !== userId) {
-            throw new UnauthorizedException(
+            throw new ForbiddenException(
                 "Comment has not been written by user.",
             );
         }
@@ -102,7 +103,7 @@ export class CommentService {
 
         // if the comment has not been written by user, it is an error
         if (comment.writer.id !== userId) {
-            throw new UnauthorizedException(
+            throw new ForbiddenException(
                 "Comment has not been written by user.",
             );
         }

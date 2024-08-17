@@ -19,9 +19,14 @@ import { CreateActionDto } from "./dto/create-action.dto";
 import { UpdateActionDto } from "./dto/update-action.dto";
 import {
     ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiInternalServerErrorResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
     ApiOperation,
-    ApiResponse,
     ApiTags,
+    ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import {
     ActionResponseDto,
@@ -34,6 +39,10 @@ import { CommentsResponseDto } from "../comment/dto/response.dto";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("Action")
+@ApiInternalServerErrorResponse({
+    description: "예기치 못한 서버 에러 발생",
+    type: BaseResponseDto,
+})
 @Controller("v1/actions")
 export class ActionController {
     private logger = new Logger("ActionController");
@@ -42,10 +51,13 @@ export class ActionController {
 
     // [AC-01] Controller logic
     @ApiOperation({ summary: "특정 답변 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "답변 조회 성공",
         type: ActionResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "답변이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(ActionResponseDto)
     @Public()
@@ -65,10 +77,17 @@ export class ActionController {
     // [AC-02] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "새 답변 생성" })
-    @ApiResponse({
-        status: HttpStatus.CREATED,
+    @ApiCreatedResponse({
         description: "답변 생성 성공",
         type: ActionResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "답변이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(ActionResponseDto)
     @Post()
@@ -91,10 +110,21 @@ export class ActionController {
     // [AC-03] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "답변 내용 수정" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "답변 수정 성공",
         type: ActionResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 권한이 없음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "답변이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(ActionResponseDto)
     @Patch(":id")
@@ -119,9 +149,20 @@ export class ActionController {
     // [AC-04] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "답변 삭제" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "답변 삭제 성공",
+        type: BaseResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 권한이 없음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "답변이 존재하지 않음",
         type: BaseResponseDto,
     })
     @SetResponseDto(BaseResponseDto)
@@ -141,10 +182,21 @@ export class ActionController {
     // [AC-05] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "특정 답변의 Raw 마크다운 컨텐츠 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "마크다운 컨텐츠 조회 성공",
         type: ContentResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 권한이 없음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "답변이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(ContentResponseDto)
     @Get(":id/raw-content")
@@ -167,10 +219,17 @@ export class ActionController {
     // [AC-06] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "좋아요 등록/취소" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "좋아요 등록/취소 성공",
         type: LikeResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "답변이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(LikeResponseDto)
     @Post(":id/like")
@@ -194,10 +253,17 @@ export class ActionController {
     // [AC-07] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "좋아요 여부 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "좋아요 여부 조회 성공",
         type: LikeResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "답변이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(LikeResponseDto)
     @Get(":id/like")
@@ -220,10 +286,13 @@ export class ActionController {
 
     // [AC-08] Controller logic
     @ApiOperation({ summary: "댓글 목록 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "댓글 목록 조회 성공",
         type: CommentsResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "답변이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(CommentsResponseDto)
     @Public()

@@ -11,9 +11,14 @@ import {
 } from "@nestjs/common";
 import {
     ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiInternalServerErrorResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
     ApiOperation,
-    ApiResponse,
     ApiTags,
+    ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { CommentService } from "./comment.service";
 import { CommentResponseDto } from "./dto/response.dto";
@@ -24,6 +29,10 @@ import { UpdateCommentDto } from "./dto/update-comment.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 
 @ApiTags("Comment")
+@ApiInternalServerErrorResponse({
+    description: "예기치 못한 서버 에러 발생",
+    type: BaseResponseDto,
+})
 @Controller("v1/comments")
 export class CommentController {
     private logger = new Logger("CommentController");
@@ -33,10 +42,17 @@ export class CommentController {
     // [CM-01] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "새 댓글 작성" })
-    @ApiResponse({
-        status: HttpStatus.CREATED,
+    @ApiCreatedResponse({
         description: "댓글 작성 성공",
         type: CommentResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "답변이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(CommentResponseDto)
     @Post()
@@ -61,10 +77,21 @@ export class CommentController {
     // [CM-02] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "댓글 수정" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "댓글 수정 성공",
         type: CommentResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 권한이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "댓글이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(CommentResponseDto)
     @Patch(":id")
@@ -90,9 +117,16 @@ export class CommentController {
     // [CM-03] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "댓글 삭제" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "댓글 삭제 성공",
+        type: BaseResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 권한이 존재하지 않음",
         type: BaseResponseDto,
     })
     @SetResponseDto(BaseResponseDto)

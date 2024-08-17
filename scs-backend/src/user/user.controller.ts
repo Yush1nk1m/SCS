@@ -17,16 +17,24 @@ import { ChangePasswordDto } from "./dto/change-password.dto";
 import { ChangeNicknameDto } from "./dto/change-nickname.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
 import {
+    ApiBadRequestResponse,
     ApiBearerAuth,
+    ApiInternalServerErrorResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
     ApiOperation,
-    ApiResponse,
     ApiTags,
+    ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { UserResponseDto, UsersResponseDto } from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("User")
+@ApiInternalServerErrorResponse({
+    description: "예기치 못한 서버 에러 발생",
+    type: BaseResponseDto,
+})
 @Controller("v1/users")
 export class UserController {
     private logger = new Logger("UserController");
@@ -34,8 +42,7 @@ export class UserController {
 
     // [U-01] Controller logic
     @ApiOperation({ summary: "모든 사용자 정보 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "사용자 정보 조회 성공",
         type: UsersResponseDto,
     })
@@ -55,10 +62,13 @@ export class UserController {
     // [U-03] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "로그인한 사용자 정보 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "사용자 정보 조회 성공",
         type: UserResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "사용자 정보가 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(UserResponseDto)
     @Get("me")
@@ -79,10 +89,13 @@ export class UserController {
 
     // [U-02] Controller logic
     @ApiOperation({ summary: "특정 사용자 정보 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "사용자 정보 조회 성공",
         type: UserResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "사용자 정보가 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(UserResponseDto)
     @Public()
@@ -102,9 +115,16 @@ export class UserController {
     // [U-04] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "로그인한 사용자 비밀번호 변경" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "비밀번호 변경 성공",
+        type: BaseResponseDto,
+    })
+    @ApiBadRequestResponse({
+        description: "적절하지 않은 요청",
+        type: BaseResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "접근 권한이 없음",
         type: BaseResponseDto,
     })
     @SetResponseDto(BaseResponseDto)
@@ -124,8 +144,7 @@ export class UserController {
     // [U-05] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "로그인한 사용자 닉네임 변경" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "닉네임 변경 성공",
         type: BaseResponseDto,
     })
@@ -146,9 +165,16 @@ export class UserController {
     // [U-06] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "로그인한 사용자 회원 탈퇴" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "회원 탈퇴 성공",
+        type: BaseResponseDto,
+    })
+    @ApiBadRequestResponse({
+        description: "적절하지 않은 요청",
+        type: BaseResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "접근 권한이 없음",
         type: BaseResponseDto,
     })
     @SetResponseDto(BaseResponseDto)

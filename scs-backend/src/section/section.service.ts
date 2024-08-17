@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import {
+    Injectable,
+    Logger,
+    NotFoundException,
+    UnauthorizedException,
+} from "@nestjs/common";
 import { SectionRepository } from "../repository/section.repository";
 import { Section } from "./section.entity";
 import { CreateSectionDto } from "./dto/create-section.dto";
@@ -52,20 +57,20 @@ export class SectionService {
     ): Promise<Section> {
         const { subject, description } = createSectionDto;
 
-        // check again if user exists
+        // find user from DB
         const creator = await this.userRepository.findUserById(userId);
+
+        // if user does not exist, it is an error
         if (!creator) {
-            throw new NotFoundException("User not found.");
+            throw new UnauthorizedException("User has not been found.");
         }
 
         // create new section
-        const section = await this.sectionRepository.createSection(
+        return this.sectionRepository.createSection(
             creator,
             subject,
             description,
         );
-
-        return section;
     }
 
     // [S-04] Service logic
@@ -78,11 +83,17 @@ export class SectionService {
     ): Promise<Section> {
         const { subject } = updateSectionSubjectDto;
 
-        // change found section's subject and save
-        return this.sectionRepository.findAndUpdateSectionSubject(
-            sectionId,
-            subject,
-        );
+        // find a section from DB
+        const section = await this.sectionRepository.findSectionById(sectionId);
+
+        // if the section does not exist, it is an error
+        if (!section) {
+            throw new NotFoundException(`Section ${sectionId} not found.`);
+        }
+
+        // update section subject and return
+        section.subject = subject;
+        return this.sectionRepository.save(section);
     }
 
     // [S-05] Service logic
@@ -95,11 +106,17 @@ export class SectionService {
     ): Promise<Section> {
         const { description } = updateSectionDescriptionDto;
 
-        // change found section's description and save
-        return this.sectionRepository.findAndUpdateSectionDescription(
-            sectionId,
-            description,
-        );
+        // find a section from DB
+        const section = await this.sectionRepository.findSectionById(sectionId);
+
+        // if the section does not exist, it is an error
+        if (!section) {
+            throw new NotFoundException(`Section ${sectionId} not found.`);
+        }
+
+        // update section description and return
+        section.description = description;
+        return this.sectionRepository.save(section);
     }
 
     // [S-06] Service logic

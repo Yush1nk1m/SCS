@@ -22,9 +22,14 @@ import { Roles } from "../common/decorator/roles.decorator";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
 import {
     ApiBearerAuth,
+    ApiForbiddenResponse,
+    ApiInternalServerErrorResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
     ApiOperation,
     ApiResponse,
     ApiTags,
+    ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { QuestionResponseDto } from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
@@ -33,6 +38,10 @@ import { ActionsResponseDto } from "../action/dto/response.dto";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("Question")
+@ApiInternalServerErrorResponse({
+    description: "예기치 못한 서버 에러 발생",
+    type: BaseResponseDto,
+})
 @Controller("v1/questions")
 export class QuestionController {
     private logger = new Logger("QuestionController");
@@ -41,10 +50,13 @@ export class QuestionController {
 
     // [Q-01] Controller logic
     @ApiOperation({ summary: "특정 질문 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "질문 조회 성공",
         type: QuestionResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "질문이 조회되지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(QuestionResponseDto)
     @Public()
@@ -70,6 +82,14 @@ export class QuestionController {
         description: "질문 생성 성공",
         type: QuestionResponseDto,
     })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "섹션이 존재하지 않음",
+        type: BaseResponseDto,
+    })
     @SetResponseDto(QuestionResponseDto)
     @Post()
     @HttpCode(HttpStatus.CREATED)
@@ -91,10 +111,21 @@ export class QuestionController {
     // [Q-03] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "질문 내용 수정" })
-    @ApiResponse({
-        status: HttpStatus.OK,
-        description: "질문 내용제 수정 성공",
+    @ApiOkResponse({
+        description: "질문 내용 수정 성공",
         type: QuestionResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 권한이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "질문이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(QuestionResponseDto)
     @UseGuards(RolesGuard)
@@ -102,10 +133,12 @@ export class QuestionController {
     @Patch(":id")
     @HttpCode(HttpStatus.OK)
     async updateQuestionContent(
+        @GetCurrentUserId() userId: number,
         @Param("id", ParseIntPipe) questionId: number,
         @Body() updateQuestionContentDto: UpdateQuestionContentDto,
     ): Promise<QuestionResponseDto> {
         const question = await this.questionService.updateQuestionContent(
+            userId,
             questionId,
             updateQuestionContentDto,
         );
@@ -119,9 +152,20 @@ export class QuestionController {
     // [Q-04] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "질문 삭제" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "질문 삭제 성공",
+        type: BaseResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 권한이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "질문이 존재하지 않음",
         type: BaseResponseDto,
     })
     @SetResponseDto(BaseResponseDto)
@@ -130,9 +174,10 @@ export class QuestionController {
     @Delete(":id")
     @HttpCode(HttpStatus.OK)
     async deleteQuestion(
+        @GetCurrentUserId() userId: number,
         @Param("id", ParseIntPipe) questionId: number,
     ): Promise<BaseResponseDto> {
-        await this.questionService.deleteQuestion(questionId);
+        await this.questionService.deleteQuestion(userId, questionId);
 
         return {
             message: `Question with id ${questionId} has been deleted.`,
@@ -141,10 +186,13 @@ export class QuestionController {
 
     // [Q-05] Controller logic
     @ApiOperation({ summary: "특정 질문의 답변들 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "답변 조회 성공",
         type: ActionsResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "질문이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(ActionsResponseDto)
     @Public()

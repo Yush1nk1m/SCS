@@ -147,22 +147,19 @@ export class ActionService {
         // find user from DB
         const writer = await this.userRepository.findUserBrieflyById(userId);
 
-        // if user does not exist, it is an error
-        if (!writer) {
-            throw new UnauthorizedException("User not exists.");
-        }
-
         // find an action which is written by user
-        const action = await this.actionRepository.findActionByWriterAndId(
-            writer,
-            actionId,
-        );
+        const action = await this.actionRepository.findActionById(actionId);
 
         // if the action does not exist, it is an error
         if (!action) {
-            throw new UnauthorizedException(
-                "User cannot access to the action.",
+            throw new NotFoundException(
+                `Action with id ${actionId} has not been found.`,
             );
+        }
+
+        // if the action has not been written by user, it is an error
+        if (action.writer.id !== writer.id) {
+            throw new ForbiddenException("User cannot access to the action.");
         }
 
         // extract image URLs from markdown content
@@ -213,11 +210,6 @@ export class ActionService {
         // find user from DB
         const writer = await this.userRepository.findUserById(userId);
 
-        // if user does not exist, it is an error
-        if (!writer) {
-            throw new UnauthorizedException("User does not exist.");
-        }
-
         // find action from DB
         const action = await this.actionRepository.findActionById(actionId);
 
@@ -230,9 +222,7 @@ export class ActionService {
 
         // if action has not been written by user, it is an error
         if (action.writer.id !== writer.id) {
-            throw new UnauthorizedException(
-                "Action has not been written by user",
-            );
+            throw new ForbiddenException("User cannot access to the action.");
         }
 
         // return raw markdown content

@@ -18,15 +18,24 @@ import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decora
 import { GetCurrentUser } from "../common/decorator/get-current-user.decorator";
 import {
     ApiBearerAuth,
+    ApiConflictResponse,
+    ApiCreatedResponse,
+    ApiForbiddenResponse,
+    ApiInternalServerErrorResponse,
+    ApiOkResponse,
     ApiOperation,
-    ApiResponse,
     ApiTags,
+    ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { SignupResponseDto, TokensResponseDto } from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("Auth")
+@ApiInternalServerErrorResponse({
+    description: "예기치 못한 서버 에러 발생",
+    type: BaseResponseDto,
+})
 @Controller("v1/auth")
 export class AuthController {
     private logger = new Logger("AuthController");
@@ -34,9 +43,12 @@ export class AuthController {
 
     // [A-01] Controller logic
     @ApiOperation({ summary: "인증 코드 전송" })
-    @ApiResponse({
-        status: HttpStatus.CREATED,
+    @ApiOkResponse({
         description: "인증 코드 전송 완료",
+        type: BaseResponseDto,
+    })
+    @ApiConflictResponse({
+        description: "동일한 이메일의 사용자 존재",
         type: BaseResponseDto,
     })
     @SetResponseDto(BaseResponseDto)
@@ -55,8 +67,7 @@ export class AuthController {
 
     // [A-02] Controller logic
     @ApiOperation({ summary: "인증 코드 검증" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "인증 코드 검증 완료",
         type: BaseResponseDto,
     })
@@ -83,10 +94,13 @@ export class AuthController {
 
     // [A-03] Controller logic
     @ApiOperation({ summary: "회원 가입" })
-    @ApiResponse({
-        status: HttpStatus.CREATED,
+    @ApiCreatedResponse({
         description: "회원 가입 완료",
         type: SignupResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 이메일이 인증되지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(SignupResponseDto)
     @Public()
@@ -103,10 +117,13 @@ export class AuthController {
 
     // [A-04] Controller logic
     @ApiOperation({ summary: "로그인" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "로그인 성공",
         type: TokensResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 정보가 일치하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(TokensResponseDto)
     @Public()
@@ -125,10 +142,13 @@ export class AuthController {
     // [A-05] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "리프레시" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "JWT 토큰 리프레시 성공",
         type: TokensResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "리프레시 토큰이 유효하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(TokensResponseDto)
     @Public()
@@ -155,8 +175,7 @@ export class AuthController {
     // [A-06] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "로그아웃" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "로그아웃 성공",
         type: BaseResponseDto,
     })

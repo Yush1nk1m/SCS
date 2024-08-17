@@ -26,10 +26,14 @@ import {
 } from "./dto/update-section.dto";
 import {
     ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiInternalServerErrorResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
     ApiOperation,
     ApiQuery,
-    ApiResponse,
     ApiTags,
+    ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { GetSectionsQueryDto } from "./dto/get-sections-query.dto";
 import { SectionResponseDto, SectionsResponseDto } from "./dto/response.dto";
@@ -39,6 +43,10 @@ import { QuestionsResponseDto } from "../question/dto/response.dto";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 
 @ApiTags("Section")
+@ApiInternalServerErrorResponse({
+    description: "예기치 못한 서버 에러 발생",
+    type: BaseResponseDto,
+})
 @Controller("v1/sections")
 export class SectionController {
     private logger = new Logger("SectionController");
@@ -46,8 +54,7 @@ export class SectionController {
 
     // [S-01] Controller logic
     @ApiOperation({ summary: "모든 섹션 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "섹션 조회 성공",
         type: SectionsResponseDto,
     })
@@ -70,10 +77,13 @@ export class SectionController {
 
     // [S-02] Controller logic
     @ApiOperation({ summary: "특정 섹션 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "섹션 조회 성공",
         type: SectionResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "섹션이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(SectionResponseDto)
     @Public()
@@ -92,10 +102,13 @@ export class SectionController {
 
     // [S-07] Controller logic
     @ApiOperation({ summary: "특정 섹션의 질문들 조회" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "질문 조회 성공",
         type: QuestionsResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "섹션이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(QuestionsResponseDto)
     @Public()
@@ -126,10 +139,13 @@ export class SectionController {
     // [S-03] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "새 섹션 생성" })
-    @ApiResponse({
-        status: HttpStatus.CREATED,
+    @ApiCreatedResponse({
         description: "섹션 생성 성공",
         type: SectionResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(SectionResponseDto)
     @UseGuards(RolesGuard)
@@ -154,10 +170,17 @@ export class SectionController {
     // [S-04] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "섹션 제목 수정" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "섹션 제목 수정 성공",
         type: SectionResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "섹션이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(SectionResponseDto)
     @UseGuards(RolesGuard)
@@ -182,10 +205,17 @@ export class SectionController {
     // [S-05] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "섹션 설명 수정" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "섹션 설명 수정 성공",
         type: SectionResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "섹션이 존재하지 않음",
+        type: BaseResponseDto,
     })
     @SetResponseDto(SectionResponseDto)
     @UseGuards(RolesGuard)
@@ -210,9 +240,16 @@ export class SectionController {
     // [S-06] Controller logic
     @ApiBearerAuth()
     @ApiOperation({ summary: "섹션 삭제" })
-    @ApiResponse({
-        status: HttpStatus.OK,
+    @ApiOkResponse({
         description: "섹션 삭제 성공",
+        type: BaseResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 정보가 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "섹션이 존재하지 않음",
         type: BaseResponseDto,
     })
     @SetResponseDto(BaseResponseDto)
