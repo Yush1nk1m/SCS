@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     HttpCode,
     HttpStatus,
     Logger,
@@ -20,6 +21,7 @@ import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decora
 import { CreateCommentDto } from "./dto/create-comment.dto";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 import { UpdateCommentDto } from "./dto/update-comment.dto";
+import { BaseResponseDto } from "../common/dto/base-response.dto";
 
 @ApiTags("Comment")
 @Controller("v1/comments")
@@ -82,6 +84,28 @@ export class CommentController {
         return {
             message: "Comment has been updated.",
             comment,
+        };
+    }
+
+    // [CM-03] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "댓글 삭제" })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "댓글 삭제 성공",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(BaseResponseDto)
+    @Delete(":id")
+    @HttpCode(HttpStatus.OK)
+    async deleteComment(
+        @GetCurrentUserId() userId: number,
+        @Param("id") commentId: number,
+    ): Promise<BaseResponseDto> {
+        await this.commentService.deleteComment(userId, commentId);
+
+        return {
+            message: "Comment has been deleted.",
         };
     }
 }

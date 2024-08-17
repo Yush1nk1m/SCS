@@ -84,4 +84,30 @@ export class CommentService {
         comment.content = content;
         return this.commentRepository.save(comment);
     }
+
+    // [CM-03] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async deleteComment(userId: number, commentId: number): Promise<void> {
+        // find a comment from DB
+        const comment = await this.commentRepository.findCommentById(commentId);
+
+        // if the comment does not exist, it is an error
+        if (!comment) {
+            throw new NotFoundException(
+                `Comment with id ${commentId} has not been found.`,
+            );
+        }
+
+        // if the comment has not been written by user, it is an error
+        if (comment.writer.id !== userId) {
+            throw new UnauthorizedException(
+                "Comment has not been written by user.",
+            );
+        }
+
+        // delete the comment
+        await this.commentRepository.delete({ id: commentId });
+    }
 }
