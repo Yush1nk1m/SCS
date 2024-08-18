@@ -45,9 +45,9 @@ const CreateActionPage: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await createAction(Number(questionId), title, content);
+      const response = await createAction(Number(questionId), title, content);
       toast.success("액션 생성 성공!", { id: loadingToast });
-      navigate(`/question/${questionId}`);
+      navigate(`/action/${response.action.id}`, { state: questionId });
     } catch (error: any) {
       switch (error.status) {
         case 400:

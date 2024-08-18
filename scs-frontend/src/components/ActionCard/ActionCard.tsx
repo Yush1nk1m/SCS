@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./ActionCard.css";
 
 interface ActionCardProps {
@@ -16,10 +16,11 @@ const ActionCard: React.FC<ActionCardProps> = ({
   imageUrl,
   likeCount,
 }) => {
+  const { id: questionId } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/action/${id}`);
+    navigate(`/action/${id}`, { state: questionId });
   };
 
   return (

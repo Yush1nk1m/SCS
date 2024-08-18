@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
 import {
   getAction,
@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import "./ActionPage.css";
 
 const ActionPage: React.FC = () => {
+  const questionId = useLocation().state;
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -142,7 +143,10 @@ const ActionPage: React.FC = () => {
 
   return (
     <div className="action-detail">
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button
+        className="back-button"
+        onClick={() => navigate(`/question/${questionId}`)}
+      >
         질문 페이지로 돌아가기
       </button>
       <h1 className="action-title">{action.title}</h1>
