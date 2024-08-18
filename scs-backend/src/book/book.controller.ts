@@ -1,4 +1,5 @@
 import {
+    Body,
     Controller,
     Get,
     HttpCode,
@@ -6,14 +7,18 @@ import {
     Logger,
     Param,
     ParseIntPipe,
+    Post,
     Query,
 } from "@nestjs/common";
 import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
     ApiInternalServerErrorResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
     ApiTags,
+    ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 import { BookService } from "./book.service";
@@ -21,6 +26,8 @@ import { BookResponseDto, BooksResponseDto } from "./dto/response.dto";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 import { Public } from "../common/decorator/public.decorator";
 import { GetBooksQueryDto } from "./dto/get-books-query.dto";
+import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
+import { CreateBookDto } from "./dto/create-book.dto";
 
 @ApiTags("Book")
 @ApiInternalServerErrorResponse({
@@ -83,6 +90,37 @@ export class BookController {
 
         return {
             message: "Book has been found.",
+            book,
+        };
+    }
+
+    // [B-03] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "새 문제집 생성" })
+    @ApiCreatedResponse({
+        description: "문제집 생성 성공",
+        type: BookResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 인증이 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(BookResponseDto)
+    @Post()
+    @HttpCode(HttpStatus.CREATED)
+    async createBook(
+        @GetCurrentUserId() userId: number,
+        @Body() createBookDto: CreateBookDto,
+    ): Promise<BookResponseDto> {
+        const { title, description } = createBookDto;
+        const book = await this.bookService.createBook(
+            userId,
+            title,
+            description,
+        );
+
+        return {
+            message: "New book has been created.",
             book,
         };
     }

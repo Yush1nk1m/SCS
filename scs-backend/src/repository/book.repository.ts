@@ -18,7 +18,7 @@ export class BookRepository extends Repository<Book> {
         search: string,
     ): Promise<[Book[], number]> {
         const where = {
-            title: search ? Like(`%${search}%`) : undefined,
+            title: search !== "" ? Like(`%${search}%`) : undefined,
         };
 
         return this.findAndCount({

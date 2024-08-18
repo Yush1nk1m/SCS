@@ -60,7 +60,7 @@ export class ActionRepository extends Repository<Action> {
             question: {
                 id: questionId,
             },
-            title: search ? Like(`%${search}%`) : undefined,
+            title: search !== "" ? Like(`%${search}%`) : undefined,
         };
 
         return this.findAndCount({

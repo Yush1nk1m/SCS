@@ -905,7 +905,7 @@
 - **Description**: 새로운 문제집을 생성한다.
 - **Method**: `POST`
 - **URI**: `/v1/books`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { title: `book's title`, description: `book's description` }
 - **Response data**:
 
 ```

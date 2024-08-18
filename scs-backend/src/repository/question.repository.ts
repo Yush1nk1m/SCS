@@ -24,20 +24,12 @@ export class QuestionRepository extends Repository<Question> {
             section: {
                 id: sectionId,
             },
-            content: Like(`%${search}%`),
+            content: search !== "" ? Like(`%${search}%`) : undefined,
         };
-        if (search === "") {
-            delete where.content;
-        }
 
         return this.findAndCount({
             withDeleted: true,
-            where: {
-                section: {
-                    id: sectionId,
-                },
-                content: Like(`%${search}%`),
-            },
+            where,
             relations: ["writer"],
             order: { [sort]: order },
             skip: (page - 1) * limit,

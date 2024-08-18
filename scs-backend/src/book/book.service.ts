@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import {
+    Injectable,
+    Logger,
+    NotFoundException,
+    UnauthorizedException,
+} from "@nestjs/common";
 import { BookRepository } from "../repository/book.repository";
 import { QuestionRepository } from "../repository/question.repository";
 import { UserRepository } from "../repository/user.repository";
@@ -45,5 +50,29 @@ export class BookService {
         }
 
         return book;
+    }
+
+    // [B-03] Service logic
+    async createBook(
+        userId: number,
+        title: string,
+        description: string,
+    ): Promise<Book> {
+        // find user from DB
+        const publisher = await this.userRepository.findUserById(userId);
+
+        // if user does not exist, it is an error
+        if (!publisher) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        // create new book, save it, and return
+        const book = this.bookRepository.create({
+            title,
+            description,
+            publisher,
+        });
+
+        return this.bookRepository.save(book);
     }
 }
