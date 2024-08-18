@@ -952,8 +952,8 @@
 
 - **Description**: 질문을 스크랩하여 문제집에 저장한다.
 - **Method**: `POST`
-- **URI**: `/v1/books/:id/questions`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { questionId: `question's id` }
+- **URI**: `/v1/books/:bookId/questions/:questionId`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
 - **Response data**:
 
 ```

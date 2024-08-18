@@ -34,7 +34,9 @@ export class Question {
     @Column({ default: 0 })
     saved: number;
 
-    @ManyToOne(() => User, (user) => user.questions, { onDelete: "CASCADE" })
+    @ManyToOne(() => User, (user) => user.questions, {
+        onDelete: "CASCADE",
+    })
     writer: User;
 
     @ManyToOne(() => Section, (section) => section.questions, {
@@ -45,6 +47,8 @@ export class Question {
     @OneToMany(() => Action, (action) => action.question, { cascade: true })
     actions: Action[];
 
-    @ManyToMany(() => Book, (book) => book.questions, { onDelete: "CASCADE" })
+    @ManyToMany(() => Book, (book) => book.questions, {
+        onDelete: "CASCADE",
+    })
     books: Book[];
 }

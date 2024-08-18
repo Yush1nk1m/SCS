@@ -14,6 +14,10 @@ export class QuestionDto {
     @Expose()
     content: string;
 
+    @ApiProperty({ example: 5, description: "질문이 스크랩된 횟수" })
+    @Expose()
+    saved: number;
+
     @ApiProperty({
         example: "2024-08-14T12:34:56Z",
         description: "질문 생성 일시",
@@ -27,10 +31,6 @@ export class QuestionDto {
     })
     @Expose()
     updatedAt: Date;
-
-    @ApiProperty({ example: 5, description: "질문이 스크랩된 횟수" })
-    @Expose()
-    saved: number;
 
     @ApiProperty({ type: () => WriterDto })
     @Type(() => WriterDto)

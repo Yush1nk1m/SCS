@@ -35,12 +35,15 @@ export class Book {
     publisher: User;
 
     @ManyToMany(() => Question, (question) => question.books, {
+        cascade: true,
         onDelete: "CASCADE",
     })
     @JoinTable({ name: "BookQuestion" })
     questions: Question[];
 
-    @ManyToMany(() => User, (user) => user.likedBooks, { onDelete: "CASCADE" })
+    @ManyToMany(() => User, (user) => user.likedBooks, {
+        onDelete: "CASCADE",
+    })
     @JoinTable({ name: "BookLike" })
     likedBy: User[];
 }

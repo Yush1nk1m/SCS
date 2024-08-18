@@ -14,7 +14,9 @@ import {
 } from "@nestjs/common";
 import {
     ApiBearerAuth,
+    ApiConflictResponse,
     ApiCreatedResponse,
+    ApiForbiddenResponse,
     ApiInternalServerErrorResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
@@ -142,6 +144,10 @@ export class BookController {
         description: "사용자 인증이 유효하지 않음",
         type: BaseResponseDto,
     })
+    @ApiForbiddenResponse({
+        description: "사용자 접근 권한이 존재하지 않음",
+        type: BaseResponseDto,
+    })
     @ApiNotFoundResponse({
         description: "문제집이 존재하지 않음",
         type: BaseResponseDto,
@@ -176,6 +182,10 @@ export class BookController {
     })
     @ApiUnauthorizedResponse({
         description: "사용자 인증이 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 접근 권한이 존재하지 않음",
         type: BaseResponseDto,
     })
     @ApiNotFoundResponse({
@@ -214,6 +224,10 @@ export class BookController {
         description: "사용자 인증이 유효하지 않음",
         type: BaseResponseDto,
     })
+    @ApiForbiddenResponse({
+        description: "사용자 접근 권한이 존재하지 않음",
+        type: BaseResponseDto,
+    })
     @ApiNotFoundResponse({
         description: "문제집이 존재하지 않음",
         type: BaseResponseDto,
@@ -229,6 +243,44 @@ export class BookController {
 
         return {
             message: "Book has been deleted.",
+        };
+    }
+
+    // [B-07] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "문제집에 질문 추가 (스크랩)" })
+    @ApiOkResponse({
+        description: "스크랩 성공",
+        type: BaseResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 인증이 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 접근 권한이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "문제집이나 질문이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiConflictResponse({
+        description: "질문이 이미 문제집에 저장됨",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(BaseResponseDto)
+    @Post(":bookId/questions/:questionId")
+    @HttpCode(HttpStatus.OK)
+    async saveQuestionToBook(
+        @GetCurrentUserId() userId: number,
+        @Param("bookId", ParseIntPipe) bookId: number,
+        @Param("questionId", ParseIntPipe) questionId: number,
+    ): Promise<BaseResponseDto> {
+        await this.bookService.saveQuestion(userId, bookId, questionId);
+
+        return {
+            message: "Question has been saved to the book.",
         };
     }
 }

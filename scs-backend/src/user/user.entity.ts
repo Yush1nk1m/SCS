@@ -65,6 +65,7 @@ export class User {
     actions: Action[];
 
     @ManyToMany(() => Action, (action) => action.likedBy, {
+        cascade: true,
         onDelete: "CASCADE",
     })
     likedActions: Action[];
@@ -75,6 +76,9 @@ export class User {
     @OneToMany(() => Book, (book) => book.publisher, { cascade: true })
     books: Book[];
 
-    @ManyToMany(() => Book, (book) => book.likedBy, { onDelete: "CASCADE" })
+    @ManyToMany(() => Book, (book) => book.likedBy, {
+        cascade: true,
+        onDelete: "CASCADE",
+    })
     likedBooks: Book[];
 }

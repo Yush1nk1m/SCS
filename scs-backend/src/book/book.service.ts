@@ -1,4 +1,5 @@
 import {
+    ConflictException,
     ForbiddenException,
     Injectable,
     Logger,
@@ -142,7 +143,7 @@ export class BookService {
     })
     async deleteBook(userId: number, bookId: number): Promise<void> {
         // find a book from DB
-        const book = await this.bookRepository.findBookById(bookId);
+        const book = await this.bookRepository.findBookAndQuestionsById(bookId);
 
         // if the book does not exist, it is an error
         if (!book) {
@@ -156,7 +157,62 @@ export class BookService {
             throw new ForbiddenException("User cannot access to the book.");
         }
 
+        // decrease saved count for each question and save it
+        book.questions.forEach((question) => question.saved--);
+        await this.bookRepository.save(book);
+
         // delete book from DB
         await this.bookRepository.delete({ id: bookId });
+    }
+
+    // [B-07] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async saveQuestion(
+        userId: number,
+        bookId: number,
+        questionId: number,
+    ): Promise<void> {
+        // find a question from DB
+        const question =
+            await this.questionRepository.findQuestionById(questionId);
+
+        // if the question does not exist, it is an error
+        if (!question) {
+            throw new NotFoundException(
+                `Question with id ${questionId} has not been found.`,
+            );
+        }
+
+        // find a book from DB
+        const book = await this.bookRepository.findBookAndQuestionsById(bookId);
+
+        // if the book does not exist, it is an error
+        if (!book) {
+            throw new NotFoundException(
+                `Book with id ${bookId} has not been found.`,
+            );
+        }
+
+        // if the publisher of the book is not equal to the user, it is an error
+        if (book.publisher.id !== userId) {
+            throw new ForbiddenException("User cannot access to the book.");
+        }
+
+        // if the question already exists, it is an error
+        if (
+            book.questions.some(
+                (savedQuestion) => savedQuestion.id === question.id,
+            )
+        ) {
+            throw new ConflictException("Question has already been saved.");
+        }
+
+        // increase saved count of the question
+        question.saved++;
+        // add new question to the question list and save it
+        book.questions.push(question);
+        await this.bookRepository.save(book);
     }
 }
