@@ -31,4 +31,11 @@ export class BookRepository extends Repository<Book> {
             take: limit,
         });
     }
+
+    async findBookById(bookId: number): Promise<Book> {
+        return this.findOne({
+            where: { id: bookId },
+            relations: ["publisher"],
+        });
+    }
 }

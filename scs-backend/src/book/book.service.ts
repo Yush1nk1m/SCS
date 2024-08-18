@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { BookRepository } from "../repository/book.repository";
 import { QuestionRepository } from "../repository/question.repository";
 import { UserRepository } from "../repository/user.repository";
@@ -30,5 +30,20 @@ export class BookService {
             order,
             search,
         );
+    }
+
+    // [B-02] Service logic
+    async getBook(bookId: number): Promise<Book> {
+        // find a book from DB
+        const book = await this.bookRepository.findBookById(bookId);
+
+        // if the book does not exist, it is an error
+        if (!book) {
+            throw new NotFoundException(
+                `Book with id ${bookId} has not been found.`,
+            );
+        }
+
+        return book;
     }
 }
