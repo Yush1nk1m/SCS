@@ -60,28 +60,13 @@ export class ActionRepository extends Repository<Action> {
             question: {
                 id: questionId,
             },
-            title: Like(`%${search}%`),
+            title: search ? Like(`%${search}%`) : undefined,
         };
-        if (search === "") {
-            delete where.title;
-        }
 
         return this.findAndCount({
             withDeleted: true,
             where,
             relations: ["writer"],
-            select: {
-                id: true,
-                title: true,
-                imageUrls: true,
-                likeCount: true,
-                createdAt: true,
-                updatedAt: true,
-                writer: {
-                    id: true,
-                    nickname: true,
-                },
-            },
             order: {
                 [sort]: order,
             },

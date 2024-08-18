@@ -3,7 +3,7 @@ import { Expose, Type } from "class-transformer";
 import { WriterDto } from "../../user/dto/writer.dto";
 
 export class ActionDetailDto {
-    @ApiProperty({ example: 1, description: "답변 ID" })
+    @ApiProperty({ example: 1, description: "답변 고유 ID" })
     @Expose()
     id: number;
 
