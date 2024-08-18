@@ -857,3 +857,141 @@
     message: result message
 }
 ```
+
+## Book
+
+이 섹션은 문제집 관련 API에 대한 설계이다.
+
+| API ID | Method |            URI            | Summary                          |
+| :----: | :----: | :-----------------------: | :------------------------------- |
+|  B-01  |  GET   |         /v1/books         | 모든 문제집 조회                 |
+|  B-02  |  GET   |       /v1/books/:id       | 특정 문제집 조회                 |
+|  B-03  |  POST  |         /v1/books         | 새 문제집 생성                   |
+|  B-04  | PATCH  |    /v1/books/:id/title    | 문제집 제목 수정                 |
+|  B-05  | PATCH  | /v1/books/:id/description | 문제집 설명 수정                 |
+|  B-06  | DELETE |       /v1/books/:id       | 문제집 삭제                      |
+|  B-07  |  POST  |  /v1/books/:id/questions  | 문제집에 질문 추가 (스크랩)      |
+|  B-08  | DELETE |  /v1/books/:id/questions  | 문제집에서 질문 삭제             |
+|  B-09  |  POST  |    /v1/books/:id/like     | 문제집 좋아요 등록/취소          |
+|  B-10  |  GET   |    /v1/books/:id/like     | 사용자의 문제집 좋아요 여부 조회 |
+
+### B-01: 모든 문제집 조회
+
+- **Description**: 모든 사용자가 생성한 문제집들을 조회한다. 페이지네이션을 지원한다. 쿼리 파라미터의 기본 값은 { page=1, limit=10, sort=createdAt, order=desc }이다.
+- **Method**: `GET`
+- **URI**: `/v1/books`
+- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `likeCount`, order: `asc` or `desc`, search: `searching value`
+- **Request**: URI 경로를 통해 요청한다.
+- **Response data**:
+
+```
+
+```
+
+### B-02: 특정 문제집 조회
+
+- **Description**: 특정 ID의 문제집의 상세 정보를 조회한다.
+- **Method**: `GET`
+- **URI**: `/v1/books/:id`
+- **Request**: URI 경로를 통해 요청한다.
+- **Response data**:
+
+```
+
+```
+
+### B-03: 새 문제집 생성
+
+- **Description**: 새로운 문제집을 생성한다.
+- **Method**: `POST`
+- **URI**: `/v1/books`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+
+```
+
+### B-04: 문제집 제목 수정
+
+- **Description**: 문제집의 제목을 수정한다.
+- **Method**: `PATCH`
+- **URI**: `/v1/books/:id/title`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { title: `book's new title` }
+- **Response data**:
+
+```
+
+```
+
+### B-05: 문제집 설명 수정
+
+- **Description**: 문제집의 설명을 수정한다.
+- **Method**: `PATCH`
+- **URI**: `/v1/books/:id/description`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { description: `book's new description` }
+- **Response data**:
+
+```
+
+```
+
+### B-06: 문제집 삭제
+
+- **Description**: 문제집을 삭제한다.
+- **Method**: `DELETE`
+- **URI**: `/v1/books/:id`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+
+```
+
+### B-07: 문제집에 질문 추가 (스크랩)
+
+- **Description**: 질문을 스크랩하여 문제집에 저장한다.
+- **Method**: `POST`
+- **URI**: `/v1/books/:id/questions`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { questionId: `question's id` }
+- **Response data**:
+
+```
+
+```
+
+### B-08: 문제집에서 질문 삭제
+
+- **Description**: 문제집에서 질문을 삭제한다.
+- **Method**: `DELETE`
+- **URI**: `/v1/books/:id/questions`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { questionId: `question's id` }
+- **Response data**:
+
+```
+
+```
+
+### B-09: 문제집 좋아요 등록/취소
+
+- **Description**: 문제집에 좋아요를 등록하거나 취소한다.
+- **Method**: `POST`
+- **URI**: `/v1/books/:id/like`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+
+```
+
+### B-10: 사용자의 문제집 좋아요 여부 조회
+
+- **Description**: 사용자가 문제집에 좋아요를 등록했는지 여부를 조회한다.
+- **Method**: `GET`
+- **URI**: `/v1/books/:id/like`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+
+```
