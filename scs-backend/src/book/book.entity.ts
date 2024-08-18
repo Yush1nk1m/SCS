@@ -2,6 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
     ManyToMany,
     ManyToOne,
     PrimaryGeneratedColumn,
@@ -36,5 +37,10 @@ export class Book {
     @ManyToMany(() => Question, (question) => question.books, {
         onDelete: "CASCADE",
     })
+    @JoinTable({ name: "BookQuestion" })
     questions: Question[];
+
+    @ManyToMany(() => User, (user) => user.likedBooks, { onDelete: "CASCADE" })
+    @JoinTable({ name: "BookLike" })
+    likedBy: User[];
 }

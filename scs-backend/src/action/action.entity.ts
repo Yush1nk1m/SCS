@@ -54,7 +54,7 @@ export class Action {
     @ManyToMany(() => User, (user) => user.likedActions, {
         onDelete: "CASCADE",
     })
-    @JoinTable({ name: "Like" })
+    @JoinTable({ name: "ActionLike" })
     likedBy: User[];
 
     @OneToMany(() => Comment, (comment) => comment.action, { cascade: true })
