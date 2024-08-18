@@ -81,7 +81,11 @@ const CreateActionPage: React.FC = () => {
             required
           />
           <MdEditor
-            style={{ height: "500px", marginBottom: "20px" }}
+            style={{
+              height: `calc(100vh - var(--header-height) - var(--footer-height) - var(--content-padding) * 2 - 200px - 40px)`,
+
+              marginBottom: "20px",
+            }}
             renderHTML={(text) => mdParser.render(text)}
             onChange={handleEditorChange}
             onImageUpload={handleImageUpload}

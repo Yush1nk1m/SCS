@@ -1,105 +1,150 @@
-// pages/ActionDetail.tsx
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
-import { getAction, likeAction, getComments } from "../../api/actionApi";
-import { createComment } from "../../api/commentApi";
+import {
+  getAction,
+  likeAction,
+  getComments,
+  deleteAction,
+  getActionLike,
+} from "../../api/actionApi";
+import {
+  createComment,
+  updateComment,
+  deleteComment,
+} from "../../api/commentApi";
 import { ActionDetailDto, CommentDto } from "../../api/swaggerApi";
-import "./ActionPage.css";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
+import Comment from "../../components/Comment/Comment";
 import toast from "react-hot-toast";
+import "./ActionPage.css";
 
 const ActionPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const { user, loading, isLoggedIn } = useCurrentUser();
   const [action, setAction] = useState<ActionDetailDto | null>(null);
   const [comments, setComments] = useState<CommentDto[]>([]);
   const [newComment, setNewComment] = useState("");
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    const fetchAction = async () => {
+    const fetchActionAndComments = async () => {
+      setIsLoading(true);
       try {
-        const data = await getAction(Number(id));
-        setAction(data.action);
-      } catch (error: any) {
-        console.error("액션 데이터 가져오기 실패:", error);
-        switch (error.status) {
-          case 404:
-            toast.error("존재하지 않는 액션입니다.");
-            break;
-          default:
-            toast.error("예기치 못한 에러가 발생했습니다.");
+        if (localStorage.getItem("accessToken")) {
+          const likeData = await getActionLike(Number(id));
+          setIsLiked(likeData.liked);
         }
+        const [actionData, commentsData] = await Promise.all([
+          getAction(Number(id)),
+          getComments(Number(id)),
+        ]);
+        setAction(actionData.action);
+        setComments(commentsData.comments);
+      } catch (error: any) {
+        toast.error(
+          error.status === 404
+            ? "존재하지 않는 액션입니다."
+            : "예기치 못한 에러가 발생했습니다."
+        );
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchAction();
-  }, [id]);
-
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const data = await getComments(Number(id));
-        setComments(data.comments);
-      } catch (error) {
-        console.error("댓글 가져오기 실패:", error);
-      }
-    };
-    fetchComments();
+    fetchActionAndComments();
   }, [id]);
 
   const handleLike = async () => {
+    if (!isLoggedIn) {
+      toast.error("로그인이 필요합니다.");
+      return;
+    }
     try {
-      const data = await likeAction(Number(id));
-      setIsLiked(data.liked);
-      setAction((prev) =>
-        prev ? { ...prev, likeCount: data.likeCount } : null
+      const { liked, likeCount } = await likeAction(Number(id));
+      setIsLiked(liked);
+      setAction((prev) => (prev ? { ...prev, likeCount } : null));
+      toast.success(
+        liked ? "좋아요가 등록되었습니다." : "좋아요가 취소되었습니다."
       );
-
-      if (data.liked) {
-        toast.success("좋아요가 등록되었습니다.");
-      } else {
-        toast.success("좋아요가 취소되었습니다.");
-      }
     } catch (error: any) {
-      console.error("좋아요 처리 중 에러 발생:", error);
-      switch (error.status) {
-        case 401:
-          toast.error("로그인이 필요합니다.");
-          break;
-        case 404:
-          toast.error("액션이 존재하지 않습니다.");
-          break;
-        default:
-          toast.error("예기치 못한 에러가 발생했습니다.");
-      }
+      toast.error("좋아요 처리 중 에러가 발생했습니다.");
     }
   };
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isLoggedIn) {
+      toast.error("로그인이 필요합니다.");
+      return;
+    }
     try {
-      const data = await createComment(Number(id), newComment);
-      setComments((prev) => [...prev, data.comment]);
+      const { comment } = await createComment(Number(id), newComment);
+      setComments((prev) => [...prev, comment]);
       setNewComment("");
       toast.success("댓글이 작성되었습니다.");
     } catch (error: any) {
-      console.error("댓글 작성 중 에러 발생:", error);
-      switch (error.status) {
-        case 401:
-          toast.error("로그인이 필요합니다.");
-          break;
-        case 404:
-          toast.error("액션이 존재하지 않습니다.");
-          break;
-        default:
-          toast.error("예기치 못한 서버 에러가 발생했습니다.");
+      toast.error(
+        error.status === 403
+          ? "사용자 권한이 존재하지 않습니다."
+          : "댓글 작성 중 에러가 발생했습니다."
+      );
+    }
+  };
+
+  const handleCommentUpdate = async (commentId: number, content: string) => {
+    try {
+      const { comment } = await updateComment(commentId, content);
+      setComments((prev) =>
+        prev.map((c) => (c.id === commentId ? comment : c))
+      );
+      toast.success("댓글이 수정되었습니다.");
+    } catch (error: any) {
+      toast.error("댓글 수정 중 에러가 발생했습니다.");
+    }
+  };
+
+  const handleCommentDelete = async (commentId: number) => {
+    try {
+      await deleteComment(commentId);
+      setComments((prev) => prev.filter((c) => c.id !== commentId));
+      toast.success("댓글이 삭제되었습니다.");
+    } catch (error: any) {
+      toast.error("댓글 삭제 중 에러가 발생했습니다.");
+    }
+  };
+
+  const handleEdit = () => {
+    navigate(`/action/${id}/edit`);
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm("정말로 이 액션을 삭제하시겠습니까?")) {
+      try {
+        await deleteAction(Number(id));
+        toast.success("액션이 삭제되었습니다.");
+        navigate(-1);
+      } catch (error: any) {
+        toast.error(
+          error.status === 403
+            ? "사용자 권한이 존재하지 않습니다."
+            : error.status === 404
+              ? "존재하지 않는 액션입니다."
+              : "예기치 못한 에러가 발생했습니다."
+        );
       }
     }
   };
 
-  if (!action) return <div>로딩 중...</div>;
+  if (isLoading || loading || !action)
+    return <div className="loading">로딩 중...</div>;
 
   return (
     <div className="action-detail">
+      <button className="back-button" onClick={() => navigate(-1)}>
+        질문 페이지로 돌아가기
+      </button>
       <h1 className="action-title">{action.title}</h1>
       <div className="author-info">
         <span>
@@ -111,21 +156,33 @@ const ActionPage: React.FC = () => {
         className="action-content"
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(action.content) }}
       />
-      <div className="like-button-container">
+      <div className="like-section">
         <button
           className={`like-button ${isLiked ? "liked" : ""}`}
           onClick={handleLike}
         />
+        <div className="like-count">{action.likeCount}명이 좋아합니다</div>
       </div>
-      <div className="like-count">{action.likeCount}명이 좋아합니다</div>
+      {user && action.writer.id === user.id && (
+        <div className="action-buttons">
+          <button onClick={handleEdit} className="edit-button">
+            수정
+          </button>
+          <button onClick={handleDelete} className="delete-button">
+            삭제
+          </button>
+        </div>
+      )}
       <div className="comments-section">
         <h2>댓글</h2>
         {comments.map((comment) => (
-          <div key={comment.id} className="comment">
-            <strong>{comment.writer.nickname}</strong>
-            <p>{comment.content}</p>
-            <span>{new Date(comment.createdAt).toLocaleDateString()}</span>
-          </div>
+          <Comment
+            key={comment.id}
+            comment={comment}
+            currentUser={user}
+            onUpdate={handleCommentUpdate}
+            onDelete={handleCommentDelete}
+          />
         ))}
         <form className="comment-form" onSubmit={handleCommentSubmit}>
           <textarea
