@@ -3,6 +3,7 @@ import {
     CreateDateColumn,
     Entity,
     Index,
+    ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -11,6 +12,7 @@ import {
 import { User } from "../user/user.entity";
 import { Section } from "../section/section.entity";
 import { Action } from "../action/action.entity";
+import { Book } from "../book/book.entity";
 
 @Entity()
 @Index(["section", "saved"])
@@ -32,7 +34,7 @@ export class Question {
     @Column({ default: 0 })
     saved: number;
 
-    @ManyToOne(() => User, (user) => user.questions)
+    @ManyToOne(() => User, (user) => user.questions, { onDelete: "CASCADE" })
     writer: User;
 
     @ManyToOne(() => Section, (section) => section.questions, {
@@ -40,6 +42,9 @@ export class Question {
     })
     section: Section;
 
-    @OneToMany(() => Action, (action) => action.question)
+    @OneToMany(() => Action, (action) => action.question, { cascade: true })
     actions: Action[];
+
+    @ManyToMany(() => Book, (book) => book.questions, { onDelete: "CASCADE" })
+    books: Book[];
 }

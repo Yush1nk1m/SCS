@@ -10,7 +10,6 @@ import { QuestionModule } from "./question/question.module";
 import { ActionModule } from "./action/action.module";
 import { CommentModule } from "./comment/comment.module";
 import { BookModule } from "./book/book.module";
-import { LibraryModule } from "./library/library.module";
 import { addTransactionalDataSource } from "typeorm-transactional";
 import { DataSource } from "typeorm";
 import { APP_GUARD } from "@nestjs/core";
@@ -39,7 +38,6 @@ import { RepositoryModule } from "./repository/repository.module";
         ActionModule,
         CommentModule,
         BookModule,
-        LibraryModule,
         UploadModule,
         RepositoryModule,
     ],

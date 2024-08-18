@@ -13,6 +13,7 @@ import { Section } from "../section/section.entity";
 import { Question } from "../question/question.entity";
 import { Action } from "../action/action.entity";
 import { Comment } from "../comment/comment.entity";
+import { Book } from "../book/book.entity";
 
 @Entity()
 export class User {
@@ -54,13 +55,13 @@ export class User {
     @DeleteDateColumn()
     deletedAt: Date;
 
-    @OneToMany(() => Section, (section) => section.creator)
+    @OneToMany(() => Section, (section) => section.creator, { cascade: true })
     sections: Section[];
 
-    @OneToMany(() => Question, (question) => question.writer)
+    @OneToMany(() => Question, (question) => question.writer, { cascade: true })
     questions: Question[];
 
-    @OneToMany(() => Action, (action) => action.writer)
+    @OneToMany(() => Action, (action) => action.writer, { cascade: true })
     actions: Action[];
 
     @ManyToMany(() => Action, (action) => action.likedBy, {
@@ -68,6 +69,9 @@ export class User {
     })
     likedActions: Action[];
 
-    @OneToMany(() => Comment, (comment) => comment.writer)
+    @OneToMany(() => Comment, (comment) => comment.writer, { cascade: true })
     comments: Comment[];
+
+    @OneToMany(() => Book, (book) => book.publisher, { cascade: true })
+    books: Book[];
 }

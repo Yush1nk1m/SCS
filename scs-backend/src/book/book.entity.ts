@@ -2,8 +2,8 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    ManyToMany,
     ManyToOne,
-    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from "typeorm";
@@ -11,15 +11,18 @@ import { User } from "../user/user.entity";
 import { Question } from "../question/question.entity";
 
 @Entity()
-export class Section {
+export class Book {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    subject: string;
+    title: string;
 
-    @Column({ nullable: true })
+    @Column()
     description: string;
+
+    @Column({ default: 0 })
+    likeCount: number;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -27,11 +30,11 @@ export class Section {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @ManyToOne(() => User, (user) => user.sections, { onDelete: "CASCADE" })
-    creator: User;
+    @ManyToOne(() => User, (user) => user.books, { onDelete: "CASCADE" })
+    publisher: User;
 
-    @OneToMany(() => Question, (question) => question.section, {
-        cascade: true,
+    @ManyToMany(() => Question, (question) => question.books, {
+        onDelete: "CASCADE",
     })
     questions: Question[];
 }

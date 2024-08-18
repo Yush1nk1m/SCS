@@ -43,7 +43,7 @@ export class Action {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @ManyToOne(() => User, (user) => user.actions)
+    @ManyToOne(() => User, (user) => user.actions, { onDelete: "CASCADE" })
     writer: User;
 
     @ManyToOne(() => Question, (question) => question.actions, {
@@ -57,6 +57,6 @@ export class Action {
     @JoinTable({ name: "Like" })
     likedBy: User[];
 
-    @OneToMany(() => Comment, (comment) => comment.action)
+    @OneToMany(() => Comment, (comment) => comment.action, { cascade: true })
     comments: Comment[];
 }
