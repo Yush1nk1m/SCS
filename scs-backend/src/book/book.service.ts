@@ -1,4 +1,5 @@
 import {
+    ForbiddenException,
     Injectable,
     Logger,
     NotFoundException,
@@ -8,6 +9,7 @@ import { BookRepository } from "../repository/book.repository";
 import { QuestionRepository } from "../repository/question.repository";
 import { UserRepository } from "../repository/user.repository";
 import { Book } from "./book.entity";
+import { IsolationLevel, Transactional } from "typeorm-transactional";
 
 @Injectable()
 export class BookService {
@@ -73,6 +75,35 @@ export class BookService {
             publisher,
         });
 
+        return this.bookRepository.save(book);
+    }
+
+    // [B-04] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async updateBookTitle(
+        userId: number,
+        bookId: number,
+        title: string,
+    ): Promise<Book> {
+        // find a book from DB
+        const book = await this.bookRepository.findBookById(bookId);
+
+        // if the book does not exist, it is an error
+        if (!book) {
+            throw new NotFoundException(
+                `Book with id ${bookId} has not been found.`,
+            );
+        }
+
+        // if the publisher of the book is not equal to the user, it is an error
+        if (book.publisher.id !== userId) {
+            throw new ForbiddenException("User cannot access to the book.");
+        }
+
+        // update new title, save it, and return
+        book.title = title;
         return this.bookRepository.save(book);
     }
 }

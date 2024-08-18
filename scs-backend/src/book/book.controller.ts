@@ -7,6 +7,7 @@ import {
     Logger,
     Param,
     ParseIntPipe,
+    Patch,
     Post,
     Query,
 } from "@nestjs/common";
@@ -28,6 +29,7 @@ import { Public } from "../common/decorator/public.decorator";
 import { GetBooksQueryDto } from "./dto/get-books-query.dto";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateBookDto } from "./dto/create-book.dto";
+import { UpdateBookTitleDto } from "./dto/update-book.dto";
 
 @ApiTags("Book")
 @ApiInternalServerErrorResponse({
@@ -121,6 +123,41 @@ export class BookController {
 
         return {
             message: "New book has been created.",
+            book,
+        };
+    }
+
+    // [B-04] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "문제집 제목 수정" })
+    @ApiOkResponse({
+        description: "문제집 제목 수정 성공",
+        type: BookResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 인증이 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "문제집이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(BookResponseDto)
+    @Patch(":id/title")
+    async updateBookTitle(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) bookId: number,
+        @Body() updateBookTitleDto: UpdateBookTitleDto,
+    ): Promise<BookResponseDto> {
+        const { title } = updateBookTitleDto;
+        const book = await this.bookService.updateBookTitle(
+            userId,
+            bookId,
+            title,
+        );
+
+        return {
+            message: "Book title has been updated.",
             book,
         };
     }
