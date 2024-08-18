@@ -1,18 +1,4 @@
 .sorting-options {
-  display: flex;
-  width: 200px;
-  justify-content: flex-end;
-  padding: 20px;
-  position: sticky;
-  top: 0;
-  background-color: transparent;
-  z-index: 1000;
-  border-radius: 5px;
-}
-
-.sorting-options select {
-  width: 180px;
-  margin-right: 20px;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #4c4cff;
@@ -23,7 +9,7 @@
   cursor: pointer;
 }
 
-.sorting-options select:hover {
+.sorting-options:hover {
   background-color: #4c4cff;
   color: white;
 }

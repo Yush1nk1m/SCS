@@ -29,7 +29,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
 
   useEffect(() => {
     fetchQuestionsData();
-  }, [section, page, sortOption]);
+  }, [section, page, sortOption, searchTerm]);
 
   const fetchQuestionsData = async () => {
     try {
@@ -41,22 +41,10 @@ const QuestionList: React.FC<QuestionListProps> = ({
       );
       setQuestions(response.questions);
       setTotalPages(Math.ceil(response.total / 10));
-    } catch (error: any) {
+    } catch (error) {
       console.error("질문 불러오기 실패:", error);
-      switch (error.status) {
-        case 404:
-          toast.error("존재하지 않는 섹션입니다.");
-          break;
-        default:
-          toast.error("예기치 못한 에러가 발생했습니다.");
-      }
+      toast.error("질문을 불러오는 데 실패했습니다.");
     }
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setPage(1);
-    fetchQuestionsData();
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -70,20 +58,15 @@ const QuestionList: React.FC<QuestionListProps> = ({
   return (
     <div className="question-list">
       <div className="question-list-header">
-        <form onSubmit={handleSearch} className="search-form">
-          <input
-            type="text"
-            placeholder="질문 검색..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-          <button type="submit" className="search-button">
-            검색
-          </button>
-        </form>
+        <input
+          type="text"
+          placeholder="질문 검색..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="question-search-input"
+        />
         <select
-          className="sort-select"
+          className="question-sort-select"
           value={`${sortOption.sort}-${sortOption.order}`}
           onChange={handleSortChange}
         >
@@ -93,12 +76,10 @@ const QuestionList: React.FC<QuestionListProps> = ({
           <option value="saved-ASC">스크랩 적은순</option>
         </select>
       </div>
-      {questions.map((question: QuestionDto) => (
+      {questions.map((question) => (
         <div key={question.id} className="question-item">
           <Link to={`/question/${question.id}`}>{question.content}</Link>
-          <button className="save-button" onClick={() => console.log("스크랩")}>
-            스크랩
-          </button>
+          <button className="save-button">스크랩</button>
         </div>
       ))}
       <Pagination

@@ -1,104 +1,27 @@
 .section-page {
-  min-height: 60vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   padding: 20px;
   background: linear-gradient(-45deg, #87ceeb, #1e90ff, #00bfff, #add8e6);
   background-size: 400% 400%;
   animation: wave 15s ease infinite;
-  display: flex;
-  flex-direction: column;
 }
 
-.content-wrapper {
-  max-width: 100%;
-  margin: 0 auto;
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.sticky-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  padding: 15px 0;
-  background: transparent;
-}
-
-.search-sort-container {
+.section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
-  margin-bottom: 30px; /* 간격 늘림 */
+  margin-bottom: 20px;
 }
 
-.search-form {
-  display: flex;
-  flex-grow: 1;
-}
-
-.search-input {
+.section-search-input {
   flex-grow: 1;
   padding: 10px;
   border: 1px solid #4c4cff;
-  border-radius: 5px 0 0 5px;
+  border-radius: 5px;
   font-size: 16px;
-}
-
-.search-button {
-  padding: 10px 20px;
-  background-color: #4c4cff;
-  color: white;
-  border: none;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.search-button:hover {
-  background-color: #3a3aff;
-}
-
-.main-content {
-  margin-top: 0px;
-}
-
-.section-list-container {
-  flex-grow: 1;
-  overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-.section-list-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-.section-page.modal-open > *:not(.modal-overlay) {
-  filter: blur(5px);
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 90%;
+  margin-right: 20px;
 }
 
 @keyframes wave {

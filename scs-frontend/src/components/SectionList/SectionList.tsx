@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SectionItem from "../SectionItem/SectionItem";
-import "./SectionList.css";
 import { SectionDto } from "../../api/swaggerApi";
+import "./SectionList.css";
 
 interface SectionListProps {
   sections: SectionDto[];

@@ -20,17 +20,16 @@ const SortingOptions: React.FC<SortingOptionsProps> = ({
   };
 
   return (
-    <div className="sorting-options">
-      <select
-        value={`${sortOption.sort}-${sortOption.order}`}
-        onChange={handleSortChange}
-      >
-        <option value="subject-ASC">이름 오름차순</option>
-        <option value="subject-DESC">이름 내림차순</option>
-        <option value="id-ASC">ID 오름차순</option>
-        <option value="id-DESC">ID 내림차순</option>
-      </select>
-    </div>
+    <select
+      className="sorting-options"
+      value={`${sortOption.sort}-${sortOption.order}`}
+      onChange={handleSortChange}
+    >
+      <option value="subject-ASC">이름 오름차순</option>
+      <option value="subject-DESC">이름 내림차순</option>
+      <option value="id-ASC">ID 오름차순</option>
+      <option value="id-DESC">ID 내림차순</option>
+    </select>
   );
 };
 

@@ -4,9 +4,3 @@
   gap: 20px;
   width: 100%;
 }
-
-@media (min-width: 768px) {
-  .section-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
