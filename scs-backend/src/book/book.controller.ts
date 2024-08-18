@@ -29,7 +29,10 @@ import { Public } from "../common/decorator/public.decorator";
 import { GetBooksQueryDto } from "./dto/get-books-query.dto";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateBookDto } from "./dto/create-book.dto";
-import { UpdateBookTitleDto } from "./dto/update-book.dto";
+import {
+    UpdateBookDescriptionDto,
+    UpdateBookTitleDto,
+} from "./dto/update-book.dto";
 
 @ApiTags("Book")
 @ApiInternalServerErrorResponse({
@@ -144,6 +147,7 @@ export class BookController {
     })
     @SetResponseDto(BookResponseDto)
     @Patch(":id/title")
+    @HttpCode(HttpStatus.OK)
     async updateBookTitle(
         @GetCurrentUserId() userId: number,
         @Param("id", ParseIntPipe) bookId: number,
@@ -158,6 +162,42 @@ export class BookController {
 
         return {
             message: "Book title has been updated.",
+            book,
+        };
+    }
+
+    // [B-05] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "문제집 설명 수정" })
+    @ApiOkResponse({
+        description: "문제집 설명 수정 성공",
+        type: BookResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 인증이 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "문제집이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(BookResponseDto)
+    @Patch(":id/description")
+    @HttpCode(HttpStatus.OK)
+    async updateBookDescription(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) bookId: number,
+        @Body() updateBookDescriptionDto: UpdateBookDescriptionDto,
+    ): Promise<BookResponseDto> {
+        const { description } = updateBookDescriptionDto;
+        const book = await this.bookService.updateBookDescription(
+            userId,
+            bookId,
+            description,
+        );
+
+        return {
+            message: "Book description has been updated.",
             book,
         };
     }

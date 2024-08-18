@@ -106,4 +106,33 @@ export class BookService {
         book.title = title;
         return this.bookRepository.save(book);
     }
+
+    // [B-05] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async updateBookDescription(
+        userId: number,
+        bookId: number,
+        description: string,
+    ): Promise<Book> {
+        // find a book from DB
+        const book = await this.bookRepository.findBookById(bookId);
+
+        // if the book does not exist, it is an error
+        if (!book) {
+            throw new NotFoundException(
+                `Book with id ${bookId} has not been found.`,
+            );
+        }
+
+        // if the publisher of the book is not equal to the user, it is an error
+        if (book.publisher.id !== userId) {
+            throw new ForbiddenException("User cannot access to the book.");
+        }
+
+        // update new title, save it, and return
+        book.description = description;
+        return this.bookRepository.save(book);
+    }
 }
