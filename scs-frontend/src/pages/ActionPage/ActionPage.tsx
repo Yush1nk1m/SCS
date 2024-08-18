@@ -153,7 +153,7 @@ const ActionPage: React.FC = () => {
       <div className="author-info">
         <span>
           {action.writer.nickname} •{" "}
-          {new Date(action.createdAt).toLocaleDateString()}
+          {new Date(action.createdAt).toLocaleString()}
         </span>
       </div>
       <div
