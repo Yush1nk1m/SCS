@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -199,6 +200,35 @@ export class BookController {
         return {
             message: "Book description has been updated.",
             book,
+        };
+    }
+
+    // [B-06] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "문제집 삭제" })
+    @ApiOkResponse({
+        description: "문제집 삭제 성공",
+        type: BaseResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 인증이 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "문제집이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(BaseResponseDto)
+    @Delete(":id")
+    @HttpCode(HttpStatus.OK)
+    async deleteBook(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) bookId: number,
+    ): Promise<BaseResponseDto> {
+        await this.bookService.deleteBook(userId, bookId);
+
+        return {
+            message: "Book has been deleted.",
         };
     }
 }
