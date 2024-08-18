@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { QuestionSortOption } from "../../types/section";
 import { fetchQuestions } from "../../api/sectionApi";
 import { Link } from "react-router-dom";
@@ -11,11 +11,13 @@ import toast from "react-hot-toast";
 interface QuestionListProps {
   section: SectionDto;
   onCreateQuestion: () => void;
+  onHeightChange: () => void;
 }
 
 const QuestionList: React.FC<QuestionListProps> = ({
   section,
   onCreateQuestion,
+  onHeightChange,
 }) => {
   const isLoggedIn = useAuth();
   const [questions, setQuestions] = useState<QuestionDto[]>([]);
@@ -26,12 +28,11 @@ const QuestionList: React.FC<QuestionListProps> = ({
     order: "DESC",
   });
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const paginationRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetchQuestionsData();
-  }, [section, page, sortOption, searchTerm]);
-
-  const fetchQuestionsData = async () => {
+  const fetchQuestionsData = useCallback(async () => {
+    setIsLoading(true);
     try {
       const response = await fetchQuestions(
         section.id,
@@ -44,8 +45,19 @@ const QuestionList: React.FC<QuestionListProps> = ({
     } catch (error) {
       console.error("질문 불러오기 실패:", error);
       toast.error("질문을 불러오는 데 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+      setTimeout(() => onHeightChange(), 0); // 높이 변경 알림
+      const scrollPosition = paginationRef.current?.offsetTop || window.scrollY;
+      setTimeout(() => {
+        window.scrollTo({ top: scrollPosition, behavior: "smooth" });
+      });
     }
-  };
+  }, [section, page, sortOption, searchTerm, onHeightChange]);
+
+  useEffect(() => {
+    fetchQuestionsData();
+  }, [fetchQuestionsData]);
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const [sort, order] = e.target.value.split("-");
@@ -55,6 +67,15 @@ const QuestionList: React.FC<QuestionListProps> = ({
     });
   };
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
   return (
     <div className="question-list">
       <div className="question-list-header">
@@ -62,7 +83,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
           type="text"
           placeholder="질문 검색..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearch}
           className="question-search-input"
         />
         <select
@@ -76,17 +97,27 @@ const QuestionList: React.FC<QuestionListProps> = ({
           <option value="saved-ASC">스크랩 적은순</option>
         </select>
       </div>
-      {questions.map((question) => (
-        <div key={question.id} className="question-item">
-          <Link to={`/question/${question.id}`}>{question.content}</Link>
-          <button className="save-button">스크랩</button>
-        </div>
-      ))}
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
+      <div className="question-list-content">
+        {isLoading ? (
+          <p>질문을 불러오는 중...</p>
+        ) : questions.length > 0 ? (
+          questions.map((question) => (
+            <div key={question.id} className="question-item">
+              <Link to={`/question/${question.id}`}>{question.content}</Link>
+              <button className="save-button">스크랩</button>
+            </div>
+          ))
+        ) : (
+          <p>질문이 없습니다.</p>
+        )}
+      </div>
+      <div ref={paginationRef}>
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
       {isLoggedIn && (
         <button className="create-question-button" onClick={onCreateQuestion}>
           질문 생성

@@ -22,7 +22,6 @@ import { Roles } from "../common/decorator/roles.decorator";
 import { UpdateQuestionContentDto } from "./dto/update-question-content.dto";
 import {
     ApiBearerAuth,
-    ApiForbiddenResponse,
     ApiInternalServerErrorResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
@@ -119,10 +118,6 @@ export class QuestionController {
         description: "사용자 정보가 유효하지 않음",
         type: BaseResponseDto,
     })
-    @ApiForbiddenResponse({
-        description: "사용자 권한이 존재하지 않음",
-        type: BaseResponseDto,
-    })
     @ApiNotFoundResponse({
         description: "질문이 존재하지 않음",
         type: BaseResponseDto,
@@ -133,12 +128,10 @@ export class QuestionController {
     @Patch(":id")
     @HttpCode(HttpStatus.OK)
     async updateQuestionContent(
-        @GetCurrentUserId() userId: number,
         @Param("id", ParseIntPipe) questionId: number,
         @Body() updateQuestionContentDto: UpdateQuestionContentDto,
     ): Promise<QuestionResponseDto> {
         const question = await this.questionService.updateQuestionContent(
-            userId,
             questionId,
             updateQuestionContentDto,
         );
@@ -160,10 +153,6 @@ export class QuestionController {
         description: "사용자 정보가 유효하지 않음",
         type: BaseResponseDto,
     })
-    @ApiForbiddenResponse({
-        description: "사용자 권한이 존재하지 않음",
-        type: BaseResponseDto,
-    })
     @ApiNotFoundResponse({
         description: "질문이 존재하지 않음",
         type: BaseResponseDto,
@@ -174,10 +163,9 @@ export class QuestionController {
     @Delete(":id")
     @HttpCode(HttpStatus.OK)
     async deleteQuestion(
-        @GetCurrentUserId() userId: number,
         @Param("id", ParseIntPipe) questionId: number,
     ): Promise<BaseResponseDto> {
-        await this.questionService.deleteQuestion(userId, questionId);
+        await this.questionService.deleteQuestion(questionId);
 
         return {
             message: `Question with id ${questionId} has been deleted.`,

@@ -9,6 +9,7 @@ import ActionCard from "../../components/ActionCard/ActionCard";
 import { useAuth } from "../../hooks/useAuth";
 import { ActionDto, QuestionDto } from "../../api/swaggerApi";
 import toast from "react-hot-toast";
+import SortingOptions from "../../components/SortingOptions/SortingOptions";
 
 const QuestionPage: React.FC = () => {
   const isLoggedIn = useAuth();
@@ -94,9 +95,15 @@ const QuestionPage: React.FC = () => {
           </div>
         )}
         <div className="actions-header">
-          <ActionSortingOptions
+          <SortingOptions<ActionSortOption>
             sortOption={sortOption}
             onSortChange={setSortOption}
+            options={[
+              { value: "updatedAt-DESC", label: "최신순" },
+              { value: "updatedAt-ASC", label: "오래된순" },
+              { value: "likeCount-DESC", label: "좋아요 높은순" },
+              { value: "likeCount-ASC", label: "좋아요 낮은순" },
+            ]}
           />
           <form onSubmit={handleSearch} className="search-form">
             <input

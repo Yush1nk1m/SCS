@@ -1,58 +1,50 @@
 .signup-container {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 65vh;
   background: linear-gradient(-45deg, #87ceeb, #1e90ff, #00bfff, #add8e6);
   background-size: 400% 400%;
   animation: wave 15s ease infinite;
-}
-
-@keyframes wave {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  padding: var(--content-padding);
+  margin: 0;
 }
 
 .welcome-content {
-  padding: 20px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  max-width: 800px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.text-line {
+.welcome-title,
+.welcome-description,
+.welcome-thanks {
   opacity: 0;
   transform: translateY(20px);
-  font-size: 24px;
   color: white;
-  margin-bottom: 20px;
-  white-space: nowrap;
+  margin-bottom: 15px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.line1 {
+.welcome-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 0;
   animation: fadeIn 0.5s ease forwards 0.5s;
 }
-.line2 {
+
+.welcome-description {
+  font-size: 18px;
   animation: fadeIn 0.5s ease forwards 1.5s;
 }
-.line3 {
+
+.welcome-thanks {
+  font-size: 18px;
+  margin-bottom: 0;
   animation: fadeIn 0.5s ease forwards 2.5s;
 }
 
@@ -72,4 +64,55 @@
 
 .login-button:hover {
   background-color: #3a3aff;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .welcome-title {
+    font-size: 36px;
+  }
+  .welcome-description,
+  .welcome-thanks {
+    font-size: 22px;
+  }
+  .welcome-content {
+    padding: 40px;
+  }
+  .login-button {
+    font-size: 18px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .welcome-title {
+    font-size: 44px;
+  }
+  .welcome-description,
+  .welcome-thanks {
+    font-size: 24px;
+  }
+  .welcome-content {
+    padding: 50px;
+  }
+  .login-button {
+    font-size: 20px;
+  }
 }

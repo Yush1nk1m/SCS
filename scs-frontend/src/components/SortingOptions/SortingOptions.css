@@ -1,15 +1,43 @@
 .sorting-options {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #4c4cff;
-  background-color: white;
-  color: #4c4cff;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  cursor: pointer;
+  width: 100%;
+  position: relative;
 }
 
-.sorting-options:hover {
-  background-color: #4c4cff;
-  color: white;
+.sorting-options select {
+  width: 100%;
+  padding: 12px 45px 12px 15px;
+  font-size: 16px;
+  border: 2px solid #4c4cff;
+  border-radius: 25px;
+  background-color: white;
+  color: #333;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sorting-options::after {
+  content: "\25BC";
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  color: #4c4cff;
+  pointer-events: none;
+}
+
+.sorting-options select:hover,
+.sorting-options select:focus {
+  border-color: #3a3aff;
+  box-shadow: 0 0 0 2px rgba(74, 74, 255, 0.2);
+  outline: none;
+}
+
+@media (min-width: 768px) {
+  .sorting-options {
+    width: auto;
+    min-width: 200px;
+  }
 }

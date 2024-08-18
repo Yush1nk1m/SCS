@@ -23,9 +23,20 @@
 
 .toggle-icon {
   font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.toggle-icon.expanded {
+  transform: rotate(180deg);
 }
 
 .section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.section-content-inner {
   padding: 15px 20px;
 }
 

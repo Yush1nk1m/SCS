@@ -1,5 +1,4 @@
 import {
-    ForbiddenException,
     Injectable,
     Logger,
     NotFoundException,
@@ -76,13 +75,9 @@ export class QuestionService {
         isolationLevel: IsolationLevel.REPEATABLE_READ,
     })
     async updateQuestionContent(
-        userId: number,
         questionId: number,
         updateQuestionContentDto: UpdateQuestionContentDto,
     ): Promise<Question> {
-        // find user from DB
-        const writer = await this.userRepository.findUserById(userId);
-
         // extract content from DTO
         const { content } = updateQuestionContentDto;
 
@@ -97,13 +92,6 @@ export class QuestionService {
             );
         }
 
-        // if the question has not been written by user, it is an error
-        if (question.writer.id !== writer.id) {
-            throw new ForbiddenException(
-                "User cannot update the content of the question.",
-            );
-        }
-
         // update and return question
         question.content = content;
         return this.questionRepository.save(question);
@@ -113,10 +101,7 @@ export class QuestionService {
     @Transactional({
         isolationLevel: IsolationLevel.REPEATABLE_READ,
     })
-    async deleteQuestion(userId: number, questionId: number): Promise<void> {
-        // find user from DB
-        const writer = await this.userRepository.findUserById(userId);
-
+    async deleteQuestion(questionId: number): Promise<void> {
         // find question from DB
         const question =
             await this.questionRepository.findQuestionById(questionId);
@@ -126,11 +111,6 @@ export class QuestionService {
             throw new NotFoundException(
                 `Question with id ${questionId} has not been found.`,
             );
-        }
-
-        // if the question has not been written by user, it is an error
-        if (question.writer.id !== writer.id) {
-            throw new ForbiddenException("User cannot delete the question.");
         }
 
         return this.questionRepository.deleteQuestionById(questionId);

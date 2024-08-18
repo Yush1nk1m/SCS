@@ -1,5 +1,12 @@
 .question-list {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.question-list-content {
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .question-list-header {
@@ -31,6 +38,7 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  gap: 5px;
 }
 
 .question-item a {
@@ -47,6 +55,7 @@
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .create-question-button {

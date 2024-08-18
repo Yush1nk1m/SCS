@@ -21,35 +21,39 @@ const LoginForm: React.FC = () => {
       navigate("/");
     } catch (error: any) {
       console.error("로그인 실패:", error);
-      switch (error.status) {
-        case 403:
-          toast.error("이메일과 비밀번호를 확인해 주세요.");
-          break;
-        default:
-          toast.error("예기치 못한 에러가 발생했습니다.");
+      if (error.status === 403) {
+        toast.error("이메일과 비밀번호를 확인해 주세요.");
+      } else {
+        toast.error("예기치 못한 에러가 발생했습니다.");
       }
     }
   };
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <h2>로그인</h2>
-      <input
-        type="email"
-        placeholder="이메일"
-        value={loginData.email}
-        onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-        required
-      />
-      <input
-        type="password"
-        placeholder="비밀번호"
-        value={loginData.password}
-        onChange={(e) =>
-          setLoginData({ ...loginData, password: e.target.value })
-        }
-        required
-      />
+      <h2 className="login-title">로그인</h2>
+      <div className="input-group">
+        <input
+          type="email"
+          placeholder="이메일"
+          value={loginData.email}
+          onChange={(e) =>
+            setLoginData({ ...loginData, email: e.target.value })
+          }
+          required
+        />
+      </div>
+      <div className="input-group">
+        <input
+          type="password"
+          placeholder="비밀번호"
+          value={loginData.password}
+          onChange={(e) =>
+            setLoginData({ ...loginData, password: e.target.value })
+          }
+          required
+        />
+      </div>
       <button type="submit" className="submit-button">
         로그인
       </button>

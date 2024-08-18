@@ -10,6 +10,7 @@ import QuestionPage from "./pages/QuestionPage/QuestionPage";
 import CreateActionPage from "./pages/CreateActionPage/CreateActionPage";
 import ActionPage from "./pages/ActionPage/ActionPage";
 import "./App.css";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         }}
       />
       <Layout>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignupPage />} />

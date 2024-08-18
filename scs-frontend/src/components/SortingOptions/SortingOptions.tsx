@@ -1,36 +1,43 @@
 import React from "react";
-import { SectionSortOption } from "../../types/section";
 import "./SortingOptions.css";
+import { SectionSortOption } from "../../types/section";
+import { ActionSortOption } from "../../types/action";
 
-interface SortingOptionsProps {
-  sortOption: SectionSortOption;
-  onSortChange: (option: SectionSortOption) => void;
+type SortOption = SectionSortOption | ActionSortOption;
+
+interface SortingOptionsProps<T extends SortOption> {
+  sortOption: T;
+  onSortChange: (option: T) => void;
+  options: Array<{
+    value: `${T["sort"]}-${T["order"]}`;
+    label: string;
+  }>;
 }
 
-const SortingOptions: React.FC<SortingOptionsProps> = ({
+function SortingOptions<T extends SortOption>({
   sortOption,
   onSortChange,
-}) => {
+  options,
+}: SortingOptionsProps<T>) {
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const [sort, order] = e.target.value.split("-");
-    onSortChange({
-      sort: sort as "subject" | "id",
-      order: order as "ASC" | "DESC",
-    });
+    const [sort, order] = e.target.value.split("-") as [T["sort"], T["order"]];
+    onSortChange({ sort, order } as T);
   };
 
   return (
-    <select
-      className="sorting-options"
-      value={`${sortOption.sort}-${sortOption.order}`}
-      onChange={handleSortChange}
-    >
-      <option value="subject-ASC">이름 오름차순</option>
-      <option value="subject-DESC">이름 내림차순</option>
-      <option value="id-ASC">ID 오름차순</option>
-      <option value="id-DESC">ID 내림차순</option>
-    </select>
+    <div className="sorting-options">
+      <select
+        value={`${sortOption.sort}-${sortOption.order}`}
+        onChange={handleSortChange}
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
   );
-};
+}
 
 export default SortingOptions;

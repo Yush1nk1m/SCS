@@ -22,16 +22,12 @@ const SectionPage: React.FC = () => {
 
   useEffect(() => {
     fetchSectionsData();
-  }, [sortOption, searchTerm]);
+  }, [sortOption.sort, sortOption.order]);
 
   const fetchSectionsData = async () => {
     try {
       const response = await fetchSections(sortOption);
-      setSections(
-        response.sections.filter((section) =>
-          section.subject.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
+      setSections(response.sections);
     } catch (error) {
       console.error("섹션 불러오기 실패:", error);
       toast.error("예기치 못한 에러가 발생했습니다.");
@@ -53,6 +49,10 @@ const SectionPage: React.FC = () => {
     await fetchSectionsData();
   };
 
+  const filteredSections = sections.filter((section) =>
+    section.subject.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="section-page">
       <div className="section-header">
@@ -63,9 +63,18 @@ const SectionPage: React.FC = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="section-search-input"
         />
-        <SortingOptions sortOption={sortOption} onSortChange={setSortOption} />
+        <SortingOptions<SectionSortOption>
+          sortOption={sortOption}
+          onSortChange={setSortOption}
+          options={[
+            { value: "subject-ASC", label: "이름 오름차순" },
+            { value: "subject-DESC", label: "이름 내림차순" },
+            { value: "id-ASC", label: "ID 오름차순" },
+            { value: "id-DESC", label: "ID 내림차순" },
+          ]}
+        />
       </div>
-      <SectionList sections={sections} onOpenModal={handleOpenModal} />
+      <SectionList sections={filteredSections} onOpenModal={handleOpenModal} />
       {isModalOpen && selectedSectionId && (
         <CreateQuestionModal
           sectionId={selectedSectionId}

@@ -1,11 +1,17 @@
-.login-container {
+.login-page {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 65vh;
   background: linear-gradient(-45deg, #87ceeb, #1e90ff, #00bfff, #add8e6);
   background-size: 400% 400%;
   animation: wave 15s ease infinite;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
 }
 
 @keyframes wave {
@@ -17,5 +23,11 @@
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 10px;
   }
 }
