@@ -1,0 +1,37 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+:root {
+  --header-height: 60px;
+  --footer-height: 60px;
+  --content-padding: 20px;
+}
+
+@media screen and (min-width: 768px) {
+  :root {
+    --header-height: 80px;
+    --footer-height: 80px;
+    --content-padding: 30px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  :root {
+    --header-height: 100px;
+    --footer-height: 100px;
+    --content-padding: 40px;
+  }
+}

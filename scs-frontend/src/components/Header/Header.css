@@ -1,68 +1,120 @@
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 15vh;
-  width: 100% - 40px;
-  padding: 0 20px;
+  width: 100%;
   background: linear-gradient(-45deg, #87ceeb, #1e90ff, #00bfff, #add8e6);
   background-size: 400% 400%;
   animation: wave 15s ease infinite;
 }
 
-.leftGroup {
+.header-content {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
+  padding: var(--content-padding);
+  min-height: var(--header-height);
 }
 
 .logoContainer {
-  display: flex;
-  align-items: center;
-  margin-right: 20px;
+  flex: 1;
 }
 
 .logo {
-  height: 10vh;
-  width: auto;
+  height: calc(var(--header-height) * 0.6);
+  max-width: 100px;
+  cursor: pointer;
+}
+
+.menu-toggle {
+  display: block;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+.nav,
+.buttons {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .nav {
+  margin-bottom: 10px;
+}
+
+.nav.open,
+.buttons.open {
   display: flex;
-  gap: 20px;
 }
 
 .navItem {
   color: white;
   text-decoration: none;
   font-weight: bold;
-  font-size: 18px;
-  padding: 10px;
-  white-space: nowrap;
-}
-
-.buttons {
-  display: flex;
-  gap: 10px;
-  font-size: 14px;
+  font-size: 16px;
+  padding: 5px;
 }
 
 .btn {
-  display: inline-block;
+  display: block;
+  text-align: center;
   text-decoration: none;
-  padding: 10px 20px;
+  padding: 10px;
+  width: 80%;
   border: none;
   border-radius: 5px;
   background-color: #ffffff;
   color: #1e90ff;
   font-weight: bold;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  white-space: nowrap;
 }
 
 .btn:hover {
   background-color: #1e90ff;
   color: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .menu-toggle {
+    display: none;
+  }
+
+  .nav,
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+  }
+
+  .nav {
+    margin-right: 40px;
+  }
+
+  .header-content {
+    flex-wrap: nowrap;
+  }
+
+  .btn {
+    width: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .navItem {
+    font-size: 18px;
+    padding: 10px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
 }
 
 @keyframes wave {

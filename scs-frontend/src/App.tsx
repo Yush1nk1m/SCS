@@ -1,8 +1,7 @@
-import "./App.css";
 import React from "react";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
 import { Route, Routes } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import Layout from "./components/Layout/Layout";
 import HomePage from "./pages/HomePage/HomePage";
 import SignupPage from "./pages/SignupPage/SignupPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
@@ -10,7 +9,7 @@ import SectionPage from "./pages/SectionPage/SectionPage";
 import QuestionPage from "./pages/QuestionPage/QuestionPage";
 import CreateActionPage from "./pages/CreateActionPage/CreateActionPage";
 import ActionPage from "./pages/ActionPage/ActionPage";
-import { Toaster } from "react-hot-toast";
+import "./App.css";
 
 const App: React.FC = () => {
   return (
@@ -19,14 +18,13 @@ const App: React.FC = () => {
         gutter={100000}
         toastOptions={{
           style: {
-            fontSize: "20px",
-            padding: "16px 24px",
-            marginTop: "15vh",
+            fontSize: "16px",
+            padding: "12px 20px",
+            marginTop: "var(--header-height)",
           },
         }}
       />
-      <div className="App">
-        <Header />
+      <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -39,8 +37,7 @@ const App: React.FC = () => {
           />
           <Route path="/action/:id" element={<ActionPage />} />
         </Routes>
-        <Footer />
-      </div>
+      </Layout>
     </>
   );
 };
