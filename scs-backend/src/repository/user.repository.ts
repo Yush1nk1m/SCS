@@ -1,6 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { User } from "../user/user.entity";
-import { DataSource, Repository } from "typeorm";
+import { Brackets, DataSource, Repository } from "typeorm";
+import { Book } from "../book/book.entity";
 
 @Injectable()
 export class UserRepository extends Repository<User> {
@@ -83,5 +84,42 @@ export class UserRepository extends Repository<User> {
 
     async deleteUserById(id: number): Promise<void> {
         await this.softDelete({ id });
+    }
+
+    async findBooksLikedByUser(
+        userId: number,
+        page: number = 1,
+        limit: number = 10,
+        sort: "createdAt" | "likeCount" = "createdAt",
+        order: "ASC" | "DESC" = "DESC",
+        search: string,
+    ): Promise<[Book[], number]> {
+        const query = this.createQueryBuilder("user")
+            .leftJoinAndSelect("user.likedBooks", "book")
+            .leftJoinAndSelect("book.publisher", "publisher")
+            .where("user.id = :userId", { userId })
+            .andWhere(
+                new Brackets((innerQuery) => {
+                    innerQuery
+                        .where("book.visibility = :PUBLIC", {
+                            PUBLIC: "public",
+                        })
+                        .orWhere("publisher.id = :userId", { userId });
+                }),
+            )
+            .orderBy(`book.${sort}`, order)
+            .skip((page - 1) * limit)
+            .take(limit);
+
+        if (search !== "") {
+            query.andWhere("book.title LIKE :title", { title: `%${search}%` });
+        }
+
+        const user = await query.getOne();
+        if (!user) {
+            return [[], 0];
+        } else {
+            return [user.likedBooks, user.likedBooks.length];
+        }
     }
 }

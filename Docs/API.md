@@ -935,6 +935,7 @@
 |  B-09  |  POST  |    /v1/books/:id/like     | 문제집 좋아요 등록/취소          |
 |  B-10  |  GET   |    /v1/books/:id/like     | 사용자의 문제집 좋아요 여부 조회 |
 |  B-11  | PATCH  | /v1/books/:id/visibility  | 문제집 공개 범위 수정            |
+|  B-12  |  GET   |  /v1/books/:id/questions  | 문제집에 저장된 질문 조회        |
 
 ### B-01: 모든 문제집 조회
 
@@ -1175,3 +1176,12 @@
   }
 }
 ```
+
+### B-12: 문제집에 저장된 질문 조회
+
+- **Description**: 문제집에 저장된 질문들을 조회한다. 페이지네이션을 지원한다. 쿼리 파라미터의 기본 값은 { page=1, limit=10, sort=createdAt, order=desc }이다.
+- **Method**: `GET`
+- **URI**: `/v1/books/:id/questions`
+- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `saved`, order: `asc` or `desc`, search: `searching value`
+- **Request**:
+- **Response data**:

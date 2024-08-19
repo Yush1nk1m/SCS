@@ -12,6 +12,8 @@ import { UserRepository } from "../repository/user.repository";
 import { Book } from "./book.entity";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 import { BookVisibility } from "./types/book-visibility.type";
+import { GetQuestionsQueryDto } from "../section/dto/get-questions-query.dto";
+import { Question } from "../question/question.entity";
 
 @Injectable()
 export class BookService {
@@ -390,5 +392,24 @@ export class BookService {
         // update book's visibility and save
         book.visibility = visibility;
         return this.bookRepository.save(book);
+    }
+
+    // [B-12] Service logic
+    async getQuestionsOfBook(
+        bookId: number,
+        query: GetQuestionsQueryDto,
+    ): Promise<[Question[], number]> {
+        // find a book from DB
+        const book = await this.bookRepository.findBookById(bookId);
+
+        // if the book does not exist, it is an error
+        if (!book) {
+            throw new NotFoundException(
+                `Book with id ${bookId} has not been found.`,
+            );
+        }
+
+        // find questions and return
+        return this.bookRepository.findQuestionsByBookId(bookId, query);
     }
 }

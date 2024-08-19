@@ -160,7 +160,7 @@ export class UserService {
             throw new UnauthorizedException("User does not exist.");
         }
 
-        return this.bookRepository.findBooksLikedByUser(
+        return this.userRepository.findBooksLikedByUser(
             userId,
             page,
             limit,

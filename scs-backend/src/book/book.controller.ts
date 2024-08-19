@@ -38,6 +38,8 @@ import {
     UpdateBookVisibilityDto,
 } from "./dto/update-book.dto";
 import { LikeResponseDto } from "../common/dto/like-response.dto";
+import { QuestionsResponseDto } from "../question/dto/response.dto";
+import { GetQuestionsQueryDto } from "../section/dto/get-questions-query.dto";
 
 @ApiTags("Book")
 @ApiInternalServerErrorResponse({
@@ -110,6 +112,40 @@ export class BookController {
             message: "Book's like status has been found.",
             likeCount,
             liked,
+        };
+    }
+
+    // [B-12] Controller logic
+    @ApiOperation({ summary: "문제집에 저장된 질문 조회" })
+    @ApiOkResponse({
+        description: "질문 조회 성공",
+        type: QuestionsResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "문제집에 접근할 수 없음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "문제집이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(QuestionsResponseDto)
+    @Public()
+    @Get(":id/questions")
+    @HttpCode(HttpStatus.OK)
+    async getQuestionsOfBook(
+        @Param("id", ParseIntPipe) bookId: number,
+        @Query() query: GetQuestionsQueryDto,
+    ): Promise<QuestionsResponseDto> {
+        const [questions, total] = await this.bookService.getQuestionsOfBook(
+            bookId,
+            query,
+        );
+
+        return {
+            message: "Questions have been found.",
+            questions,
+            total,
         };
     }
 

@@ -1,6 +1,8 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { Brackets, DataSource, Like, Repository } from "typeorm";
+import { DataSource, Like, Repository } from "typeorm";
 import { Book } from "../book/book.entity";
+import { Question } from "../question/question.entity";
+import { GetQuestionsQueryDto } from "../section/dto/get-questions-query.dto";
 
 @Injectable()
 export class BookRepository extends Repository<Book> {
@@ -73,35 +75,30 @@ export class BookRepository extends Repository<Book> {
         });
     }
 
-    async findBooksLikedByUser(
-        userId: number,
-        page: number = 1,
-        limit: number = 10,
-        sort: "createdAt" | "likeCount" = "createdAt",
-        order: "ASC" | "DESC" = "DESC",
-        search: string,
-    ): Promise<[Book[], number]> {
-        const query = this.createQueryBuilder("book")
-            .innerJoin("book.likedBy", "user")
-            .leftJoinAndSelect("book.publisher", "publisher")
-            .where("user.id = :userId", { userId })
-            .andWhere(
-                new Brackets((innerQuery) => {
-                    innerQuery
-                        .where("book.visibility = :PUBLIC", {
-                            PUBLIC: "public",
-                        })
-                        .orWhere("book.publisher.id = :userId", { userId });
-                }),
-            )
-            .orderBy(`book.${sort}`, order)
+    async findQuestionsByBookId(
+        bookId: number,
+        query: GetQuestionsQueryDto,
+    ): Promise<[Question[], number]> {
+        const { page, limit, sort, order, search } = query;
+        const queryBuilder = this.createQueryBuilder("book")
+            .leftJoinAndSelect("book.questions", "question")
+            .leftJoinAndSelect("question.writer", "writer")
+            .where("book.id = :bookId", { bookId })
+            .orderBy(`question.${sort}`, order)
             .skip((page - 1) * limit)
             .take(limit);
 
         if (search !== "") {
-            query.andWhere("book.title LIKE :title", { title: `%${search}%` });
+            queryBuilder.andWhere("question.content = :content", {
+                content: `%${search}%`,
+            });
         }
 
-        return query.getManyAndCount();
+        const book = await queryBuilder.getOne();
+        if (!book) {
+            return [[], 0];
+        } else {
+            return [book.questions, book.questions.length];
+        }
     }
 }
