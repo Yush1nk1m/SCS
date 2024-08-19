@@ -54,7 +54,7 @@ const SectionPage: React.FC = () => {
       <div className="section-list">
         {filteredSections.map((section) => (
           <Link
-            to={`/section/${section.id}/questions`}
+            to={`/section/${section.id}/questions?source=section`}
             key={section.id}
             className="section-item"
           >

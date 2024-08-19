@@ -5,7 +5,7 @@ import {
   getBookLike,
   getQuestionsOfBook,
   toggleBookLike,
-} from "../../api/bookApi"; // API 함수들은 직접 만들어야 해
+} from "../../api/bookApi";
 import { BookDto, QuestionDto } from "../../api/swaggerApi";
 import {
   Heart,
@@ -194,12 +194,21 @@ const BookDetailPage: React.FC = () => {
         </div>
         <div className="book-detail-questions-list">
           {questions.map((question) => (
-            <div key={question.id} className="book-detail-question-item">
+            <Link
+              to={`/question/${question.id}?source=book&id=${id}`}
+              key={question.id}
+              className="book-detail-question-item"
+            >
               <h3>{question.content}</h3>
-              <span className="book-detail-answer-count">
-                답변 {question.saved}
-              </span>
-            </div>
+              <div className="book-detail-question-meta">
+                <span className="book-detail-answer-count">
+                  스크랩 {question.saved}개
+                </span>
+                <span className="book-detail-question-date">
+                  {new Date(question.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
         <Pagination

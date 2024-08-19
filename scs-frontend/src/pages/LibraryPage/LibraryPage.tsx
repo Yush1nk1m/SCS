@@ -9,6 +9,7 @@ import { getBooks, getLikedBooks, getMyBooks } from "../../api/bookApi";
 import toast from "react-hot-toast";
 import BookCard from "../../components/BookCard/BookCard";
 import CreateBookModal from "../../components/CreateBookModal/CreateBookModal";
+import { useAuth } from "../../hooks/useAuth";
 
 const LibraryPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"public" | "liked" | "my">(
@@ -24,6 +25,7 @@ const LibraryPage: React.FC = () => {
   const [books, setBooks] = useState<BookDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isLoggedIn } = useAuth();
 
   const fetchBooks = async () => {
     setIsLoading(true);
@@ -153,9 +155,11 @@ const LibraryPage: React.FC = () => {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-      <button className="create-book-button" onClick={handleCreateBook}>
-        새 문제집 만들기
-      </button>
+      {isLoggedIn && (
+        <button className="create-book-button" onClick={handleCreateBook}>
+          새 문제집 만들기
+        </button>
+      )}
       <CreateBookModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

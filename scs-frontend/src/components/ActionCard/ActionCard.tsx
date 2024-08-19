@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./ActionCard.css";
 import { Heart, Calendar, Image, ArrowRight } from "lucide-react";
 
@@ -18,11 +18,18 @@ const ActionCard: React.FC<ActionCardProps> = ({
   likeCount,
   createdAt,
 }) => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const source = queryParams.get("source");
+  const sourceId = queryParams.get("id");
+
   const { id: questionId } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/action/${id}`, { state: questionId });
+    navigate(
+      `/action/${id}?source=${source}&id=${sourceId}&questionId=${questionId}`
+    );
   };
 
   return (

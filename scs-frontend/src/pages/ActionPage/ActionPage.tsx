@@ -21,10 +21,15 @@ import "./ActionPage.css";
 import { useAuth } from "../../hooks/useAuth";
 
 const ActionPage: React.FC = () => {
-  const questionId = useLocation().state;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const source = queryParams.get("source");
+  const sourceId = queryParams.get("id");
+  const questionId = queryParams.get("questionId");
+
   const { isLoggedIn, userId } = useAuth();
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [action, setAction] = useState<ActionDetailDto | null>(null);
   const [comments, setComments] = useState<CommentDto[]>([]);
@@ -118,7 +123,9 @@ const ActionPage: React.FC = () => {
   };
 
   const handleEdit = () => {
-    navigate(`/action/${id}/edit`, { state: questionId });
+    navigate(
+      `/action/${id}/edit?source=${source}&id=${sourceId}&questionId=${questionId}`
+    );
   };
 
   const handleDelete = async () => {
@@ -126,7 +133,7 @@ const ActionPage: React.FC = () => {
       try {
         await deleteAction(Number(id));
         toast.success("액션이 삭제되었습니다.");
-        navigate(-1);
+        navigate(`/question/${questionId}?source=${source}&id=${sourceId}`);
       } catch (error: any) {
         toast.error(
           error.status === 403
@@ -145,7 +152,9 @@ const ActionPage: React.FC = () => {
     <div className="action-detail-page">
       <button
         className="action-detail-back-button"
-        onClick={() => navigate(`/question/${questionId}`)}
+        onClick={() =>
+          navigate(`/question/${questionId}?source=${source}&id=${sourceId}`)
+        }
       >
         <ArrowLeft size={20} />
         <span>질문 페이지로 돌아가기</span>

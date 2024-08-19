@@ -28,8 +28,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onScrap }) => {
           스크랩
         </button>
         <Link
-          to={`/question/${question.id}`}
-          state={{ sectionId }}
+          to={`/question/${question.id}?source=section&id=${sectionId}`}
           className="view-button"
         >
           보기

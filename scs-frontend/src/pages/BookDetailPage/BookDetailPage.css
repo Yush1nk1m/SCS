@@ -167,19 +167,47 @@
 
 .book-detail-question-item {
   background-color: #f1f2f6;
-  padding: 15px;
+  padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-detail-question-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: #e8eaf6;
 }
 
 .book-detail-question-item h3 {
   margin-bottom: 10px;
   font-size: 18px;
+  color: #333;
+  /* 두 줄 이상일 경우 말줄임표 처리 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-detail-question-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #666;
 }
 
 .book-detail-answer-count {
-  color: #54a0ff;
+  color: #4c4cff;
   font-weight: bold;
+}
+
+.book-detail-question-date {
+  color: #888;
 }
 
 @media (max-width: 768px) {

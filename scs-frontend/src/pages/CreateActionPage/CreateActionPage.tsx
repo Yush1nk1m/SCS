@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import MarkdownIt from "markdown-it";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
@@ -11,6 +11,11 @@ import toast from "react-hot-toast";
 const mdParser = new MarkdownIt();
 
 const CreateActionPage: React.FC = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const source = queryParams.get("source");
+  const sourceId = queryParams.get("id");
+
   const { id: questionId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -47,7 +52,9 @@ const CreateActionPage: React.FC = () => {
     try {
       const response = await createAction(Number(questionId), title, content);
       toast.success("액션 생성 성공!", { id: loadingToast });
-      navigate(`/action/${response.action.id}`, { state: questionId });
+      navigate(
+        `/action/${response.action.id}?source=${source}&id=${sourceId}&questionId=${questionId}`
+      );
     } catch (error: any) {
       switch (error.status) {
         case 400:
@@ -93,7 +100,11 @@ const CreateActionPage: React.FC = () => {
           <div className="buttonContainer">
             <button
               type="button"
-              onClick={() => navigate(-1)}
+              onClick={() =>
+                navigate(
+                  `/question/${questionId}?source=${source}&id=${sourceId}`
+                )
+              }
               className="cancelButton"
             >
               취소

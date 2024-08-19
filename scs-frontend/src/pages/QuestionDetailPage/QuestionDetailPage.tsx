@@ -13,8 +13,12 @@ import "./QuestionDetailPage.css";
 import { ArrowLeft, PlusCircle, User } from "lucide-react";
 
 const QuestionDetailPage: React.FC = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const source = queryParams.get("source");
+  const sourceId = queryParams.get("id");
+
   const { id } = useParams<{ id: string }>();
-  const { sectionId } = useLocation().state;
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [question, setQuestion] = useState<QuestionDto>();
@@ -85,13 +89,23 @@ const QuestionDetailPage: React.FC = () => {
   return (
     <div className="question-detail-page">
       <div className="question-detail-content-wrapper">
-        <button
-          className="question-detail-back-button"
-          onClick={() => navigate(`/section/${sectionId}/questions`)}
-        >
-          <ArrowLeft size={20} />
-          <span>질문 목록으로 돌아가기</span>
-        </button>
+        {source === "section" ? (
+          <button
+            className="question-detail-back-button"
+            onClick={() => navigate(`/section/${sourceId}/questions`)}
+          >
+            <ArrowLeft size={20} />
+            <span>질문 목록으로 돌아가기</span>
+          </button>
+        ) : (
+          <button
+            className="question-detail-back-button"
+            onClick={() => navigate(`/book/${sourceId}`)}
+          >
+            <ArrowLeft size={20} />
+            <span>문제집으로 돌아가기</span>
+          </button>
+        )}
         {question && (
           <div className="question-detail-content">
             <h1 className="question-detail-title">{question.content}</h1>
@@ -134,7 +148,11 @@ const QuestionDetailPage: React.FC = () => {
         {isLoggedIn && (
           <button
             className="question-detail-create-action-button"
-            onClick={() => navigate(`/question/${id}/create-action`)}
+            onClick={() =>
+              navigate(
+                `/question/${id}/create-action?source=${source}&id=${sourceId}`
+              )
+            }
           >
             <PlusCircle size={20} />
             <span>새 액션 작성</span>

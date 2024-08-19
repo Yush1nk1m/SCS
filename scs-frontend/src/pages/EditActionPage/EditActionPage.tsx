@@ -13,7 +13,12 @@ import { UpdateActionDto } from "../../api/swaggerApi";
 const mdParser = new MarkdownIt();
 
 const EditActionPage: React.FC = () => {
-  const questionId = useLocation().state;
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const source = queryParams.get("source");
+  const sourceId = queryParams.get("id");
+  const questionId = queryParams.get("questionId");
+
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -56,7 +61,9 @@ const EditActionPage: React.FC = () => {
       const updateActionDto: UpdateActionDto = { title, content };
       await updateAction(Number(id), updateActionDto);
       toast.success("액션이 성공적으로 수정되었습니다.");
-      navigate(`/action/${id}`, { state: questionId });
+      navigate(
+        `/action/${id}?source=${source}&id=${sourceId}&questionId=${questionId}`
+      );
     } catch (error: any) {
       console.error("액션 수정 실패:", error);
       toast.error("액션 수정에 실패했습니다.");
@@ -91,7 +98,11 @@ const EditActionPage: React.FC = () => {
           <div className="buttonContainer">
             <button
               type="button"
-              onClick={() => navigate(`/action/${id}`, { state: questionId })}
+              onClick={() =>
+                navigate(
+                  `/action/${id}?source=${source}&id=${sourceId}&questionId=${questionId}`
+                )
+              }
               className="cancelButton"
             >
               취소

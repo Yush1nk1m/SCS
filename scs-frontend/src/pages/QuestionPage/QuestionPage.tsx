@@ -2,12 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { fetchQuestions } from "../../api/sectionApi";
 import { QuestionDto } from "../../api/swaggerApi";
-import {
-  ArrowLeft,
-  SaveIcon,
-  LucideMessageCircleQuestion,
-  PlusCircle,
-} from "lucide-react";
+import { ArrowLeft, PlusCircle } from "lucide-react";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import SortingOptions from "../../components/SortingOptions/SortingOptions";
 import Pagination from "../../components/Pagination/Pagination";
