@@ -20,6 +20,13 @@ export class UserRepository extends Repository<User> {
         return this.findOne({ where: { id } });
     }
 
+    async findUserAndLikedBooksById(id: number): Promise<User> {
+        return this.findOne({
+            where: { id },
+            relations: ["likedBooks"],
+        });
+    }
+
     async findUserBrieflyById(id: number): Promise<User> {
         return this.findOne({
             where: { id },

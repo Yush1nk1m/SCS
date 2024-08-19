@@ -36,6 +36,7 @@ import {
     UpdateBookDescriptionDto,
     UpdateBookTitleDto,
 } from "./dto/update-book.dto";
+import { LikeResponseDto } from "../common/dto/like-response.dto";
 
 @ApiTags("Book")
 @ApiInternalServerErrorResponse({
@@ -319,6 +320,40 @@ export class BookController {
 
         return {
             message: "Question has been deleted from the book.",
+        };
+    }
+
+    // [B-09] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "문제집 좋아요 등록/취소" })
+    @ApiOkResponse({
+        description: "문제집 좋아요 등록/취소 성공",
+        type: LikeResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 인증이 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "문제집이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(LikeResponseDto)
+    @Post(":id/like")
+    @HttpCode(HttpStatus.OK)
+    async toggleLike(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) bookId: number,
+    ): Promise<LikeResponseDto> {
+        const [likeCount, liked] = await this.bookService.toggleLike(
+            userId,
+            bookId,
+        );
+
+        return {
+            message: "Like request has been processed",
+            likeCount,
+            liked,
         };
     }
 }

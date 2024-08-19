@@ -28,11 +28,8 @@ import {
     ApiTags,
     ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import {
-    ActionResponseDto,
-    ContentResponseDto,
-    LikeResponseDto,
-} from "./dto/response.dto";
+import { ActionResponseDto, ContentResponseDto } from "./dto/response.dto";
+import { LikeResponseDto } from "../common/dto/like-response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 import { GetCommentsQueryDto } from "../comment/dto/get-comments-query.dto";
 import { CommentsResponseDto } from "../comment/dto/response.dto";

@@ -269,4 +269,63 @@ export class BookService {
         await this.questionRepository.save(question);
         await this.bookRepository.save(book);
     }
+
+    // [B-09] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async toggleLike(
+        userId: number,
+        bookId: number,
+    ): Promise<[number, boolean]> {
+        // find user from DB
+        const user =
+            await this.userRepository.findUserAndLikedBooksById(userId);
+
+        // if user does not exist, it is an error
+        if (!user) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        // find a book from DB
+        const book = await this.bookRepository.findBookById(bookId);
+
+        // if the book does not exist, it is an error
+        if (!book) {
+            throw new NotFoundException(
+                `Book with id ${bookId} does not exist.`,
+            );
+        }
+
+        // like status
+        let liked: boolean = null;
+
+        // if the book has already been liked
+        if (user.likedBooks.some((likedBook) => likedBook.id === book.id)) {
+            // liked status will be switched to false
+            liked = false;
+            // delete the book from the liked books list
+            user.likedBooks = user.likedBooks.filter(
+                (likedBook) => likedBook.id !== book.id,
+            );
+            // decrease book's like count
+            book.likeCount--;
+        }
+        // if the book has not been liked
+        else {
+            // liked status will be switched to true
+            liked = true;
+            // add the book to the liked books list
+            user.likedBooks.push(book);
+            // increase book's like count
+            book.likeCount++;
+        }
+
+        // save the change
+        await this.userRepository.save(user);
+        await this.bookRepository.save(book);
+
+        // return result
+        return [book.likeCount, liked];
+    }
 }
