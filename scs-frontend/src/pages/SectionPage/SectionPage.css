@@ -18,12 +18,10 @@
   margin-bottom: 20px;
 }
 
-@media (max-width: 768px) {
-  .section-page-controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
+.section-page-controls {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
 }
 
 .section-list {

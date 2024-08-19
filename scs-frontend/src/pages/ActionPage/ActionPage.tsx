@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ArrowLeft, Heart, Edit, Trash2, Send } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
 import {
@@ -14,7 +15,6 @@ import {
   deleteComment,
 } from "../../api/commentApi";
 import { ActionDetailDto, CommentDto } from "../../api/swaggerApi";
-import { useCurrentUser } from "../../hooks/useCurrentUser";
 import Comment from "../../components/Comment/Comment";
 import toast from "react-hot-toast";
 import "./ActionPage.css";
@@ -142,43 +142,53 @@ const ActionPage: React.FC = () => {
   if (isLoading || !action) return <div className="loading">로딩 중...</div>;
 
   return (
-    <div className="action-detail">
+    <div className="action-detail-page">
       <button
-        className="back-button"
+        className="action-detail-back-button"
         onClick={() => navigate(`/question/${questionId}`)}
       >
-        질문 페이지로 돌아가기
+        <ArrowLeft size={20} />
+        <span>질문 페이지로 돌아가기</span>
       </button>
-      <h1 className="action-title">{action.title}</h1>
-      <div className="author-info">
+      <h1 className="action-detail-title">{action.title}</h1>
+      <div className="action-detail-author-info">
         <span>
           {action.writer.nickname} •{" "}
           {new Date(action.createdAt).toLocaleString()}
         </span>
       </div>
       <div
-        className="action-content"
+        className="action-detail-content"
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(action.content) }}
       />
-      <div className="like-section">
+      <div className="action-detail-like-section">
         <button
-          className={`like-button ${isLiked ? "liked" : ""}`}
+          className={`action-detail-like-button ${isLiked ? "liked" : ""}`}
           onClick={handleLike}
-        />
-        <div className="like-count">{action.likeCount}명이 좋아합니다</div>
+        >
+          <Heart size={30} />
+        </button>
+        <div className="action-detail-like-count">
+          {action.likeCount}명이 좋아합니다
+        </div>
       </div>
       {action.writer.id === userId && (
-        <div className="action-buttons">
-          <button onClick={handleEdit} className="edit-button">
-            수정
+        <div className="action-detail-buttons">
+          <button onClick={handleEdit} className="action-detail-edit-button">
+            <Edit size={20} />
+            <span>수정</span>
           </button>
-          <button onClick={handleDelete} className="delete-button">
-            삭제
+          <button
+            onClick={handleDelete}
+            className="action-detail-delete-button"
+          >
+            <Trash2 size={20} />
+            <span>삭제</span>
           </button>
         </div>
       )}
-      <div className="comments-section">
-        <h2>댓글</h2>
+      <div className="action-detail-comments-section">
+        <h2 className="action-detail-comments-title">댓글</h2>
         {comments.map((comment) => (
           <Comment
             key={comment.id}
@@ -188,13 +198,19 @@ const ActionPage: React.FC = () => {
             onDelete={handleCommentDelete}
           />
         ))}
-        <form className="comment-form" onSubmit={handleCommentSubmit}>
+        <form
+          className="action-detail-comment-form"
+          onSubmit={handleCommentSubmit}
+        >
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="댓글을 입력하세요"
           />
-          <button type="submit">작성</button>
+          <button type="submit">
+            <Send size={20} />
+            <span>작성</span>
+          </button>
         </form>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./ActionCard.css";
-import { Heart, Calendar, Image } from "lucide-react";
+import { Heart, Calendar, Image, ArrowRight } from "lucide-react";
 
 interface ActionCardProps {
   id: number;
@@ -26,29 +26,32 @@ const ActionCard: React.FC<ActionCardProps> = ({
   };
 
   return (
-    <div className="action-card" onClick={handleClick}>
-      <div className="action-thumbnail">
+    <div className="action-card-container" onClick={handleClick}>
+      <div className="action-card-thumbnail">
         {imageUrl ? (
           <img src={imageUrl} alt={title} />
         ) : (
-          <div className="placeholder-thumbnail">
+          <div className="action-card-placeholder-thumbnail">
             <Image size={48} />
             <span>No Image</span>
           </div>
         )}
       </div>
-      <div className="action-content">
-        <h2 className="action-title">{title}</h2>
-        <div className="action-info">
-          <span className="action-date">
+      <div className="action-card-content">
+        <h2 className="action-card-title">{title}</h2>
+        <div className="action-card-info">
+          <span className="action-card-date">
             <Calendar size={16} />
             {new Date(createdAt).toLocaleDateString()}
           </span>
-          <span className="action-likes">
-            <Heart size={16} fill="#e74c3c" stroke="#e74c3c" />
+          <span className="action-card-likes">
+            <Heart size={16} />
             {likeCount}
           </span>
         </div>
+      </div>
+      <div className="action-card-view">
+        <ArrowRight size={20} />
       </div>
     </div>
   );

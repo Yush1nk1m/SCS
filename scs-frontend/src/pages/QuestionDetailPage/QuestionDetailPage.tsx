@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ActionSortOption } from "../../types/action";
 import { fetchActions, fetchQuestion } from "../../api/questionApi";
 import Pagination from "../../components/Pagination/Pagination";
@@ -10,10 +10,12 @@ import toast from "react-hot-toast";
 import SortingOptions from "../../components/SortingOptions/SortingOptions";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import "./QuestionDetailPage.css";
+import { ArrowLeft, PlusCircle, User } from "lucide-react";
 
 const QuestionDetailPage: React.FC = () => {
-  const isLoggedIn = useAuth();
   const { id } = useParams<{ id: string }>();
+  const { sectionId } = useLocation().state;
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [question, setQuestion] = useState<QuestionDto>();
   const [actions, setActions] = useState<ActionDto[]>([]);
@@ -81,18 +83,25 @@ const QuestionDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="question-page">
-      <div className="content-wrapper">
-        <button className="back-button" onClick={() => navigate("/section")}>
-          섹션 페이지로 돌아가기
+    <div className="question-detail-page">
+      <div className="question-detail-content-wrapper">
+        <button
+          className="question-detail-back-button"
+          onClick={() => navigate(`/section/${sectionId}/questions`)}
+        >
+          <ArrowLeft size={20} />
+          <span>질문 목록으로 돌아가기</span>
         </button>
         {question && (
-          <div className="question-content">
-            <h1>{question.content}</h1>
-            <p>작성자: {question.writer?.nickname || "알 수 없음"}</p>
+          <div className="question-detail-content">
+            <h1 className="question-detail-title">{question.content}</h1>
+            <p className="question-detail-writer">
+              <User size={16} />
+              <span>{question.writer?.nickname || "알 수 없음"}</span>
+            </p>
           </div>
         )}
-        <div className="actions-header">
+        <div className="question-detail-actions-header">
           <SortingOptions<ActionSortOption>
             sortOption={sortOption}
             onSortChange={setSortOption}
@@ -105,7 +114,7 @@ const QuestionDetailPage: React.FC = () => {
           />
           <SearchForm onSearch={onSearch} placeholder="액션 검색 ..." />
         </div>
-        <div className="actions-list">
+        <div className="question-detail-actions-list">
           {actions.map((action) => (
             <ActionCard
               key={action.id}
@@ -124,10 +133,11 @@ const QuestionDetailPage: React.FC = () => {
         />
         {isLoggedIn && (
           <button
-            className="create-action-button"
+            className="question-detail-create-action-button"
             onClick={() => navigate(`/question/${id}/create-action`)}
           >
-            새 액션 작성
+            <PlusCircle size={20} />
+            <span>새 액션 작성</span>
           </button>
         )}
       </div>

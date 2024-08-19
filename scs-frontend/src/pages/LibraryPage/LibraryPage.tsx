@@ -69,7 +69,6 @@ const LibraryPage: React.FC = () => {
       }
     } finally {
       setIsLoading(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 

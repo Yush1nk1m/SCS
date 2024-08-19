@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getBook, getBookLike, toggleBookLike } from "../../api/bookApi"; // API 함수들은 직접 만들어야 해
+import {
+  getBook,
+  getBookLike,
+  getQuestionsOfBook,
+  toggleBookLike,
+} from "../../api/bookApi"; // API 함수들은 직접 만들어야 해
 import { BookDto, QuestionDto } from "../../api/swaggerApi";
 import {
   Heart,
@@ -53,7 +58,31 @@ const BookDetailPage: React.FC = () => {
   };
 
   const fetchQuestions = async () => {
-    // TO DO:
+    if (!id) return;
+    try {
+      const response = await getQuestionsOfBook(
+        Number(id),
+        currentPage,
+        12,
+        sortOption.sort,
+        sortOption.order,
+        searchTerm
+      );
+      setQuestions(response.questions);
+      setTotalPages(Math.ceil(response.total / 12));
+    } catch (error: any) {
+      console.error("질문 불러오기 실패:", error);
+      switch (error.status) {
+        case 403:
+          toast.error("문제집에 접근할 수 없습니다.");
+          break;
+        case 404:
+          toast.error("존재하지 않는 문제집입니다.");
+          break;
+        default:
+          toast.error("예기치 못한 에러가 발생했습니다.");
+      }
+    }
   };
 
   const handleLike = async () => {
@@ -133,7 +162,7 @@ const BookDetailPage: React.FC = () => {
             <Heart size={24} />
           </button>
           <span className="book-detail-like-count">
-            {book.likeCount}명이 좋아했습니다.
+            {book.likeCount}명이 좋아합니다
           </span>
         </div>
         {book.publisher.id === userId && (

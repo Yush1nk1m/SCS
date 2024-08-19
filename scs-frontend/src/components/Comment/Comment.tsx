@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CommentDto } from "../../api/swaggerApi";
 import "./Comment.css";
+import { Edit2, Trash2, Check, X } from "lucide-react";
 
 interface CommentProps {
   comment: CommentDto;
@@ -32,18 +33,30 @@ const Comment: React.FC<CommentProps> = ({
   return (
     <div className="comment">
       <div className="comment-header">
-        <strong>{comment.writer.nickname}</strong>
-        <span>{new Date(comment.createdAt).toLocaleString()}</span>
+        <strong className="comment-author">{comment.writer.nickname}</strong>
+        <span className="comment-date">
+          {new Date(comment.createdAt).toLocaleString()}
+        </span>
       </div>
       {isEditing ? (
         <div className="comment-edit">
           <textarea
+            className="comment-edit-textarea"
             value={editedContent}
             onChange={(e) => setEditedContent(e.target.value)}
           />
           <div className="comment-edit-buttons">
-            <button onClick={handleEdit}>저장</button>
-            <button onClick={() => setIsEditing(false)}>취소</button>
+            <button className="comment-save-button" onClick={handleEdit}>
+              <Check size={16} />
+              <span>저장</span>
+            </button>
+            <button
+              className="comment-cancel-button"
+              onClick={() => setIsEditing(false)}
+            >
+              <X size={16} />
+              <span>취소</span>
+            </button>
           </div>
         </div>
       ) : (
@@ -51,8 +64,17 @@ const Comment: React.FC<CommentProps> = ({
           <p className="comment-content">{comment.content}</p>
           {userId === comment.writer.id && (
             <div className="comment-buttons">
-              <button onClick={() => setIsEditing(true)}>수정</button>
-              <button onClick={handleDelete}>삭제</button>
+              <button
+                className="comment-edit-button"
+                onClick={() => setIsEditing(true)}
+              >
+                <Edit2 size={16} />
+                <span>수정</span>
+              </button>
+              <button className="comment-delete-button" onClick={handleDelete}>
+                <Trash2 size={16} />
+                <span>삭제</span>
+              </button>
             </div>
           )}
         </>

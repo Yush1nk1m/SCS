@@ -1834,6 +1834,38 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Book
+     * @name BookControllerGetQuestionsOfBook
+     * @summary 문제집에 저장된 질문 조회
+     * @request GET:/v1/books/{id}/questions
+     */
+    bookControllerGetQuestionsOfBook: (
+      id: number,
+      query?: {
+        /** @default 1 */
+        page?: number;
+        /** @default 10 */
+        limit?: number;
+        /** @default "createdAt" */
+        sort?: "createdAt" | "saved";
+        /** @default "DESC" */
+        order?: "ASC" | "DESC";
+        /** @default "" */
+        search?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<QuestionsResponseDto, BaseResponseDto>({
+        path: `/v1/books/${id}/questions`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
      * @name BookControllerGetBook
      * @summary 특정 문제집 조회
      * @request GET:/v1/books/{id}

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { fetchSections } from "../../api/sectionApi";
 import { SectionSortOption } from "../../types/section";
 import { SectionDto } from "../../api/swaggerApi";
-import { Book, ArrowUpDown, Notebook } from "lucide-react";
+import { ArrowUpDown, Notebook } from "lucide-react";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import SortingOptions from "../../components/SortingOptions/SortingOptions";
 import toast from "react-hot-toast";

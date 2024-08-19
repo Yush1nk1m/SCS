@@ -8,10 +8,25 @@
 .book-detail-back-button {
   display: inline-flex;
   align-items: center;
+  background-color: #4c4cff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
   margin-bottom: 20px;
-  color: #4c4cff;
   text-decoration: none;
-  font-weight: bold;
+}
+
+.book-detail-back-button:hover {
+  background-color: #3a3aff;
+  text-decoration: none;
+}
+
+.book-detail-back-button span {
+  margin-left: 10px;
 }
 
 .book-detail-back-button svg {
@@ -82,12 +97,33 @@
 }
 
 .book-detail-like-button {
-  background-color: #ff4757;
-  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }
 
-.book-detail-like-button.liked {
-  background-color: #ff6b81;
+.book-detail-like-button svg {
+  width: 30px;
+  height: 30px;
+  transition: all 0.3s ease;
+}
+
+.book-detail-like-button:not(.liked) svg {
+  stroke: #ff4136;
+  fill: white;
+}
+
+.book-detail-like-button.liked svg {
+  stroke: #ff4136;
+  fill: #ff4136;
 }
 
 .book-detail-edit-button {

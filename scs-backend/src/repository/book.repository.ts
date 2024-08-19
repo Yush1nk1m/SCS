@@ -89,12 +89,13 @@ export class BookRepository extends Repository<Book> {
             .take(limit);
 
         if (search !== "") {
-            queryBuilder.andWhere("question.content = :content", {
+            queryBuilder.andWhere("question.content LIKE :content", {
                 content: `%${search}%`,
             });
         }
 
         const book = await queryBuilder.getOne();
+
         if (!book) {
             return [[], 0];
         } else {

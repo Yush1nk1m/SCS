@@ -1,11 +1,10 @@
-// src/api/bookApi.ts
-
 import {
   Api,
   BooksResponseDto,
   BookResponseDto,
   LikeResponseDto,
   BaseResponseDto,
+  QuestionsResponseDto,
 } from "./swaggerApi";
 import {
   getAccessToken,
@@ -148,6 +147,33 @@ export const saveQuestionToBook = async (
       api.v1.bookControllerSaveQuestionToBook(params.bookId, params.questionId),
     { bookId, questionId }
   );
+};
+
+export const getQuestionsOfBook = async (
+  bookId: number,
+  page: number | undefined,
+  limit: number | undefined,
+  sort: "createdAt" | "saved",
+  order: "ASC" | "DESC",
+  search?: string
+): Promise<QuestionsResponseDto> => {
+  try {
+    const response = await api.v1.bookControllerGetQuestionsOfBook(
+      Number(bookId),
+      {
+        page,
+        limit,
+        sort,
+        order,
+        search,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    throw {
+      status: error.status,
+    };
+  }
 };
 
 const authRequest = async <T, P>(

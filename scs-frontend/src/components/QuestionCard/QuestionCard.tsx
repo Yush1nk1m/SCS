@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { QuestionDto } from "../../api/swaggerApi";
 import { SaveIcon, LucideMessageCircleQuestion } from "lucide-react";
 import "./QuestionCard.css";
@@ -10,6 +10,7 @@ interface QuestionCardProps {
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({ question, onScrap }) => {
+  const { sectionId } = useParams<{ sectionId: string }>();
   return (
     <div className="question-card">
       <LucideMessageCircleQuestion size={24} />
@@ -26,7 +27,11 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onScrap }) => {
         <button className="scrap-button" onClick={() => onScrap(question.id)}>
           스크랩
         </button>
-        <Link to={`/question/${question.id}`} className="view-button">
+        <Link
+          to={`/question/${question.id}`}
+          state={{ sectionId }}
+          className="view-button"
+        >
           보기
         </Link>
       </div>
