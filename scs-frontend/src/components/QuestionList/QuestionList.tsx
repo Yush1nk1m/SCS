@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { QuestionSortOption } from "../../types/section";
 import { fetchQuestions } from "../../api/sectionApi";
 import { Link } from "react-router-dom";
 import "./QuestionList.css";
@@ -7,6 +6,9 @@ import Pagination from "../Pagination/Pagination";
 import { useAuth } from "../../hooks/useAuth";
 import { QuestionDto, SectionDto } from "../../api/swaggerApi";
 import toast from "react-hot-toast";
+import SearchForm from "../SearchForm/SearchForm";
+import SortingOptions from "../SortingOptions/SortingOptions";
+import { QuestionSortOption } from "../../types/question";
 
 interface QuestionListProps {
   section: SectionDto;
@@ -79,23 +81,17 @@ const QuestionList: React.FC<QuestionListProps> = ({
   return (
     <div className="question-list">
       <div className="question-list-header">
-        <input
-          type="text"
-          placeholder="질문 검색..."
-          value={searchTerm}
-          onChange={handleSearch}
-          className="question-search-input"
+        <SearchForm onSearch={setSearchTerm} placeholder="질문 검색 ..." />
+        <SortingOptions<QuestionSortOption>
+          sortOption={sortOption}
+          onSortChange={setSortOption}
+          options={[
+            { value: "createdAt-DESC", label: "최신순" },
+            { value: "createdAt-ASC", label: "오래된순" },
+            { value: "saved-DESC", label: "스크랩 높은 순" },
+            { value: "saved-ASC", label: "스크랩 낮은 순" },
+          ]}
         />
-        <select
-          className="question-sort-select"
-          value={`${sortOption.sort}-${sortOption.order}`}
-          onChange={handleSortChange}
-        >
-          <option value="createdAt-DESC">최신순</option>
-          <option value="createdAt-ASC">오래된순</option>
-          <option value="saved-DESC">스크랩 많은순</option>
-          <option value="saved-ASC">스크랩 적은순</option>
-        </select>
       </div>
       <div className="question-list-content">
         {isLoading ? (

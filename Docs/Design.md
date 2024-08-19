@@ -61,6 +61,7 @@
   - updatedAt: 수정 날짜
 - Book: 질문들을 모아서 만든 문제집
   - id: 고유 부여되는 아이디
+  - visibility: 문제집 공개 범위
   - title: 문제집 제목
   - description: 문제집 설명
   - createdAt: 생성 날짜

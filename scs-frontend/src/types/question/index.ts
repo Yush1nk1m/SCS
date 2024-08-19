@@ -24,3 +24,8 @@ export interface QuestionResponse {
     saved: number;
   };
 }
+
+export interface QuestionSortOption {
+  sort: "createdAt" | "saved";
+  order: "ASC" | "DESC";
+}

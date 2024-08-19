@@ -7,6 +7,7 @@ import CreateQuestionModal from "../../components/CreateQuestionModal/CreateQues
 import { SectionDto } from "../../api/swaggerApi";
 import toast from "react-hot-toast";
 import "./SectionPage.css";
+import SearchForm from "../../components/SearchForm/SearchForm";
 
 const SectionPage: React.FC = () => {
   const [sections, setSections] = useState<SectionDto[]>([]);
@@ -56,13 +57,7 @@ const SectionPage: React.FC = () => {
   return (
     <div className="section-page">
       <div className="section-header">
-        <input
-          type="text"
-          placeholder="섹션 검색..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="section-search-input"
-        />
+        <SearchForm onSearch={setSearchTerm} placeholder="섹션 검색 ..." />
         <SortingOptions<SectionSortOption>
           sortOption={sortOption}
           onSortChange={setSortOption}

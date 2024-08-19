@@ -3,11 +3,6 @@ export interface SectionSortOption {
   order: "ASC" | "DESC";
 }
 
-export interface QuestionSortOption {
-  sort: "createdAt" | "saved";
-  order: "ASC" | "DESC";
-}
-
 export interface Section {
   id: number;
   subject: string;

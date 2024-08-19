@@ -2,8 +2,9 @@ import React from "react";
 import "./SortingOptions.css";
 import { SectionSortOption } from "../../types/section";
 import { ActionSortOption } from "../../types/action";
+import { QuestionSortOption } from "../../types/question";
 
-type SortOption = SectionSortOption | ActionSortOption;
+type SortOption = SectionSortOption | ActionSortOption | QuestionSortOption;
 
 interface SortingOptionsProps<T extends SortOption> {
   sortOption: T;

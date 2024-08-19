@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ActionSortOption } from "../../types/action";
-import ActionSortingOptions from "../../components/ActionSortingOptions/ActionSortingOptions";
 import { fetchActions, fetchQuestion } from "../../api/questionApi";
 import "./QuestionPage.css";
 import Pagination from "../../components/Pagination/Pagination";
@@ -10,6 +9,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { ActionDto, QuestionDto } from "../../api/swaggerApi";
 import toast from "react-hot-toast";
 import SortingOptions from "../../components/SortingOptions/SortingOptions";
+import SearchForm from "../../components/SearchForm/SearchForm";
 
 const QuestionPage: React.FC = () => {
   const isLoggedIn = useAuth();
@@ -21,7 +21,6 @@ const QuestionPage: React.FC = () => {
     sort: "updatedAt",
     order: "DESC",
   });
-  const [searchInput, setSearchInput] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -70,11 +69,10 @@ const QuestionPage: React.FC = () => {
     }
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSearch = (searchTerm: string) => {
     setCurrentPage(1);
     if (id) {
-      fetchActionsData(id, searchInput);
+      fetchActionsData(id, searchTerm);
     }
   };
 
@@ -105,18 +103,7 @@ const QuestionPage: React.FC = () => {
               { value: "likeCount-ASC", label: "좋아요 낮은순" },
             ]}
           />
-          <form onSubmit={handleSearch} className="search-form">
-            <input
-              type="text"
-              placeholder="액션 검색..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className="search-input"
-            />
-            <button type="submit" className="search-button">
-              검색
-            </button>
-          </form>
+          <SearchForm onSearch={onSearch} placeholder="액션 검색 ..." />
         </div>
         <div className="actions-list">
           {actions.map((action) => (
