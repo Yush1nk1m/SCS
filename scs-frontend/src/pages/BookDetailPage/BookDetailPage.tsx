@@ -6,8 +6,6 @@ import {
   Heart,
   Eye,
   EyeOff,
-  Edit,
-  Share2,
   Trash2,
   ArrowLeft,
   Calendar,

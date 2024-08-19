@@ -5,6 +5,7 @@ import {
   BooksResponseDto,
   BookResponseDto,
   LikeResponseDto,
+  BaseResponseDto,
 } from "./swaggerApi";
 import {
   getAccessToken,
@@ -136,6 +137,17 @@ export const createBook = async (
     title,
     description,
   });
+};
+
+export const saveQuestionToBook = async (
+  bookId: number,
+  questionId: number
+): Promise<BaseResponseDto> => {
+  return authRequest<BaseResponseDto, { bookId: number; questionId: number }>(
+    (params) =>
+      api.v1.bookControllerSaveQuestionToBook(params.bookId, params.questionId),
+    { bookId, questionId }
+  );
 };
 
 const authRequest = async <T, P>(

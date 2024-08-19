@@ -16,6 +16,8 @@ import toast from "react-hot-toast";
 import "./QuestionPage.css";
 import { useAuth } from "../../hooks/useAuth";
 import CreateQuestionModal from "../../components/CreateQuestionModal/CreateQuestionModal";
+import ScrapModal from "../../components/ScrapModal/ScrapModal";
+import QuestionCard from "../../components/QuestionCard/QuestionCard";
 
 const QuestionPage: React.FC = () => {
   const { sectionId } = useParams<{ sectionId: string }>();
@@ -27,7 +29,11 @@ const QuestionPage: React.FC = () => {
     order: "DESC",
   });
   const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [scrapModalOpen, setScrapModalOpen] = useState(false);
+  const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(
+    null
+  );
   const { isLoggedIn } = useAuth();
 
   useEffect(() => {
@@ -61,12 +67,17 @@ const QuestionPage: React.FC = () => {
   };
 
   const handleCreateQuestion = () => {
-    setIsModalOpen(true);
+    setIsCreateModalOpen(true);
   };
 
   const handleQuestionSubmit = async () => {
-    setIsModalOpen(false);
+    setIsCreateModalOpen(false);
     await fetchQuestionsData();
+  };
+
+  const handleScrap = (questionId: number) => {
+    setSelectedQuestionId(questionId);
+    setScrapModalOpen(true);
   };
 
   return (
@@ -91,22 +102,11 @@ const QuestionPage: React.FC = () => {
       </div>
       <div className="question-list">
         {questions.map((question) => (
-          <Link
-            to={`/question/${question.id}`}
+          <QuestionCard
             key={question.id}
-            className="question-item"
-          >
-            <LucideMessageCircleQuestion size={24} />
-            <div className="question-item-content">
-              <h2>{question.content}</h2>
-              <div className="question-item-meta">
-                <span>
-                  <SaveIcon size={16} /> {question.saved}
-                </span>
-                <span>{new Date(question.createdAt).toLocaleDateString()}</span>
-              </div>
-            </div>
-          </Link>
+            question={question}
+            onScrap={handleScrap}
+          />
         ))}
       </div>
       <Pagination
@@ -123,11 +123,17 @@ const QuestionPage: React.FC = () => {
           <span>질문 생성</span>
         </button>
       )}
-      {isModalOpen && (
+      {isCreateModalOpen && (
         <CreateQuestionModal
           sectionId={Number(sectionId!)}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => setIsCreateModalOpen(false)}
           onSubmit={handleQuestionSubmit}
+        />
+      )}
+      {scrapModalOpen && selectedQuestionId && (
+        <ScrapModal
+          questionId={selectedQuestionId}
+          onClose={() => setScrapModalOpen(false)}
         />
       )}
     </div>

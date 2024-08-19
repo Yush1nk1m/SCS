@@ -1,0 +1,59 @@
+.scrap-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.scrap-modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.scrap-modal h2 {
+  margin-bottom: 20px;
+}
+
+.scrap-modal select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.scrap-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.scrap-modal-actions button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.scrap-modal-actions button:first-child {
+  background-color: #4c4cff;
+  color: white;
+}
+
+.scrap-modal-actions button:first-child:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.scrap-modal-actions button:last-child {
+  background-color: #f0f0f0;
+}
