@@ -8,6 +8,13 @@ export class BookDto {
     id: number;
 
     @ApiProperty({
+        example: "public",
+        description: "문제집 공개 범위",
+    })
+    @Expose()
+    visibility: string;
+
+    @ApiProperty({
         example: "백엔드 신입 면접 대비 문제집",
         description: "문제집 제목",
     })

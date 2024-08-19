@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { BookVisibility } from "../types/book-visibility.type";
 
 export class UpdateBookTitleDto {
     @ApiProperty({
@@ -18,4 +19,14 @@ export class UpdateBookDescriptionDto {
     })
     @IsString()
     description: string;
+}
+
+export class UpdateBookVisibilityDto {
+    @ApiProperty({
+        enum: BookVisibility,
+        example: "public",
+        description: "문제집 공개 범위",
+    })
+    @IsEnum(BookVisibility)
+    visibility: BookVisibility;
 }

@@ -25,7 +25,7 @@
 
 ```
 {
-    message: `result message`
+  "message": "Request has been processed."
 }
 ```
 
@@ -39,7 +39,7 @@
 
 ```
 {
-    message: `result message`
+  "message": "Request has been processed."
 }
 ```
 
@@ -53,14 +53,14 @@
 
 ```
 {
-    message: `result message`,
-    user: {
-        id: `user's id`,
-        email: `user's email`,
-        nickname: `user's nickname`,
-        affiliation: `user's affiliation`,
-        position: `position`
-    }
+  "message": "Request has been processed.",
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "nickname": "닉네임",
+    "affiliation": "서강대학교",
+    "position": "백엔드"
+  }
 }
 ```
 
@@ -74,9 +74,9 @@
 
 ```
 {
-    message: `result message`,
-    accessToken: `JWT access token`,
-    refreshToken: `JWT refresh token`
+  "message": "Request has been processed.",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
@@ -90,9 +90,9 @@
 
 ```
 {
-    message: `result message`,
-    accessToken: `JWT access token`,
-    refreshToken: `JWT refresh token`
+  "message": "Request has been processed.",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
@@ -106,7 +106,7 @@
 
 ```
 {
-    message: `result message`
+  "message": "Request has been processed."
 }
 ```
 
@@ -146,18 +146,16 @@
 
 ```
 {
-    message: `result message`,
-    users: [
-        {
-            id: `user's id`,
-            email: `user's email`,
-            nickname: `user's nickname`,
-            affiliation: `user's affiliation`,
-            position: `position`
-        },
-        { ... },
-        ...
-    ]
+  "message": "Request has been processed.",
+  "users": [
+    {
+      "id": 1,
+      "email": "user@example.com",
+      "nickname": "닉네임",
+      "affiliation": "서강대학교",
+      "position": "백엔드"
+    }
+  ]
 }
 ```
 
@@ -171,14 +169,14 @@
 
 ```
 {
-    message: `result message`,
-    user: {
-        id: `user's id`,
-        email: `user's email`,
-        nickname: `user's nickname`,
-        affiliation: `user's affiliation`,
-        position: `position`
-    }
+  "message": "Request has been processed.",
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "nickname": "닉네임",
+    "affiliation": "서강대학교",
+    "position": "백엔드"
+  }
 }
 ```
 
@@ -192,14 +190,14 @@
 
 ```
 {
-    message: `result message`,
-    user: {
-        id: `user's id`,
-        email: `user's email`,
-        nickname: `user's nickname`,
-        affiliation: `user's affiliation`,
-        position: `position`
-    }
+  "message": "Request has been processed.",
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "nickname": "닉네임",
+    "affiliation": "서강대학교",
+    "position": "백엔드"
+  }
 }
 ```
 
@@ -213,7 +211,7 @@
 
 ```
 {
-    message: `result message`
+  "message": "Request has been processed."
 }
 ```
 
@@ -227,7 +225,7 @@
 
 ```
 {
-    message: `result message`
+  "message": "Request has been processed."
 }
 ```
 
@@ -241,7 +239,7 @@
 
 ```
 {
-    message: `result message`
+  "message": "Request has been processed."
 }
 ```
 
@@ -255,7 +253,24 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed.",
+  "books": [
+    {
+      "id": 1,
+      "title": "백엔드 신입 면접 대비 문제집",
+      "description": "백엔드 신입 취준을 위한 문제집입니다.",
+      "likeCount": 10,
+      "createdAt": "2024-08-14T12:34:56Z",
+      "updatedAt": "2024-08-14T12:34:56Z",
+      "publisher": {
+        "id": 1,
+        "nickname": "닉네임"
+      }
+    }
+  ],
+  "total": 5
+}
 ```
 
 ## Section
@@ -283,22 +298,20 @@
 
 ```
 {
-    message: `result message`,
-    sections: [
-        {
-            id: `section's id`,
-            subject: `section's subject`,
-            description: `section's description`,
-            createdAt: `section`s updated date`,
-            updatedAt: `section's updated date`,
-            creator: {
-                id: `creator's id`,
-                nickname: `creator's nickname`
-            },
-        },
-        { ... },
-        ...
-    ]
+  "message": "Request has been processed.",
+  "sections": [
+    {
+      "id": 1,
+      "subject": "네트워크",
+      "description": "네트워크 관련 질문들",
+      "createdAt": "2024-08-14T12:34:56Z",
+      "updatedAt": "2024-08-14T12:34:56Z",
+      "creator": {
+        "id": 1,
+        "nickname": "닉네임"
+      }
+    }
+  ]
 }
 ```
 
@@ -312,18 +325,18 @@
 
 ```
 {
-    message: `result message`,
-    section: {
-        id: `section's id`,
-        subject: `section's subject`,
-        description: `section's description`,
-        createdAt: `section's created date`,
-        updatedAt: `section's updated date`,
-        creator: {
-            id: `creator's id`,
-            nickname: `creator's nickname`
-        }
+  "message": "Request has been processed.",
+  "section": {
+    "id": 1,
+    "subject": "네트워크",
+    "description": "네트워크 관련 질문들",
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "creator": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -337,18 +350,18 @@
 
 ```
 {
-    message: `result message`,
-    section: {
-        id: `section's id`,
-        subject: `section's subject`,
-        description: `section's description`,
-        createdAt: `section's created date`,
-        updatedAt: `section's updated date`,
-        creator: {
-            id: `creator's id`,
-            nickname: `creator's nickname`
-        }
+  "message": "Request has been processed.",
+  "section": {
+    "id": 1,
+    "subject": "네트워크",
+    "description": "네트워크 관련 질문들",
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "creator": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -362,18 +375,18 @@
 
 ```
 {
-    message: `result message`,
-    section: {
-        id: `section's id`,
-        subject: `section's subject`,
-        description: `section's description`,
-        createdAt: `section's created date`,
-        updatedAt: `section's updated date`,
-        creator: {
-            id: `creator's id`,
-            nickname: `creator's nickname`
-        }
+  "message": "Request has been processed.",
+  "section": {
+    "id": 1,
+    "subject": "네트워크",
+    "description": "네트워크 관련 질문들",
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "creator": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -387,18 +400,18 @@
 
 ```
 {
-    message: `result message`,
-    section: {
-        id: `section's id`,
-        subject: `section's subject`,
-        description: `section's description`,
-        createdAt: `section's created date`,
-        updatedAt: `section's updated date`,
-        creator: {
-            id: `creator's id`,
-            nickname: `creator's nickname`
-        }
+  "message": "Request has been processed.",
+  "section": {
+    "id": 1,
+    "subject": "네트워크",
+    "description": "네트워크 관련 질문들",
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "creator": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -411,7 +424,9 @@
 - **Response data**:
 
 ```
-{ message: `result message` }
+{
+  "message": "Request has been processed."
+}
 ```
 
 ### S-07: 특정 섹션의 질문들 조회
@@ -425,23 +440,21 @@
 
 ```
 {
-    message: `result message`,
-    questions: [
-        {
-            id: `question's id`,
-            content: `question content`,
-            saved: `number of times saved`
-            createdAt: `question's created date`,
-            updatedAt: `question's updated date`,
-            writer: {
-                id: `writer's id`,
-                nickname: `writer's nickname`
-            },
-        },
-        { ... },
-        ...
-        ],
-    total: `total number of the same section's questions`
+  "message": "Request has been processed.",
+  "questions": [
+    {
+      "id": 1,
+      "content": "TCP와 UDP의 차이점은 무엇인가요?",
+      "saved": 5,
+      "createdAt": "2024-08-14T12:34:56Z",
+      "updatedAt": "2024-08-14T12:34:56Z",
+      "writer": {
+        "id": 1,
+        "nickname": "닉네임"
+      }
+    }
+  ],
+  "total": 5
 }
 ```
 
@@ -467,18 +480,18 @@
 
 ```
 {
-    message: `result message`,
-    question: {
-        id: `question's id`,
-        content: `question content`,
-        createdAt: `question's created date`,
-        updatedAt: `question's updated date`,
-        saved: `number of times saved`,
-        writer: {
-            id: `writer's id`,
-            nickname: `writer's nickname`
-        },
+  "message": "Request has been processed.",
+  "question": {
+    "id": 1,
+    "content": "TCP와 UDP의 차이점은 무엇인가요?",
+    "saved": 5,
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "writer": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -517,18 +530,18 @@
 
 ```
 {
-    message: `result message`,
-    question: {
-        id: `question's id`,
-        content: `question's updated content`,
-        createdAt: `question's created date`,
-        updatedAt: `question's updated date`,
-        saved: `question's saved count`,
-        writer: {
-            id: `writer's id`,
-            nickname: `writer's nickname`
-        },
+  "message": "Request has been processed.",
+  "question": {
+    "id": 1,
+    "content": "TCP와 UDP의 차이점은 무엇인가요?",
+    "saved": 5,
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "writer": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -541,7 +554,9 @@
 - **Response data**:
 
 ```
-{ message: `result message` }
+{
+  "message": "Request has been processed."
+}
 ```
 
 ### Q-05: 특정 질문의 답변들 조회
@@ -555,24 +570,24 @@
 
 ```
 {
-    message: `result message`,
-    actions: [
-        {
-            id: `action's id`,
-            title: `action's title`,
-            imageUrls: `attached images' url`,
-            likeCount: `action's total like`,
-            createdAt: `action's created date`,
-            updatedAt: `action's updated date`,
-            writer: {
-                id: `writer's id`,
-                nickname: `writer's nickname`
-            }
-        },
-        { ... },
-        ...
-    ],
-    total: `total number of found actions`
+  "message": "Request has been processed.",
+  "actions": [
+    {
+      "id": 1,
+      "title": "관리자님이 2024. 08. 14. 작성한 답변입니다.",
+      "imageUrls": [
+        "http://example.com/image1.jpg"
+      ],
+      "likeCount": 10,
+      "createdAt": "2024-08-14T12:34:56Z",
+      "updatedAt": "2024-08-14T12:34:56Z",
+      "writer": {
+        "id": 1,
+        "nickname": "닉네임"
+      }
+    }
+  ],
+  "total": 5
 }
 ```
 
@@ -601,19 +616,19 @@
 
 ```
 {
-    message: `result message`,
-    action: {
-        id: `action's id`,
-        title: `action's title`,
-        content: `action's content`,
-        likeCount: `number of likes`,
-        createdAt: `action's created date`,
-        updatedAt: `action's updated date`,
-        writer: {
-            id: `writer's id`,
-            nickname: `writer's nickname`
-        },
+  "message": "Request has been processed.",
+  "action": {
+    "id": 1,
+    "title": "관리자님이 2024. 08. 14. 작성한 답변입니다.",
+    "content": "TCP는 연결 지향적이고...",
+    "likeCount": 10,
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "writer": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -627,19 +642,19 @@
 
 ```
 {
-    message: `result message`,
-    action: {
-        id: `created action's id`,
-        title: `action title`,
-        content: `action content`,
-        likeCount: `number of likes`,
-        createdAt: `creation date`,
-        updatedAt: `updated date`,
-        writer: {
-            id: `writer's id`,
-            nickname: `writer's nickname`
-        }
+  "message": "Request has been processed.",
+  "action": {
+    "id": 1,
+    "title": "관리자님이 2024. 08. 14. 작성한 답변입니다.",
+    "content": "TCP는 연결 지향적이고...",
+    "likeCount": 10,
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "writer": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -653,19 +668,19 @@
 
 ```
 {
-    message: `result message`,
-    action: {
-        id: `created action's id`,
-        title: `action title`,
-        content: `action content`,
-        likeCount: `number of likes`,
-        createdAt: `creation date`,
-        updatedAt: `updated date`,
-        writer: {
-            id: `writer's id`,
-            nickname: `writer's nickname`
-        }
+  "message": "Request has been processed.",
+  "action": {
+    "id": 1,
+    "title": "관리자님이 2024. 08. 14. 작성한 답변입니다.",
+    "content": "TCP는 연결 지향적이고...",
+    "likeCount": 10,
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "writer": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -679,7 +694,7 @@
 
 ```
 {
-    message: `result message`
+  "message": "Request has been processed."
 }
 ```
 
@@ -693,8 +708,8 @@
 
 ```
 {
-    message: `result message`,
-    content: `action's raw markdown content`
+  "message": "Request has been processed.",
+  "content": "# TCP와 UDP\n\nTCP는..."
 }
 ```
 
@@ -708,9 +723,9 @@
 
 ```
 {
-    message: `result message`,
-    liked: `true` or `false`,
-    likeCount: `number of like`
+  "message": "Request has been processed.",
+  "likeCount": 10,
+  "liked": false
 }
 ```
 
@@ -724,9 +739,9 @@
 
 ```
 {
-    message: `result message`,
-    liked: `true` or `false`,
-    likeCount: `number of like`
+  "message": "Request has been processed.",
+  "likeCount": 10,
+  "liked": false
 }
 ```
 
@@ -742,21 +757,20 @@
 
 ```
 {
-    message: result message,
-    comments: [
-        {
-            id: comment's id,
-            content: comment content,
-            createdAt: comment's created date,
-            updatedAt: comment's updated date,
-            writer: {
-                id: writer's id,
-                nickname: writer's nickname
-            }
-        },
-        { ... },
-        ...
-    ]
+  "message": "Request has been processed.",
+  "comments": [
+    {
+      "id": 1,
+      "content": "이 게시물은 큰 도움이 되었습니다 ...",
+      "createdAt": "2024-08-14T12:34:56Z",
+      "updatedAt": "2024-08-14T12:34:56Z",
+      "writer": {
+        "id": 1,
+        "nickname": "닉네임"
+      }
+    }
+  ],
+  "total": 15
 }
 ```
 
@@ -779,8 +793,8 @@
 
 ```
 {
-    message: `result message`,
-    url: `uploaded image URL`
+  "message": "Request has been processed.",
+  "url": "s3://aws.amazon.com/..."
 }
 ```
 
@@ -794,9 +808,9 @@
 
 ```
 {
-    message: `result message`,
-    url: `presigned URL`,
-    key: `S3 object key`
+  "message": "Request has been processed.",
+  "key": "image.png",
+  "url": "s3://aws.amazon.com/..."
 }
 ```
 
@@ -820,17 +834,17 @@
 
 ```
 {
-    message: result message,
-    comment: {
-        id: comment's id,
-        content: comment content,
-        createdAt: comment's created date,
-        updatedAt: comment's updated date,
-        writer: {
-            id: writer's id,
-            nickname: writer's nickname
-        }
+  "message": "Request has been processed.",
+  "comment": {
+    "id": 1,
+    "content": "이 게시물은 큰 도움이 되었습니다 ...",
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "writer": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -844,17 +858,17 @@
 
 ```
 {
-    message: result message,
-    comment: {
-        id: comment's id,
-        content: comment content,
-        createdAt: comment's created date,
-        updatedAt: comment's updated date,
-        writer: {
-            id: writer's id,
-            nickname: writer's nickname
-        }
+  "message": "Request has been processed.",
+  "comment": {
+    "id": 1,
+    "content": "이 게시물은 큰 도움이 되었습니다 ...",
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "writer": {
+      "id": 1,
+      "nickname": "닉네임"
     }
+  }
 }
 ```
 
@@ -868,7 +882,7 @@
 
 ```
 {
-    message: result message
+  "message": "Request has been processed."
 }
 ```
 
@@ -888,6 +902,7 @@
 |  B-08  | DELETE |  /v1/books/:id/questions  | 문제집에서 질문 삭제             |
 |  B-09  |  POST  |    /v1/books/:id/like     | 문제집 좋아요 등록/취소          |
 |  B-10  |  GET   |    /v1/books/:id/like     | 사용자의 문제집 좋아요 여부 조회 |
+|  B-11  | PATCH  | /v1/books/:id/visibility  | 문제집 공개 범위 수정            |
 
 ### B-01: 모든 문제집 조회
 
@@ -919,7 +934,7 @@
 - **Description**: 새로운 문제집을 생성한다.
 - **Method**: `POST`
 - **URI**: `/v1/books`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { title: `book's title`, description: `book's description` }
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { visibility: `"public"` or `"private"`, title: `book's title`, description: `book's description` }
 - **Response data**:
 
 ```
@@ -1004,6 +1019,18 @@
 - **Method**: `GET`
 - **URI**: `/v1/books/:id/like`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+
+```
+
+### B-11: 문제집 공개 범위 수정
+
+- **Description**: 문제집의 공개 범위를 수정한다.
+- **Method**: `PATCH`
+- **URI**: `/v1/books/:id/visibility`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & body = { visibility: `"public"` or `"private"` }
 - **Response data**:
 
 ```

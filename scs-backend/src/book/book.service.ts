@@ -11,6 +11,7 @@ import { QuestionRepository } from "../repository/question.repository";
 import { UserRepository } from "../repository/user.repository";
 import { Book } from "./book.entity";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
+import { BookVisibility } from "./types/book-visibility.type";
 
 @Injectable()
 export class BookService {
@@ -58,6 +59,7 @@ export class BookService {
     // [B-03] Service logic
     async createBook(
         userId: number,
+        visibility: BookVisibility,
         title: string,
         description: string,
     ): Promise<Book> {
@@ -71,6 +73,7 @@ export class BookService {
 
         // create new book, save it, and return
         const book = this.bookRepository.create({
+            visibility,
             title,
             description,
             publisher,
@@ -358,5 +361,34 @@ export class BookService {
         else {
             return [book.likeCount, false];
         }
+    }
+
+    // [B-11] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async updateBookVisibility(
+        userId: number,
+        bookId: number,
+        visibility: BookVisibility,
+    ): Promise<Book> {
+        // find a book from DB
+        const book = await this.bookRepository.findBookById(bookId);
+
+        // if the book does not exist, it is an error
+        if (!book) {
+            throw new NotFoundException(
+                `Book with id ${bookId} has not been found.`,
+            );
+        }
+
+        // if the book has not been written by user, it is an error
+        if (book.publisher.id !== userId) {
+            throw new ForbiddenException("User cannot access to the book.");
+        }
+
+        // update book's visibility and save
+        book.visibility = visibility;
+        return this.bookRepository.save(book);
     }
 }

@@ -35,6 +35,7 @@ import { CreateBookDto } from "./dto/create-book.dto";
 import {
     UpdateBookDescriptionDto,
     UpdateBookTitleDto,
+    UpdateBookVisibilityDto,
 } from "./dto/update-book.dto";
 import { LikeResponseDto } from "../common/dto/like-response.dto";
 
@@ -155,9 +156,10 @@ export class BookController {
         @GetCurrentUserId() userId: number,
         @Body() createBookDto: CreateBookDto,
     ): Promise<BookResponseDto> {
-        const { title, description } = createBookDto;
+        const { visibility, title, description } = createBookDto;
         const book = await this.bookService.createBook(
             userId,
+            visibility,
             title,
             description,
         );
@@ -388,6 +390,46 @@ export class BookController {
             message: "Like request has been processed",
             likeCount,
             liked,
+        };
+    }
+
+    // [B-11] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "문제집 공개 범위 수정" })
+    @ApiOkResponse({
+        description: "문제집 공개 범위 수정 성공",
+        type: BookResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 인증이 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 접근 권한이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "문제집이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(BookResponseDto)
+    @Patch(":id/visibility")
+    @HttpCode(HttpStatus.OK)
+    async updateBookVisibility(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) bookId: number,
+        @Body() updateBookVisibilityDto: UpdateBookVisibilityDto,
+    ): Promise<BookResponseDto> {
+        const { visibility } = updateBookVisibilityDto;
+        const book = await this.bookService.updateBookVisibility(
+            userId,
+            bookId,
+            visibility,
+        );
+
+        return {
+            message: "Book visibility has been updated.",
+            book,
         };
     }
 }

@@ -133,18 +133,13 @@ export class UserService {
         }
 
         // find books from DB
-        const [books, total] =
-            await this.bookRepository.findBooksWithQueryByUserId(
-                userId,
-                page,
-                limit,
-                sort,
-                order,
-                search,
-            );
-
-        this.logger.verbose(books);
-
-        return [books, total];
+        return this.bookRepository.findBooksWithQueryByUserId(
+            userId,
+            page,
+            limit,
+            sort,
+            order,
+            search,
+        );
     }
 }

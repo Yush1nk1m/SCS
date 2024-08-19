@@ -16,6 +16,13 @@ export class Book {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({
+        type: "enum",
+        enum: ["public", "private"],
+        default: "public",
+    })
+    visibility: string;
+
     @Column()
     title: string;
 
