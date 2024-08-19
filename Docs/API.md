@@ -247,9 +247,10 @@
 
 ### U-07: 로그인한 사용자가 생성한 문제집 조회
 
-- **Description**: 로그인한 사용자가 생성한 문제집들을 조회한다.
+- **Description**: 로그인한 사용자가 생성한 문제집들을 조회한다. 페이지네이션을 지원한다. 쿼리 파라미터의 기본 값은 { page=1, limit=10, sort=createdAt, order=desc }이다.
 - **Method**: `GET`
 - **URI**: `/v1/users/books`
+- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `likeCount`, order: `asc` or `desc`, search: `search value`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
 - **Response data**:
 

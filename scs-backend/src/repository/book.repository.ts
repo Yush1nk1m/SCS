@@ -32,6 +32,32 @@ export class BookRepository extends Repository<Book> {
         });
     }
 
+    async findBooksWithQueryByUserId(
+        userId: number,
+        page: number = 1,
+        limit: number = 10,
+        sort: "createdAt" | "likeCount" = "createdAt",
+        order: "ASC" | "DESC" = "DESC",
+        search: string,
+    ): Promise<[Book[], number]> {
+        const where = {
+            title: search !== "" ? Like(`%${search}%`) : undefined,
+            publisher: {
+                id: userId,
+            },
+        };
+
+        return this.findAndCount({
+            where,
+            relations: ["publisher"],
+            order: {
+                [sort]: order,
+            },
+            skip: (page - 1) * limit,
+            take: limit,
+        });
+    }
+
     async findBookById(bookId: number): Promise<Book> {
         return this.findOne({
             where: { id: bookId },

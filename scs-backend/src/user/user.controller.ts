@@ -9,6 +9,7 @@ import {
     Param,
     ParseIntPipe,
     Patch,
+    Query,
 } from "@nestjs/common";
 import { Public } from "../common/decorator/public.decorator";
 import { UserService } from "./user.service";
@@ -29,6 +30,8 @@ import {
 import { UserResponseDto, UsersResponseDto } from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
+import { BooksResponseDto } from "../book/dto/response.dto";
+import { GetBooksQueryDto } from "../book/dto/get-books-query.dto";
 
 @ApiTags("User")
 @ApiInternalServerErrorResponse({
@@ -84,6 +87,41 @@ export class UserController {
         return {
             message: `An user with id: ${id} has been found.`,
             user,
+        };
+    }
+
+    // [U-07] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "로그인한 사용자가 생성한 문제집 조회" })
+    @ApiOkResponse({
+        description: "문제집 조회 성공",
+        type: BooksResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "접근 권한이 없음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(BooksResponseDto)
+    @Get("books")
+    @HttpCode(HttpStatus.OK)
+    async getMyBooks(
+        @GetCurrentUserId() userId: number,
+        @Query() query: GetBooksQueryDto,
+    ): Promise<BooksResponseDto> {
+        const { page, limit, sort, order, search } = query;
+        const [books, total] = await this.userService.getMyBooks(
+            userId,
+            page,
+            limit,
+            sort,
+            order,
+            search,
+        );
+
+        return {
+            message: "User's books have been found.",
+            books,
+            total,
         };
     }
 

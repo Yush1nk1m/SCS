@@ -13,13 +13,18 @@ import * as bcrypt from "bcrypt";
 import { ChangeNicknameDto } from "./dto/change-nickname.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
 import * as dotenv from "dotenv";
+import { Book } from "../book/book.entity";
+import { BookRepository } from "../repository/book.repository";
 dotenv.config();
 
 @Injectable()
 export class UserService {
     private logger = new Logger("UserService");
 
-    constructor(private readonly userRepository: UserRepository) {}
+    constructor(
+        private readonly userRepository: UserRepository,
+        private readonly bookRepository: BookRepository,
+    ) {}
 
     // [U-01] Service logic
     async findAllUsers(): Promise<User[]> {
@@ -108,5 +113,38 @@ export class UserService {
         }
 
         await this.userRepository.deleteUserById(id);
+    }
+
+    // [U-07] Service logic
+    async getMyBooks(
+        userId: number,
+        page: number = 1,
+        limit: number = 10,
+        sort: "createdAt" | "likeCount" = "createdAt",
+        order: "ASC" | "DESC" = "DESC",
+        search: string,
+    ): Promise<[Book[], number]> {
+        // find user from DB
+        const user = await this.userRepository.findUserById(userId);
+
+        // if user does not exist, it is an error
+        if (!user) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        // find books from DB
+        const [books, total] =
+            await this.bookRepository.findBooksWithQueryByUserId(
+                userId,
+                page,
+                limit,
+                sort,
+                order,
+                search,
+            );
+
+        this.logger.verbose(books);
+
+        return [books, total];
     }
 }
