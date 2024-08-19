@@ -125,6 +125,41 @@ export class UserController {
         };
     }
 
+    // [U-08] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "로그인한 사용자가 좋아요한 문제집 조회" })
+    @ApiOkResponse({
+        description: "문제집 조회 성공",
+        type: BooksResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "접근 권한이 없음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(BooksResponseDto)
+    @Get("books/liked")
+    @HttpCode(HttpStatus.OK)
+    async getLikedBooks(
+        @GetCurrentUserId() userId: number,
+        @Query() query: GetBooksQueryDto,
+    ): Promise<BooksResponseDto> {
+        const { page, limit, sort, order, search } = query;
+        const [books, total] = await this.userService.getLikedBooks(
+            userId,
+            page,
+            limit,
+            sort,
+            order,
+            search,
+        );
+
+        return {
+            message: "User's books have been found.",
+            books,
+            total,
+        };
+    }
+
     // [U-02] Controller logic
     @ApiOperation({ summary: "특정 사용자 정보 조회" })
     @ApiOkResponse({

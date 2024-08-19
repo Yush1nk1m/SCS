@@ -142,4 +142,31 @@ export class UserService {
             search,
         );
     }
+
+    // [U-07] Service logic
+    async getLikedBooks(
+        userId: number,
+        page: number = 1,
+        limit: number = 10,
+        sort: "createdAt" | "likeCount" = "createdAt",
+        order: "ASC" | "DESC" = "DESC",
+        search: string,
+    ): Promise<[Book[], number]> {
+        // find user from DB
+        const user = await this.userRepository.findUserById(userId);
+
+        // if user does not exist, it is an error
+        if (!user) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        return this.bookRepository.findBooksLikedByUser(
+            userId,
+            page,
+            limit,
+            sort,
+            order,
+            search,
+        );
+    }
 }

@@ -1183,6 +1183,39 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags User
+     * @name UserControllerGetLikedBooks
+     * @summary 로그인한 사용자가 좋아요한 문제집 조회
+     * @request GET:/v1/users/books/liked
+     * @secure
+     */
+    userControllerGetLikedBooks: (
+      query?: {
+        /** @default 1 */
+        page?: number;
+        /** @default 10 */
+        limit?: number;
+        /** @default "createdAt" */
+        sort?: "createdAt" | "likeCount";
+        /** @default "DESC" */
+        order?: "ASC" | "DESC";
+        /** @default "" */
+        search?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<BooksResponseDto, BaseResponseDto>({
+        path: `/v1/users/books/liked`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
      * @name UserControllerGetSpecificUser
      * @summary 특정 사용자 정보 조회
      * @request GET:/v1/users/{id}

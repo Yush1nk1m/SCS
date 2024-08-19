@@ -12,6 +12,7 @@ import ActionPage from "./pages/ActionPage/ActionPage";
 import "./App.css";
 import ScrollToTop from "./components/common/ScrollToTop";
 import EditActionPage from "./pages/EditActionPage/EditActionPage";
+import LibraryPage from "./pages/LibraryPage/LibraryPage";
 
 const App: React.FC = () => {
   return (
@@ -40,6 +41,7 @@ const App: React.FC = () => {
           />
           <Route path="/action/:id/edit" element={<EditActionPage />} />
           <Route path="/action/:id" element={<ActionPage />} />
+          <Route path="/library" element={<LibraryPage />} />
         </Routes>
       </Layout>
     </>

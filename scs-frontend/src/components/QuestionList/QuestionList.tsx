@@ -61,16 +61,8 @@ const QuestionList: React.FC<QuestionListProps> = ({
     fetchQuestionsData();
   }, [fetchQuestionsData]);
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const [sort, order] = e.target.value.split("-");
-    setSortOption({
-      sort: sort as "createdAt" | "saved",
-      order: order as "ASC" | "DESC",
-    });
-  };
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
     setPage(1);
   };
 
@@ -81,7 +73,7 @@ const QuestionList: React.FC<QuestionListProps> = ({
   return (
     <div className="question-list">
       <div className="question-list-header">
-        <SearchForm onSearch={setSearchTerm} placeholder="질문 검색 ..." />
+        <SearchForm onSearch={handleSearch} placeholder="질문 검색 ..." />
         <SortingOptions<QuestionSortOption>
           sortOption={sortOption}
           onSortChange={setSortOption}

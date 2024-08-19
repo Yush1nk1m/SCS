@@ -71,4 +71,27 @@ export class BookRepository extends Repository<Book> {
             relations: ["publisher", "questions"],
         });
     }
+
+    async findBooksLikedByUser(
+        userId: number,
+        page: number = 1,
+        limit: number = 10,
+        sort: "createdAt" | "likeCount" = "createdAt",
+        order: "ASC" | "DESC" = "DESC",
+        search: string,
+    ): Promise<[Book[], number]> {
+        const query = this.createQueryBuilder("book")
+            .innerJoin("book.likedBy", "user")
+            .where("user.id = :userId", { userId })
+            .leftJoinAndSelect("book.publisher", "publisher")
+            .orderBy(`book.${sort}`, order)
+            .skip((page - 1) * limit)
+            .take(limit);
+
+        if (search !== "") {
+            query.andWhere("book.title LIKE :title", { title: `%${search}%` });
+        }
+
+        return query.getManyAndCount();
+    }
 }
