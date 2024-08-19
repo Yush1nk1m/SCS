@@ -914,7 +914,25 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed.",
+  "books": [
+    {
+      "id": 1,
+      "visibility": "public",
+      "title": "백엔드 신입 면접 대비 문제집",
+      "description": "백엔드 신입 취준을 위한 문제집입니다.",
+      "likeCount": 10,
+      "createdAt": "2024-08-14T12:34:56Z",
+      "updatedAt": "2024-08-14T12:34:56Z",
+      "publisher": {
+        "id": 1,
+        "nickname": "닉네임"
+      }
+    }
+  ],
+  "total": 5
+}
 ```
 
 ### B-02: 특정 문제집 조회
@@ -926,7 +944,22 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed.",
+  "book": {
+    "id": 1,
+    "visibility": "public",
+    "title": "백엔드 신입 면접 대비 문제집",
+    "description": "백엔드 신입 취준을 위한 문제집입니다.",
+    "likeCount": 10,
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "publisher": {
+      "id": 1,
+      "nickname": "닉네임"
+    }
+  }
+}
 ```
 
 ### B-03: 새 문제집 생성
@@ -938,7 +971,22 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed.",
+  "book": {
+    "id": 1,
+    "visibility": "public",
+    "title": "백엔드 신입 면접 대비 문제집",
+    "description": "백엔드 신입 취준을 위한 문제집입니다.",
+    "likeCount": 10,
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "publisher": {
+      "id": 1,
+      "nickname": "닉네임"
+    }
+  }
+}
 ```
 
 ### B-04: 문제집 제목 수정
@@ -950,7 +998,22 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed.",
+  "book": {
+    "id": 1,
+    "visibility": "public",
+    "title": "백엔드 신입 면접 대비 문제집",
+    "description": "백엔드 신입 취준을 위한 문제집입니다.",
+    "likeCount": 10,
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "publisher": {
+      "id": 1,
+      "nickname": "닉네임"
+    }
+  }
+}
 ```
 
 ### B-05: 문제집 설명 수정
@@ -962,7 +1025,22 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed.",
+  "book": {
+    "id": 1,
+    "visibility": "public",
+    "title": "백엔드 신입 면접 대비 문제집",
+    "description": "백엔드 신입 취준을 위한 문제집입니다.",
+    "likeCount": 10,
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "publisher": {
+      "id": 1,
+      "nickname": "닉네임"
+    }
+  }
+}
 ```
 
 ### B-06: 문제집 삭제
@@ -974,7 +1052,9 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed."
+}
 ```
 
 ### B-07: 문제집에 질문 추가 (스크랩)
@@ -986,7 +1066,9 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed."
+}
 ```
 
 ### B-08: 문제집에서 질문 삭제
@@ -998,7 +1080,9 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed."
+}
 ```
 
 ### B-09: 문제집 좋아요 등록/취소
@@ -1010,7 +1094,11 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed.",
+  "likeCount": 10,
+  "liked": false
+}
 ```
 
 ### B-10: 사용자의 문제집 좋아요 여부 조회
@@ -1022,7 +1110,11 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed.",
+  "likeCount": 10,
+  "liked": false
+}
 ```
 
 ### B-11: 문제집 공개 범위 수정
@@ -1034,5 +1126,20 @@
 - **Response data**:
 
 ```
-
+{
+  "message": "Request has been processed.",
+  "book": {
+    "id": 1,
+    "visibility": "public",
+    "title": "백엔드 신입 면접 대비 문제집",
+    "description": "백엔드 신입 취준을 위한 문제집입니다.",
+    "likeCount": 10,
+    "createdAt": "2024-08-14T12:34:56Z",
+    "updatedAt": "2024-08-14T12:34:56Z",
+    "publisher": {
+      "id": 1,
+      "nickname": "닉네임"
+    }
+  }
+}
 ```
