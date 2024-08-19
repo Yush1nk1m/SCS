@@ -599,7 +599,7 @@
 | :----: | :----: | :-------------------------: | :----------------------------------- |
 | AC-01  |  GET   |       /v1/actions/:id       | 특정 답변 조회                       |
 | AC-02  |  POST  |  /v1/questions/:id/actions  | 새 답변 생성                         |
-| AC-03  | PATCH  |       /v1/actions/:id       | 답변 내용 수정                       |
+| AC-03  | PATCH  |       /v1/actions/:id       | 답변 수정                            |
 | AC-04  | DELETE |       /v1/actions/:id       | 답변 삭제                            |
 | AC-05  |  GET   | /v1/actions/:id/raw-content | 특정 답변의 Raw 마크다운 컨텐츠 조회 |
 | AC-06  |  POST  |    /v1/actions/:id/like     | 좋아요 등록/취소                     |
@@ -658,12 +658,12 @@
 }
 ```
 
-### AC-03: 답변 내용 수정
+### AC-03: 답변 수정
 
 - **Description**: 특정 답변의 내용을 수정한다. 답변 작성자만 수정 가능하다.
 - **Method**: `PATCH`
 - **URI**: `/v1/actions/:id`
-- **Request**: Request header = { Authorization: Bearer ${accessToken} } & Body = { content: updated action content }
+- **Request**: Request header = { Authorization: Bearer ${accessToken} } & Body = { title: `updated action title`, content: `updated action content` }
 - **Response data**:
 
 ```

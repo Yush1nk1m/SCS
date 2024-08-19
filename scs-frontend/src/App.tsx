@@ -11,6 +11,7 @@ import CreateActionPage from "./pages/CreateActionPage/CreateActionPage";
 import ActionPage from "./pages/ActionPage/ActionPage";
 import "./App.css";
 import ScrollToTop from "./components/common/ScrollToTop";
+import EditActionPage from "./pages/EditActionPage/EditActionPage";
 
 const App: React.FC = () => {
   return (
@@ -37,6 +38,7 @@ const App: React.FC = () => {
             path="/question/:id/create-action"
             element={<CreateActionPage />}
           />
+          <Route path="/action/:id/edit" element={<EditActionPage />} />
           <Route path="/action/:id" element={<ActionPage />} />
         </Routes>
       </Layout>

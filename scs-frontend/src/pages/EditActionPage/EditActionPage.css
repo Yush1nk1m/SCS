@@ -1,0 +1,138 @@
+.edit-action-page {
+  flex: 1;
+  height: 40vh;
+  padding: 20px;
+  background: linear-gradient(-45deg, #87ceeb, #1e90ff, #00bfff, #add8e6);
+  background-size: 400% 400%;
+  animation: wave 15s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.titleInput {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.titleInput:focus {
+  border-color: #4c4cff;
+  outline: none;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.cancelButton,
+.submitButton {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancelButton {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+.submitButton {
+  background-color: #4c4cff;
+  color: white;
+}
+
+.cancelButton:hover,
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cancelButton:hover {
+  background-color: #ff4757;
+}
+
+.submitButton:hover {
+  background-color: #3a3aff;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .titleInput {
+    font-size: 14px;
+  }
+
+  .buttonContainer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cancelButton,
+  .submitButton {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .md-editor {
+    height: calc(
+      100vh - var(--header-height) - var(--footer-height) -
+        var(--content-padding) * 2 - 150px
+    ) !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .content-wrapper {
+    max-width: 90%;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+}

@@ -160,6 +160,74 @@ export interface UserResponseDto {
   user: UserDto;
 }
 
+export interface PublisherDto {
+  /**
+   * 사용자 고유 ID
+   * @example 1
+   */
+  id: number;
+  /**
+   * 사용자 닉네임
+   * @example "닉네임"
+   */
+  nickname: string;
+}
+
+export interface BookDto {
+  /**
+   * 문제집 고유 ID
+   * @example 1
+   */
+  id: number;
+  /**
+   * 문제집 공개 범위
+   * @example "public"
+   */
+  visibility: string;
+  /**
+   * 문제집 제목
+   * @example "백엔드 신입 면접 대비 문제집"
+   */
+  title: string;
+  /**
+   * 문제집 설명
+   * @example "백엔드 신입 취준을 위한 문제집입니다."
+   */
+  description: string;
+  /**
+   * 좋아요 수
+   * @example 10
+   */
+  likeCount: number;
+  /**
+   * 답변 생성 일시
+   * @format date-time
+   * @example "2024-08-14T12:34:56Z"
+   */
+  createdAt: string;
+  /**
+   * 답변 수정 일시
+   * @format date-time
+   * @example "2024-08-14T12:34:56Z"
+   */
+  updatedAt: string;
+  publisher: PublisherDto;
+}
+
+export interface BooksResponseDto {
+  /**
+   * 응답 메시지
+   * @example "Request has been processed."
+   */
+  message: string;
+  books: BookDto[];
+  /**
+   * 검색된 문제집의 총 개수
+   * @example 5
+   */
+  total: number;
+}
+
 export interface ChangePasswordDto {
   /**
    * 사용자의 새로운 비밀번호
@@ -281,6 +349,11 @@ export interface QuestionDto {
    */
   content: string;
   /**
+   * 질문이 스크랩된 횟수
+   * @example 5
+   */
+  saved: number;
+  /**
    * 질문 생성 일시
    * @format date-time
    * @example "2024-08-14T12:34:56Z"
@@ -292,11 +365,6 @@ export interface QuestionDto {
    * @example "2024-08-14T12:34:56Z"
    */
   updatedAt: string;
-  /**
-   * 질문이 스크랩된 횟수
-   * @example 5
-   */
-  saved: number;
   writer: WriterDto;
 }
 
@@ -425,7 +493,7 @@ export interface ActionsResponseDto {
 
 export interface ActionDetailDto {
   /**
-   * 답변 ID
+   * 답변 고유 ID
    * @example 1
    */
   id: number;
@@ -487,6 +555,11 @@ export interface CreateActionDto {
 }
 
 export interface UpdateActionDto {
+  /**
+   * 답변 제목
+   * @example "관리자님이 2024. 08. 14. 작성한 답변입니다."
+   */
+  title: string;
   /**
    * 답변 내용
    * @example "TCP는 연결 지향적이고..."
@@ -595,6 +668,57 @@ export interface UpdateCommentDto {
    * @example "이 게시물은 큰 도움이 되었습니다 ..."
    */
   content: string;
+}
+
+export interface BookResponseDto {
+  /**
+   * 응답 메시지
+   * @example "Request has been processed."
+   */
+  message: string;
+  book: BookDto;
+}
+
+export interface CreateBookDto {
+  /**
+   * 문제집 공개 범위
+   * @default "public"
+   */
+  visibility: "public" | "private";
+  /**
+   * 문제집 제목
+   * @example "백엔드 신입 면접 대비 문제집"
+   */
+  title: string;
+  /**
+   * 문제집 설명
+   * @example "백엔드 신입 취준을 위한 문제집입니다."
+   */
+  description: string;
+}
+
+export interface UpdateBookTitleDto {
+  /**
+   * 문제집 제목
+   * @example "백엔드 신입 면접 대비 문제집"
+   */
+  title: string;
+}
+
+export interface UpdateBookDescriptionDto {
+  /**
+   * 문제집 설명
+   * @example "백엔드 신입 취준을 위한 문제집입니다."
+   */
+  description: string;
+}
+
+export interface UpdateBookVisibilityDto {
+  /**
+   * 문제집 공개 범위
+   * @example "public"
+   */
+  visibility: "public" | "private";
 }
 
 export interface URLResponseDto {
@@ -1026,6 +1150,39 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags User
+     * @name UserControllerGetMyBooks
+     * @summary 로그인한 사용자가 생성한 문제집 조회
+     * @request GET:/v1/users/books
+     * @secure
+     */
+    userControllerGetMyBooks: (
+      query?: {
+        /** @default 1 */
+        page?: number;
+        /** @default 10 */
+        limit?: number;
+        /** @default "createdAt" */
+        sort?: "createdAt" | "likeCount";
+        /** @default "DESC" */
+        order?: "ASC" | "DESC";
+        /** @default "" */
+        search?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<BooksResponseDto, BaseResponseDto>({
+        path: `/v1/users/books`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
      * @name UserControllerGetSpecificUser
      * @summary 특정 사용자 정보 조회
      * @request GET:/v1/users/{id}
@@ -1358,7 +1515,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags Action
      * @name ActionControllerUpdateAction
-     * @summary 답변 내용 수정
+     * @summary 답변 수정
      * @request PATCH:/v1/actions/{id}
      * @secure
      */
@@ -1556,6 +1713,223 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Book
+     * @name BookControllerGetBooks
+     * @summary 모든 문제집 조회
+     * @request GET:/v1/books
+     */
+    bookControllerGetBooks: (
+      query?: {
+        /** @default 1 */
+        page?: number;
+        /** @default 10 */
+        limit?: number;
+        /** @default "createdAt" */
+        sort?: "createdAt" | "likeCount";
+        /** @default "DESC" */
+        order?: "ASC" | "DESC";
+        /** @default "" */
+        search?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<BooksResponseDto, BaseResponseDto>({
+        path: `/v1/books`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
+     * @name BookControllerCreateBook
+     * @summary 새 문제집 생성
+     * @request POST:/v1/books
+     * @secure
+     */
+    bookControllerCreateBook: (data: CreateBookDto, params: RequestParams = {}) =>
+      this.request<BookResponseDto, BaseResponseDto>({
+        path: `/v1/books`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
+     * @name BookControllerGetLike
+     * @summary 사용자의 문제집 좋아요 여부 조회
+     * @request GET:/v1/books/{id}/like
+     * @secure
+     */
+    bookControllerGetLike: (id: number, params: RequestParams = {}) =>
+      this.request<LikeResponseDto, BaseResponseDto>({
+        path: `/v1/books/${id}/like`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
+     * @name BookControllerToggleLike
+     * @summary 문제집 좋아요 등록/취소
+     * @request POST:/v1/books/{id}/like
+     * @secure
+     */
+    bookControllerToggleLike: (id: number, params: RequestParams = {}) =>
+      this.request<LikeResponseDto, BaseResponseDto>({
+        path: `/v1/books/${id}/like`,
+        method: "POST",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
+     * @name BookControllerGetBook
+     * @summary 특정 문제집 조회
+     * @request GET:/v1/books/{id}
+     */
+    bookControllerGetBook: (id: number, params: RequestParams = {}) =>
+      this.request<BookResponseDto, BaseResponseDto>({
+        path: `/v1/books/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
+     * @name BookControllerDeleteBook
+     * @summary 문제집 삭제
+     * @request DELETE:/v1/books/{id}
+     * @secure
+     */
+    bookControllerDeleteBook: (id: number, params: RequestParams = {}) =>
+      this.request<BaseResponseDto, BaseResponseDto>({
+        path: `/v1/books/${id}`,
+        method: "DELETE",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
+     * @name BookControllerUpdateBookTitle
+     * @summary 문제집 제목 수정
+     * @request PATCH:/v1/books/{id}/title
+     * @secure
+     */
+    bookControllerUpdateBookTitle: (id: number, data: UpdateBookTitleDto, params: RequestParams = {}) =>
+      this.request<BookResponseDto, BaseResponseDto>({
+        path: `/v1/books/${id}/title`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
+     * @name BookControllerUpdateBookDescription
+     * @summary 문제집 설명 수정
+     * @request PATCH:/v1/books/{id}/description
+     * @secure
+     */
+    bookControllerUpdateBookDescription: (id: number, data: UpdateBookDescriptionDto, params: RequestParams = {}) =>
+      this.request<BookResponseDto, BaseResponseDto>({
+        path: `/v1/books/${id}/description`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
+     * @name BookControllerSaveQuestionToBook
+     * @summary 문제집에 질문 추가 (스크랩)
+     * @request POST:/v1/books/{bookId}/questions/{questionId}
+     * @secure
+     */
+    bookControllerSaveQuestionToBook: (bookId: number, questionId: number, params: RequestParams = {}) =>
+      this.request<BaseResponseDto, BaseResponseDto>({
+        path: `/v1/books/${bookId}/questions/${questionId}`,
+        method: "POST",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
+     * @name BookControllerDeleteQuestionFromBook
+     * @summary 문제집에서 질문 삭제
+     * @request DELETE:/v1/books/{bookId}/questions/{questionId}
+     * @secure
+     */
+    bookControllerDeleteQuestionFromBook: (bookId: number, questionId: number, params: RequestParams = {}) =>
+      this.request<BaseResponseDto, BaseResponseDto>({
+        path: `/v1/books/${bookId}/questions/${questionId}`,
+        method: "DELETE",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Book
+     * @name BookControllerUpdateBookVisibility
+     * @summary 문제집 공개 범위 수정
+     * @request PATCH:/v1/books/{id}/visibility
+     * @secure
+     */
+    bookControllerUpdateBookVisibility: (id: number, data: UpdateBookVisibilityDto, params: RequestParams = {}) =>
+      this.request<BookResponseDto, BaseResponseDto>({
+        path: `/v1/books/${id}/visibility`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Upload
      * @name UploadControllerUploadImage
      * @summary 이미지 업로드
@@ -1569,7 +1943,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<URLResponseDto, any>({
+      this.request<URLResponseDto, BaseResponseDto>({
         path: `/v1/upload/images`,
         method: "POST",
         body: data,
@@ -1589,7 +1963,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     uploadControllerGetPresignedUrl: (params: RequestParams = {}) =>
-      this.request<PresignedURLResponseDto, any>({
+      this.request<PresignedURLResponseDto, BaseResponseDto>({
         path: `/v1/upload/presigned-url`,
         method: "POST",
         secure: true,

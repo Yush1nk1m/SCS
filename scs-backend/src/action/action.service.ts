@@ -13,7 +13,6 @@ import * as sanitizeHtml from "sanitize-html";
 import { sanitizeOptions } from "../config/sanitize-config";
 import { CreateActionDto } from "./dto/create-action.dto";
 import { UserRepository } from "../repository/user.repository";
-import { UpdateActionDto } from "./dto/update-action.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 import { LikeCount, Liked } from "./types/like.type";
 import { Comment } from "../comment/comment.entity";
@@ -139,14 +138,9 @@ export class ActionService {
     async updateAction(
         userId: number,
         actionId: number,
-        updateActionDto: UpdateActionDto,
+        title: string,
+        content: string,
     ): Promise<Action> {
-        // extract data from DTO
-        const { content } = updateActionDto;
-
-        // find user from DB
-        const writer = await this.userRepository.findUserBrieflyById(userId);
-
         // find an action which is written by user
         const action = await this.actionRepository.findActionById(actionId);
 
@@ -158,7 +152,7 @@ export class ActionService {
         }
 
         // if the action has not been written by user, it is an error
-        if (action.writer.id !== writer.id) {
+        if (action.writer.id !== userId) {
             throw new ForbiddenException("User cannot access to the action.");
         }
 
@@ -170,12 +164,11 @@ export class ActionService {
         const sanitizedHtml = await this.parseAndSanitizeMarkdown(content);
         this.logger.verbose("Updated sanitized HTML:", sanitizedHtml);
 
-        // update action's title
-        action.title = `${writer.nickname}님께서 ${new Date().toLocaleDateString()} 수정한 액션입니다.`;
-
         // update action information and save
+        action.title = title;
         action.content = sanitizedHtml;
         action.rawContent = content;
+        action.imageUrls = imageUrls;
 
         return this.actionRepository.save(action);
     }

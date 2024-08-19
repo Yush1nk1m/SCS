@@ -2,7 +2,9 @@ import {
   ActionResponseDto,
   Api,
   BaseResponseDto,
+  ContentResponseDto,
   LikeResponseDto,
+  UpdateActionDto,
 } from "./swaggerApi";
 import {
   getAccessToken,
@@ -44,6 +46,30 @@ export const getAction = async (id: number) => {
       status: error.status,
     };
   }
+};
+
+export const updateAction = async (
+  actionId: number,
+  updateActionDto: UpdateActionDto
+): Promise<ActionResponseDto> => {
+  return authRequest<ActionResponseDto, { id: number; body: UpdateActionDto }>(
+    (params) => api.v1.actionControllerUpdateAction(params.id, params.body),
+    {
+      id: actionId,
+      body: updateActionDto,
+    }
+  );
+};
+
+export const getRawContent = async (
+  actionId: number
+): Promise<ContentResponseDto> => {
+  return authRequest<ContentResponseDto, { id: number }>(
+    (params) => api.v1.actionControllerGetRawContent(params.id),
+    {
+      id: actionId,
+    }
+  );
 };
 
 export const deleteAction = async (

@@ -117,7 +117,7 @@ const ActionPage: React.FC = () => {
   };
 
   const handleEdit = () => {
-    navigate(`/action/${id}/edit`);
+    navigate(`/action/${id}/edit`, { state: questionId });
   };
 
   const handleDelete = async () => {

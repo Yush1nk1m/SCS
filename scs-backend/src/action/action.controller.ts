@@ -106,7 +106,7 @@ export class ActionController {
 
     // [AC-03] Controller logic
     @ApiBearerAuth()
-    @ApiOperation({ summary: "답변 내용 수정" })
+    @ApiOperation({ summary: "답변 수정" })
     @ApiOkResponse({
         description: "답변 수정 성공",
         type: ActionResponseDto,
@@ -131,10 +131,12 @@ export class ActionController {
         @Param("id", ParseIntPipe) actionId: number,
         @Body() updateActionDto: UpdateActionDto,
     ): Promise<ActionResponseDto> {
+        const { title, content } = updateActionDto;
         const action = await this.actionService.updateAction(
             userId,
             actionId,
-            updateActionDto,
+            title,
+            content,
         );
 
         return {
