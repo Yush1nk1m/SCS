@@ -964,8 +964,8 @@
 
 - **Description**: 문제집에서 질문을 삭제한다.
 - **Method**: `DELETE`
-- **URI**: `/v1/books/:id/questions`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { questionId: `question's id` }
+- **URI**: `/v1/books/:bookId/questions/:questionId`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
 - **Response data**:
 
 ```

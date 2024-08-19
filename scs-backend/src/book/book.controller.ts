@@ -283,4 +283,42 @@ export class BookController {
             message: "Question has been saved to the book.",
         };
     }
+
+    // [B-08] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "문제집에서 질문 삭제" })
+    @ApiOkResponse({
+        description: "질문 삭제 성공",
+        type: BaseResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 인증이 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiForbiddenResponse({
+        description: "사용자 접근 권한이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "문제집이나 질문이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiConflictResponse({
+        description: "질문이 문제집에 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(BaseResponseDto)
+    @Delete(":bookId/questions/:questionId")
+    @HttpCode(HttpStatus.OK)
+    async deleteQuestionFromBook(
+        @GetCurrentUserId() userId: number,
+        @Param("bookId", ParseIntPipe) bookId: number,
+        @Param("questionId", ParseIntPipe) questionId: number,
+    ): Promise<BaseResponseDto> {
+        await this.bookService.deleteQuestion(userId, bookId, questionId);
+
+        return {
+            message: "Question has been deleted from the book.",
+        };
+    }
 }

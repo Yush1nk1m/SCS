@@ -215,4 +215,58 @@ export class BookService {
         book.questions.push(question);
         await this.bookRepository.save(book);
     }
+
+    // [B-08] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async deleteQuestion(
+        userId: number,
+        bookId: number,
+        questionId: number,
+    ): Promise<void> {
+        // find a question from DB
+        const question =
+            await this.questionRepository.findQuestionById(questionId);
+
+        // if the question does not exist, it is an error
+        if (!question) {
+            throw new NotFoundException(
+                `Question with id ${questionId} has not been found.`,
+            );
+        }
+
+        // find a book from DB
+        const book = await this.bookRepository.findBookAndQuestionsById(bookId);
+
+        // if the book has not been found, it is an error
+        if (!book) {
+            throw new NotFoundException(
+                `Book with id ${bookId} has not been found.`,
+            );
+        }
+
+        // if the book has not been written by user, it is an error
+        if (book.publisher.id !== userId) {
+            throw new ForbiddenException("User cannot access to the book");
+        }
+
+        // generate filtered questions without question with specified id
+        const filteredQuestions = book.questions.filter(
+            (question) => question.id !== questionId,
+        );
+
+        // if two sizes are equal, it is an error (question does not exist in the book)
+        if (filteredQuestions.length === book.questions.length) {
+            throw new ConflictException(
+                `Question with id ${questionId} does not exist in the book`,
+            );
+        }
+
+        // update related status and save
+        question.saved--;
+        book.questions = filteredQuestions;
+        await this.questionRepository.save(question);
+        await this.bookRepository.save(book);
+    }
 }
