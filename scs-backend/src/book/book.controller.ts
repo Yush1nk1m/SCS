@@ -78,6 +78,40 @@ export class BookController {
         };
     }
 
+    // [B-10] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "사용자의 문제집 좋아요 여부 조회" })
+    @ApiOkResponse({
+        description: "문제집 좋아요 여부 조회 성공",
+        type: LikeResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "사용자 인증이 유효하지 않음",
+        type: BaseResponseDto,
+    })
+    @ApiNotFoundResponse({
+        description: "문제집이 존재하지 않음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(LikeResponseDto)
+    @Get(":id/like")
+    @HttpCode(HttpStatus.OK)
+    async getLike(
+        @GetCurrentUserId() userId: number,
+        @Param("id", ParseIntPipe) bookId: number,
+    ): Promise<LikeResponseDto> {
+        const [likeCount, liked] = await this.bookService.getLike(
+            userId,
+            bookId,
+        );
+
+        return {
+            message: "Book's like status has been found.",
+            likeCount,
+            liked,
+        };
+    }
+
     // [B-02] Controller logic
     @ApiOperation({ summary: "특정 문제집 조회" })
     @ApiOkResponse({

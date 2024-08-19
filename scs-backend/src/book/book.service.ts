@@ -328,4 +328,35 @@ export class BookService {
         // return result
         return [book.likeCount, liked];
     }
+
+    // [B-10] Service logic
+    async getLike(userId: number, bookId: number): Promise<[number, boolean]> {
+        // find user from DB
+        const user =
+            await this.userRepository.findUserAndLikedBooksById(userId);
+
+        // if user does not exist, it is an error
+        if (!user) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        // find a book from DB
+        const book = await this.bookRepository.findBookById(bookId);
+
+        // if the book does not exist, it is an error
+        if (!book) {
+            throw new NotFoundException(
+                `Book with id ${bookId} has not been found.`,
+            );
+        }
+
+        // if the book has already been liked
+        if (user.likedBooks.some((likedBook) => likedBook.id === book.id)) {
+            return [book.likeCount, true];
+        }
+        // if the book has not been liked
+        else {
+            return [book.likeCount, false];
+        }
+    }
 }
