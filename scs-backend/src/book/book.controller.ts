@@ -32,11 +32,7 @@ import { Public } from "../common/decorator/public.decorator";
 import { GetBooksQueryDto } from "./dto/get-books-query.dto";
 import { GetCurrentUserId } from "../common/decorator/get-current-user-id.decorator";
 import { CreateBookDto } from "./dto/create-book.dto";
-import {
-    UpdateBookDescriptionDto,
-    UpdateBookTitleDto,
-    UpdateBookVisibilityDto,
-} from "./dto/update-book.dto";
+import { UpdateBookDto, UpdateBookVisibilityDto } from "./dto/update-book.dto";
 import { LikeResponseDto } from "../common/dto/like-response.dto";
 import { QuestionsResponseDto } from "../question/dto/response.dto";
 import { GetQuestionsQueryDto } from "../section/dto/get-questions-query.dto";
@@ -208,9 +204,9 @@ export class BookController {
 
     // [B-04] Controller logic
     @ApiBearerAuth()
-    @ApiOperation({ summary: "문제집 제목 수정" })
+    @ApiOperation({ summary: "문제집 수정" })
     @ApiOkResponse({
-        description: "문제집 제목 수정 성공",
+        description: "문제집 수정 성공",
         type: BookResponseDto,
     })
     @ApiUnauthorizedResponse({
@@ -231,57 +227,18 @@ export class BookController {
     async updateBookTitle(
         @GetCurrentUserId() userId: number,
         @Param("id", ParseIntPipe) bookId: number,
-        @Body() updateBookTitleDto: UpdateBookTitleDto,
+        @Body() updateBookDto: UpdateBookDto,
     ): Promise<BookResponseDto> {
-        const { title } = updateBookTitleDto;
-        const book = await this.bookService.updateBookTitle(
+        const { title, description } = updateBookDto;
+        const book = await this.bookService.updateBook(
             userId,
             bookId,
             title,
-        );
-
-        return {
-            message: "Book title has been updated.",
-            book,
-        };
-    }
-
-    // [B-05] Controller logic
-    @ApiBearerAuth()
-    @ApiOperation({ summary: "문제집 설명 수정" })
-    @ApiOkResponse({
-        description: "문제집 설명 수정 성공",
-        type: BookResponseDto,
-    })
-    @ApiUnauthorizedResponse({
-        description: "사용자 인증이 유효하지 않음",
-        type: BaseResponseDto,
-    })
-    @ApiForbiddenResponse({
-        description: "사용자 접근 권한이 존재하지 않음",
-        type: BaseResponseDto,
-    })
-    @ApiNotFoundResponse({
-        description: "문제집이 존재하지 않음",
-        type: BaseResponseDto,
-    })
-    @SetResponseDto(BookResponseDto)
-    @Patch(":id/description")
-    @HttpCode(HttpStatus.OK)
-    async updateBookDescription(
-        @GetCurrentUserId() userId: number,
-        @Param("id", ParseIntPipe) bookId: number,
-        @Body() updateBookDescriptionDto: UpdateBookDescriptionDto,
-    ): Promise<BookResponseDto> {
-        const { description } = updateBookDescriptionDto;
-        const book = await this.bookService.updateBookDescription(
-            userId,
-            bookId,
             description,
         );
 
         return {
-            message: "Book description has been updated.",
+            message: "Book title has been updated.",
             book,
         };
     }

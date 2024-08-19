@@ -1022,12 +1022,12 @@
 }
 ```
 
-### B-04: 문제집 제목 수정
+### B-04: 문제집 수정
 
-- **Description**: 문제집의 제목을 수정한다.
+- **Description**: 문제집을 수정한다.
 - **Method**: `PATCH`
 - **URI**: `/v1/books/:id/title`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { title: `book's new title` }
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { title: `book's new title`, description: `book's new description` }
 - **Response data**:
 
 ```
@@ -1049,32 +1049,7 @@
 }
 ```
 
-### B-05: 문제집 설명 수정
-
-- **Description**: 문제집의 설명을 수정한다.
-- **Method**: `PATCH`
-- **URI**: `/v1/books/:id/description`
-- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { description: `book's new description` }
-- **Response data**:
-
-```
-{
-  "message": "Request has been processed.",
-  "book": {
-    "id": 1,
-    "visibility": "public",
-    "title": "백엔드 신입 면접 대비 문제집",
-    "description": "백엔드 신입 취준을 위한 문제집입니다.",
-    "likeCount": 10,
-    "createdAt": "2024-08-14T12:34:56Z",
-    "updatedAt": "2024-08-14T12:34:56Z",
-    "publisher": {
-      "id": 1,
-      "nickname": "닉네임"
-    }
-  }
-}
-```
+### B-05: Deprecated
 
 ### B-06: 문제집 삭제
 

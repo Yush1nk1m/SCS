@@ -186,7 +186,7 @@ export class AuthService {
         if (
             user &&
             user.refreshToken && // if the user exists and a refresh token also exists
-            user.refreshToken === refreshToken // check if the hashed refresh token is the same
+            (await bcrypt.compare(refreshToken, user.refreshToken)) // check if the hashed refresh token is the same
         ) {
             // get new tokens
             const tokens = await this.getTokens(
@@ -195,6 +195,7 @@ export class AuthService {
                 user.nickname,
                 user.role,
             );
+
             // update new refresh token
             await this.updateRefreshToken(user.id, tokens.refreshToken);
 
@@ -210,8 +211,17 @@ export class AuthService {
         userId: number,
         refreshToken: string,
     ): Promise<void> {
-        // save the refresh token on DB
-        await this.userRepository.updateRefreshToken(userId, refreshToken);
+        // hash refresh token
+        const salt = await bcrypt.genSalt(
+            parseInt(process.env.SALT_LENGTH) || 10,
+        );
+        const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
+
+        // save the hashed refresh token on DB
+        await this.userRepository.updateRefreshToken(
+            userId,
+            hashedRefreshToken,
+        );
     }
 
     // [A-04], [A-05] Common service logic

@@ -166,6 +166,7 @@ export class AuthController {
             refreshToken,
         );
 
+        this.logger.verbose("tokens are refreshed");
         return {
             message: "JWT tokens have been refreshed.",
             accessToken: tokens.accessToken,

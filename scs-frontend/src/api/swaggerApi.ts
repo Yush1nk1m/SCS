@@ -697,15 +697,12 @@ export interface CreateBookDto {
   description: string;
 }
 
-export interface UpdateBookTitleDto {
+export interface UpdateBookDto {
   /**
    * 문제집 제목
    * @example "백엔드 신입 면접 대비 문제집"
    */
   title: string;
-}
-
-export interface UpdateBookDescriptionDto {
   /**
    * 문제집 설명
    * @example "백엔드 신입 취준을 위한 문제집입니다."
@@ -1901,33 +1898,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags Book
      * @name BookControllerUpdateBookTitle
-     * @summary 문제집 제목 수정
+     * @summary 문제집 수정
      * @request PATCH:/v1/books/{id}/title
      * @secure
      */
-    bookControllerUpdateBookTitle: (id: number, data: UpdateBookTitleDto, params: RequestParams = {}) =>
+    bookControllerUpdateBookTitle: (id: number, data: UpdateBookDto, params: RequestParams = {}) =>
       this.request<BookResponseDto, BaseResponseDto>({
         path: `/v1/books/${id}/title`,
-        method: "PATCH",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Book
-     * @name BookControllerUpdateBookDescription
-     * @summary 문제집 설명 수정
-     * @request PATCH:/v1/books/{id}/description
-     * @secure
-     */
-    bookControllerUpdateBookDescription: (id: number, data: UpdateBookDescriptionDto, params: RequestParams = {}) =>
-      this.request<BookResponseDto, BaseResponseDto>({
-        path: `/v1/books/${id}/description`,
         method: "PATCH",
         body: data,
         secure: true,

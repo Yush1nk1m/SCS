@@ -1,14 +1,5 @@
 import axios from "axios";
-import { Api } from "./swaggerApi";
-
-const api = new Api({
-  baseUrl: "http://localhost:4000",
-  securityWorker: (securityData) => {
-    return securityData
-      ? { headers: { Authorization: `Bearer ${securityData}` } }
-      : {};
-  },
-});
+import api from "./apiClient";
 
 export const uploadImage = async (file: File) => {
   try {

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
 import "./LoginForm.css";
 import toast from "react-hot-toast";
+import { setTokens } from "../../utils/tokenUtils";
 
 const LoginForm: React.FC = () => {
   const [loginData, setLoginData] = useState<LoginData>({
@@ -15,7 +16,9 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(loginData);
+      const tokens = await login(loginData);
+      setTokens(tokens.accessToken, tokens.refreshToken);
+      console.log(localStorage);
       toast.success("로그인 성공!");
       window.dispatchEvent(new Event("storage"));
       navigate(-1);

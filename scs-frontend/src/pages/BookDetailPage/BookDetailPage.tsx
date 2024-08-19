@@ -202,7 +202,7 @@ const BookDetailPage: React.FC = () => {
               <h3>{question.content}</h3>
               <div className="book-detail-question-meta">
                 <span className="book-detail-answer-count">
-                  스크랩 {question.saved}개
+                  {question.saved}개의 문제집에서 저장 중
                 </span>
                 <span className="book-detail-question-date">
                   {new Date(question.createdAt).toLocaleDateString()}

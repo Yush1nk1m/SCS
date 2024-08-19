@@ -1,4 +1,3 @@
-// src/components/ScrapModal/ScrapModal.tsx
 import React, { useState, useEffect } from "react";
 import { BookDto } from "../../api/swaggerApi";
 import { getMyBooks, saveQuestionToBook } from "../../api/bookApi";
