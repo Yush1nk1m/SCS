@@ -36,5 +36,6 @@ export interface DecodedToken {
   email: string;
   nickname: string;
   role: string;
+  iat: number;
   exp: number;
 }

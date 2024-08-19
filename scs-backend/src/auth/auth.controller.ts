@@ -147,7 +147,7 @@ export class AuthController {
         description: "JWT 토큰 리프레시 성공",
         type: TokensResponseDto,
     })
-    @ApiForbiddenResponse({
+    @ApiUnauthorizedResponse({
         description: "리프레시 토큰이 유효하지 않음",
         type: BaseResponseDto,
     })

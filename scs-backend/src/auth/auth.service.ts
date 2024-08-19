@@ -201,7 +201,7 @@ export class AuthService {
             // return new tokens
             return tokens;
         } else {
-            throw new ForbiddenException("The token is not valid.");
+            throw new UnauthorizedException("The token is not valid.");
         }
     }
 

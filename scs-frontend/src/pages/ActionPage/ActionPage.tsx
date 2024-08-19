@@ -18,13 +18,14 @@ import { useCurrentUser } from "../../hooks/useCurrentUser";
 import Comment from "../../components/Comment/Comment";
 import toast from "react-hot-toast";
 import "./ActionPage.css";
+import { useAuth } from "../../hooks/useAuth";
 
 const ActionPage: React.FC = () => {
   const questionId = useLocation().state;
+  const { isLoggedIn, userId } = useAuth();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const { user, loading, isLoggedIn } = useCurrentUser();
   const [action, setAction] = useState<ActionDetailDto | null>(null);
   const [comments, setComments] = useState<CommentDto[]>([]);
   const [newComment, setNewComment] = useState("");
@@ -138,8 +139,7 @@ const ActionPage: React.FC = () => {
     }
   };
 
-  if (isLoading || loading || !action)
-    return <div className="loading">로딩 중...</div>;
+  if (isLoading || !action) return <div className="loading">로딩 중...</div>;
 
   return (
     <div className="action-detail">
@@ -167,7 +167,7 @@ const ActionPage: React.FC = () => {
         />
         <div className="like-count">{action.likeCount}명이 좋아합니다</div>
       </div>
-      {user && action.writer.id === user.id && (
+      {action.writer.id === userId && (
         <div className="action-buttons">
           <button onClick={handleEdit} className="edit-button">
             수정
@@ -183,7 +183,7 @@ const ActionPage: React.FC = () => {
           <Comment
             key={comment.id}
             comment={comment}
-            currentUser={user}
+            userId={userId}
             onUpdate={handleCommentUpdate}
             onDelete={handleCommentDelete}
           />

@@ -18,7 +18,7 @@ const LoginForm: React.FC = () => {
       await login(loginData);
       toast.success("로그인 성공!");
       window.dispatchEvent(new Event("storage"));
-      navigate("/");
+      navigate(-1);
     } catch (error: any) {
       console.error("로그인 실패:", error);
       if (error.status === 403) {

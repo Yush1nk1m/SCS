@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { CommentDto, UserDto } from "../../api/swaggerApi";
+import { CommentDto } from "../../api/swaggerApi";
 import "./Comment.css";
 
 interface CommentProps {
   comment: CommentDto;
-  currentUser: UserDto | undefined;
+  userId: number | null;
   onUpdate: (commentId: number, content: string) => void;
   onDelete: (commentId: number) => void;
 }
 
 const Comment: React.FC<CommentProps> = ({
   comment,
-  currentUser,
+  userId,
   onUpdate,
   onDelete,
 }) => {
@@ -49,7 +49,7 @@ const Comment: React.FC<CommentProps> = ({
       ) : (
         <>
           <p className="comment-content">{comment.content}</p>
-          {currentUser && currentUser.id === comment.writer.id && (
+          {userId === comment.writer.id && (
             <div className="comment-buttons">
               <button onClick={() => setIsEditing(true)}>수정</button>
               <button onClick={handleDelete}>삭제</button>

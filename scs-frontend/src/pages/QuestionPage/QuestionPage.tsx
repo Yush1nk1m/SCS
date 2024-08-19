@@ -1,136 +1,135 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { ActionSortOption } from "../../types/action";
-import { fetchActions, fetchQuestion } from "../../api/questionApi";
-import "./QuestionPage.css";
-import Pagination from "../../components/Pagination/Pagination";
-import ActionCard from "../../components/ActionCard/ActionCard";
-import { useAuth } from "../../hooks/useAuth";
-import { ActionDto, QuestionDto } from "../../api/swaggerApi";
-import toast from "react-hot-toast";
-import SortingOptions from "../../components/SortingOptions/SortingOptions";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { fetchQuestions } from "../../api/sectionApi";
+import { QuestionDto } from "../../api/swaggerApi";
+import {
+  ArrowLeft,
+  SaveIcon,
+  LucideMessageCircleQuestion,
+  PlusCircle,
+} from "lucide-react";
 import SearchForm from "../../components/SearchForm/SearchForm";
+import SortingOptions from "../../components/SortingOptions/SortingOptions";
+import Pagination from "../../components/Pagination/Pagination";
+import { QuestionSortOption } from "../../types/question";
+import toast from "react-hot-toast";
+import "./QuestionPage.css";
+import { useAuth } from "../../hooks/useAuth";
+import CreateQuestionModal from "../../components/CreateQuestionModal/CreateQuestionModal";
 
 const QuestionPage: React.FC = () => {
-  const isLoggedIn = useAuth();
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [question, setQuestion] = useState<QuestionDto>();
-  const [actions, setActions] = useState<ActionDto[]>([]);
-  const [sortOption, setSortOption] = useState<ActionSortOption>({
-    sort: "updatedAt",
-    order: "DESC",
-  });
+  const { sectionId } = useParams<{ sectionId: string }>();
+  const [questions, setQuestions] = useState<QuestionDto[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [sortOption, setSortOption] = useState<QuestionSortOption>({
+    sort: "createdAt",
+    order: "DESC",
+  });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
-    if (id) {
-      fetchQuestionData(id);
-      fetchActionsData(id);
-    }
-  }, [id, sortOption, currentPage]);
+    fetchQuestionsData();
+  }, [sectionId, currentPage, sortOption, searchTerm]);
 
-  const fetchQuestionData = async (questionId: string) => {
+  const fetchQuestionsData = async () => {
+    if (!sectionId) return;
     try {
-      const response = await fetchQuestion(questionId);
-      setQuestion(response.question);
-    } catch (error: any) {
-      console.error("질문 불러오기 실패:", error);
-      switch (error.status) {
-        case 404:
-          toast.error("존재하지 않는 질문입니다.");
-          break;
-        default:
-          toast.error("예기치 못한 에러가 발생했습니다.");
-      }
-    }
-  };
-
-  const fetchActionsData = async (questionId: string, search?: string) => {
-    try {
-      const response = await fetchActions(questionId, {
-        ...sortOption,
-        search,
-        page: currentPage,
-        limit: 12,
-      });
-      setActions(response.actions);
+      const response = await fetchQuestions(
+        parseInt(sectionId),
+        currentPage,
+        sortOption,
+        searchTerm
+      );
+      setQuestions(response.questions);
       setTotalPages(Math.ceil(response.total / 12));
-    } catch (error: any) {
-      console.error("액션 불러오기 실패:", error);
-      switch (error.status) {
-        case 404:
-          toast.error("존재하지 않는 질문입니다.");
-          break;
-        default:
-          toast.error("예기치 못한 에러가 발생했습니다.");
-      }
+    } catch (error) {
+      console.error("질문 불러오기 실패:", error);
+      toast.error("질문을 불러오는데 실패했습니다.");
     }
   };
 
-  const onSearch = (searchTerm: string) => {
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
     setCurrentPage(1);
-    if (id) {
-      fetchActionsData(id, searchTerm);
-    }
   };
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
+  const handleCreateQuestion = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleQuestionSubmit = async () => {
+    setIsModalOpen(false);
+    await fetchQuestionsData();
+  };
+
   return (
-    <div className="question-page">
-      <div className="content-wrapper">
-        <button className="back-button" onClick={() => navigate("/section")}>
-          섹션 페이지로 돌아가기
-        </button>
-        {question && (
-          <div className="question-content">
-            <h1>{question.content}</h1>
-            <p>작성자: {question.writer?.nickname || "알 수 없음"}</p>
-          </div>
-        )}
-        <div className="actions-header">
-          <SortingOptions<ActionSortOption>
-            sortOption={sortOption}
-            onSortChange={setSortOption}
-            options={[
-              { value: "updatedAt-DESC", label: "최신순" },
-              { value: "updatedAt-ASC", label: "오래된순" },
-              { value: "likeCount-DESC", label: "좋아요 높은순" },
-              { value: "likeCount-ASC", label: "좋아요 낮은순" },
-            ]}
-          />
-          <SearchForm onSearch={onSearch} placeholder="액션 검색 ..." />
-        </div>
-        <div className="actions-list">
-          {actions.map((action) => (
-            <ActionCard
-              key={action.id}
-              id={action.id}
-              title={action.title}
-              imageUrl={action.imageUrls?.[0]}
-              likeCount={action.likeCount}
-              createdAt={action.createdAt}
-            />
-          ))}
-        </div>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
+    <div className="question-page-container">
+      <Link to="/section" className="question-page-back-link">
+        <ArrowLeft size={24} />
+        <span>섹션 목록으로 돌아가기</span>
+      </Link>
+      <h1 className="question-page-title">질문 목록</h1>
+      <div className="question-page-controls">
+        <SearchForm onSearch={handleSearch} placeholder="질문 검색..." />
+        <SortingOptions<QuestionSortOption>
+          sortOption={sortOption}
+          onSortChange={setSortOption}
+          options={[
+            { value: "createdAt-DESC", label: "최신순" },
+            { value: "createdAt-ASC", label: "오래된순" },
+            { value: "saved-DESC", label: "스크랩 많은순" },
+            { value: "saved-ASC", label: "스크랩 적은순" },
+          ]}
         />
-        {isLoggedIn && (
-          <button
-            className="create-action-button"
-            onClick={() => navigate(`/question/${id}/create-action`)}
-          >
-            새 액션 작성
-          </button>
-        )}
       </div>
+      <div className="question-list">
+        {questions.map((question) => (
+          <Link
+            to={`/question/${question.id}`}
+            key={question.id}
+            className="question-item"
+          >
+            <LucideMessageCircleQuestion size={24} />
+            <div className="question-item-content">
+              <h2>{question.content}</h2>
+              <div className="question-item-meta">
+                <span>
+                  <SaveIcon size={16} /> {question.saved}
+                </span>
+                <span>{new Date(question.createdAt).toLocaleDateString()}</span>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+      {isLoggedIn && (
+        <button
+          className="create-question-button"
+          onClick={handleCreateQuestion}
+        >
+          <PlusCircle size={20} />
+          <span>질문 생성</span>
+        </button>
+      )}
+      {isModalOpen && (
+        <CreateQuestionModal
+          sectionId={Number(sectionId!)}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleQuestionSubmit}
+        />
+      )}
     </div>
   );
 };

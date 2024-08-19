@@ -8,7 +8,7 @@ import "./Header.css";
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const isLoggedIn = useAuth();
+  const { isLoggedIn } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -18,7 +18,7 @@ const Header: React.FC = () => {
     await logout();
     window.dispatchEvent(new Event("storage"));
     setIsMenuOpen(false); // 로그아웃 후 메뉴 닫기
-    navigate("/"); // 홈으로 리다이렉트
+    // navigate("/"); // 홈으로 리다이렉트
   };
 
   return (

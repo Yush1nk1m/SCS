@@ -36,7 +36,7 @@ export const fetchQuestions = async (
       sectionId,
       {
         page,
-        limit: 10,
+        limit: 12,
         ...sortOption,
         search,
       }

@@ -1,6 +1,11 @@
 // src/api/bookApi.ts
 
-import { Api, BooksResponseDto, BookResponseDto } from "./swaggerApi";
+import {
+  Api,
+  BooksResponseDto,
+  BookResponseDto,
+  LikeResponseDto,
+} from "./swaggerApi";
 import {
   getAccessToken,
   isTokenExpired,
@@ -17,6 +22,17 @@ const api = new Api({
       : {};
   },
 });
+
+export const getBook = async (bookId: number): Promise<BookResponseDto> => {
+  try {
+    const response = await api.v1.bookControllerGetBook(bookId);
+    return response.data;
+  } catch (error: any) {
+    throw {
+      status: error.status,
+    };
+  }
+};
 
 export const getBooks = async (
   page: number | undefined,
@@ -64,6 +80,22 @@ export const getMyBooks = async (
     order,
     search,
   });
+};
+
+export const getBookLike = async (bookId: number): Promise<LikeResponseDto> => {
+  return authRequest<LikeResponseDto, number>(
+    (params) => api.v1.bookControllerGetLike(params),
+    bookId
+  );
+};
+
+export const toggleBookLike = async (
+  bookId: number
+): Promise<LikeResponseDto> => {
+  return authRequest<LikeResponseDto, number>(
+    (params) => api.v1.bookControllerToggleLike(params),
+    bookId
+  );
 };
 
 export const getLikedBooks = async (

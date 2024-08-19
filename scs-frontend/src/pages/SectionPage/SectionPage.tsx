@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { fetchSections } from "../../api/sectionApi";
 import { SectionSortOption } from "../../types/section";
-import SortingOptions from "../../components/SortingOptions/SortingOptions";
-import SectionList from "../../components/SectionList/SectionList";
-import CreateQuestionModal from "../../components/CreateQuestionModal/CreateQuestionModal";
 import { SectionDto } from "../../api/swaggerApi";
+import { Book, ArrowUpDown, Notebook } from "lucide-react";
+import SearchForm from "../../components/SearchForm/SearchForm";
+import SortingOptions from "../../components/SortingOptions/SortingOptions";
 import toast from "react-hot-toast";
 import "./SectionPage.css";
-import SearchForm from "../../components/SearchForm/SearchForm";
 
 const SectionPage: React.FC = () => {
   const [sections, setSections] = useState<SectionDto[]>([]);
@@ -16,14 +16,10 @@ const SectionPage: React.FC = () => {
     order: "ASC",
   });
   const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSectionId, setSelectedSectionId] = useState<number | null>(
-    null
-  );
 
   useEffect(() => {
     fetchSectionsData();
-  }, [sortOption.sort, sortOption.order]);
+  }, [sortOption]);
 
   const fetchSectionsData = async () => {
     try {
@@ -31,23 +27,8 @@ const SectionPage: React.FC = () => {
       setSections(response.sections);
     } catch (error) {
       console.error("섹션 불러오기 실패:", error);
-      toast.error("예기치 못한 에러가 발생했습니다.");
+      toast.error("섹션을 불러오는데 실패했습니다.");
     }
-  };
-
-  const handleOpenModal = (sectionId: number) => {
-    setSelectedSectionId(sectionId);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedSectionId(null);
-  };
-
-  const handleQuestionSubmit = async () => {
-    handleCloseModal();
-    await fetchSectionsData();
   };
 
   const filteredSections = sections.filter((section) =>
@@ -55,9 +36,10 @@ const SectionPage: React.FC = () => {
   );
 
   return (
-    <div className="section-page">
-      <div className="section-header">
-        <SearchForm onSearch={setSearchTerm} placeholder="섹션 검색 ..." />
+    <div className="section-page-container">
+      <h1 className="section-page-title">섹션 목록</h1>
+      <div className="section-page-controls">
+        <SearchForm onSearch={setSearchTerm} placeholder="섹션 검색..." />
         <SortingOptions<SectionSortOption>
           sortOption={sortOption}
           onSortChange={setSortOption}
@@ -69,14 +51,22 @@ const SectionPage: React.FC = () => {
           ]}
         />
       </div>
-      <SectionList sections={filteredSections} onOpenModal={handleOpenModal} />
-      {isModalOpen && selectedSectionId && (
-        <CreateQuestionModal
-          sectionId={selectedSectionId}
-          onClose={handleCloseModal}
-          onSubmit={handleQuestionSubmit}
-        />
-      )}
+      <div className="section-list">
+        {filteredSections.map((section) => (
+          <Link
+            to={`/section/${section.id}/questions`}
+            key={section.id}
+            className="section-item"
+          >
+            <Notebook size={24} />
+            <div className="section-item-content">
+              <h2>{section.subject}</h2>
+              <p>{section.description}</p>
+            </div>
+            <ArrowUpDown size={24} />
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };

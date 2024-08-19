@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { DataSource, Like, Repository } from "typeorm";
+import { Brackets, DataSource, Like, Repository } from "typeorm";
 import { Book } from "../book/book.entity";
 
 @Injectable()
@@ -18,6 +18,7 @@ export class BookRepository extends Repository<Book> {
         search: string,
     ): Promise<[Book[], number]> {
         const where = {
+            visibility: "public",
             title: search !== "" ? Like(`%${search}%`) : undefined,
         };
 
@@ -82,8 +83,17 @@ export class BookRepository extends Repository<Book> {
     ): Promise<[Book[], number]> {
         const query = this.createQueryBuilder("book")
             .innerJoin("book.likedBy", "user")
-            .where("user.id = :userId", { userId })
             .leftJoinAndSelect("book.publisher", "publisher")
+            .where("user.id = :userId", { userId })
+            .andWhere(
+                new Brackets((innerQuery) => {
+                    innerQuery
+                        .where("book.visibility = :PUBLIC", {
+                            PUBLIC: "public",
+                        })
+                        .orWhere("book.publisher.id = :userId", { userId });
+                }),
+            )
             .orderBy(`book.${sort}`, order)
             .skip((page - 1) * limit)
             .take(limit);

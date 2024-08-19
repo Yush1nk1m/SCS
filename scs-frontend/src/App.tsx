@@ -6,13 +6,15 @@ import HomePage from "./pages/HomePage/HomePage";
 import SignupPage from "./pages/SignupPage/SignupPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SectionPage from "./pages/SectionPage/SectionPage";
-import QuestionPage from "./pages/QuestionPage/QuestionPage";
 import CreateActionPage from "./pages/CreateActionPage/CreateActionPage";
 import ActionPage from "./pages/ActionPage/ActionPage";
 import "./App.css";
 import ScrollToTop from "./components/common/ScrollToTop";
 import EditActionPage from "./pages/EditActionPage/EditActionPage";
 import LibraryPage from "./pages/LibraryPage/LibraryPage";
+import BookDetailPage from "./pages/BookDetailPage/BookDetailPage";
+import QuestionDetailPage from "./pages/QuestionDetailPage/QuestionDetailPage";
+import QuestionPage from "./pages/QuestionPage/QuestionPage";
 
 const App: React.FC = () => {
   return (
@@ -34,7 +36,11 @@ const App: React.FC = () => {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/section" element={<SectionPage />} />
-          <Route path="/question/:id" element={<QuestionPage />} />
+          <Route
+            path="/section/:sectionId/questions"
+            element={<QuestionPage />}
+          />
+          <Route path="/question/:id" element={<QuestionDetailPage />} />
           <Route
             path="/question/:id/create-action"
             element={<CreateActionPage />}
@@ -42,6 +48,7 @@ const App: React.FC = () => {
           <Route path="/action/:id/edit" element={<EditActionPage />} />
           <Route path="/action/:id" element={<ActionPage />} />
           <Route path="/library" element={<LibraryPage />} />
+          <Route path="/book/:id" element={<BookDetailPage />} />
         </Routes>
       </Layout>
     </>

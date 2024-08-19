@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./ActionCard.css";
+import { Heart, Calendar, Image } from "lucide-react";
 
 interface ActionCardProps {
   id: number;
@@ -30,13 +31,24 @@ const ActionCard: React.FC<ActionCardProps> = ({
         {imageUrl ? (
           <img src={imageUrl} alt={title} />
         ) : (
-          <div className="placeholder-thumbnail">No Image</div>
+          <div className="placeholder-thumbnail">
+            <Image size={48} />
+            <span>No Image</span>
+          </div>
         )}
       </div>
-      <h2>{title}</h2>
-      <div className="action-info">
-        <p>작성일: {new Date(createdAt).toLocaleDateString()}</p>
-        <p>❤️ {likeCount}</p>
+      <div className="action-content">
+        <h2 className="action-title">{title}</h2>
+        <div className="action-info">
+          <span className="action-date">
+            <Calendar size={16} />
+            {new Date(createdAt).toLocaleDateString()}
+          </span>
+          <span className="action-likes">
+            <Heart size={16} fill="#e74c3c" stroke="#e74c3c" />
+            {likeCount}
+          </span>
+        </div>
       </div>
     </div>
   );

@@ -59,8 +59,14 @@ const LibraryPage: React.FC = () => {
       }
       setBooks(response.books);
       setTotalPages(Math.ceil(response.total / 12));
-    } catch (error) {
-      toast.error("문제집을 불러오는 데 실패했습니다.");
+    } catch (error: any) {
+      switch (error.status) {
+        case 401:
+          toast.error("로그인이 필요합니다.");
+          break;
+        default:
+          toast.error("문제집을 불러오는 데 실패했습니다.");
+      }
     } finally {
       setIsLoading(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
