@@ -126,16 +126,17 @@
 
 이 섹션은 사용자 관련 API에 대한 설계이다.
 
-| API ID | Method |          URI          | Summary                                |
-| :----: | :----: | :-------------------: | :------------------------------------- |
-|  U-01  |  GET   |       /v1/users       | 모든 사용자 정보 조회                  |
-|  U-02  |  GET   |     /v1/users/:id     | 특정 사용자 정보 조회                  |
-|  U-03  |  GET   |     /v1/users/me      | 로그인한 사용자 정보 조회              |
-|  U-04  | PATCH  |  /v1/users/password   | 로그인한 사용자 비밀번호 변경          |
-|  U-05  | PATCH  |  /v1/users/nickname   | 로그인한 사용자 닉네임 변경            |
-|  U-06  | DELETE |       /v1/users       | 로그인한 사용자 회원 탈퇴              |
-|  U-07  |  GET   |    /v1/users/books    | 로그인한 사용자가 생성한 문제집 조회   |
-|  U-08  |  GET   | /v1/users/books/liked | 로그인한 사용자가 좋아요한 문제집 조회 |
+| API ID | Method |          URI           | Summary                                |
+| :----: | :----: | :--------------------: | :------------------------------------- |
+|  U-01  |  GET   |       /v1/users        | 모든 사용자 정보 조회                  |
+|  U-02  |  GET   |     /v1/users/:id      | 특정 사용자 정보 조회                  |
+|  U-03  |  GET   |      /v1/users/me      | 로그인한 사용자 정보 조회              |
+|  U-04  | PATCH  |   /v1/users/password   | 로그인한 사용자 비밀번호 변경          |
+|  U-05  | PATCH  |   /v1/users/nickname   | 로그인한 사용자 닉네임 변경            |
+|  U-06  | DELETE |       /v1/users        | 로그인한 사용자 회원 탈퇴              |
+|  U-07  |  GET   |    /v1/users/books     | 로그인한 사용자가 생성한 문제집 조회   |
+|  U-08  |  GET   | /v1/users/books/liked  | 로그인한 사용자가 좋아요한 문제집 조회 |
+|  U-09  |  GET   | /v1/users/contribution | 로그인한 사용자의 커뮤니티 기여도 조회 |
 
 ### U-01: 모든 사용자 정보 조회
 
@@ -279,7 +280,7 @@
 - **Description**: 로그인한 사용자가 좋아요한 문제집들을 조회한다. 페이지네이션을 지원한다. 쿼리 파라미터의 기본 값은 { page=1, limit=10, sort=createdAt, order=desc }이다.
 - **Method**: `GET`
 - **URI**: `/v1/users/books/liked`
-- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `likeCount`, order: `asc` or `desc`, search: `search value`
+- **Query Parameters**: page: `page number`, limit: `items per page`, sort: `createdAt` or `likeCount`, order: `asc` or `desc`, search: `search value` page: `page number`, limit: `items per page`, sort: `createdAt` or `likeCount`, order: `asc` or `desc`, search: `search value`
 - **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
 - **Response data**:
 
@@ -303,6 +304,19 @@
   ],
   "total": 5
 }
+```
+
+### U-09: 로그인한 사용자의 커뮤니티 기여도 조회
+
+- **Description**: 로그인한 사용자의 커뮤니티 기여도를 조회한다. 기여의 종류는 1. 생성한 모든 요소(질문, 액션, 문제집)의 개수, 2. 생성한 질문의 총 스크랩된 횟수, 3. 생성한 액션의 총 좋아요 개수, 4. 생성한 문제집의 총 좋아요 개수로 구분된다.
+- **Method**: `GET`
+- **URI**: `/v1/users/contribution`
+- **Query Parameters**: type: 1. `created`, 2. `question`, 3. `action`, 4. `book`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` }
+- **Response data**:
+
+```
+
 ```
 
 ## Section

@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
       <p>
         &copy; 2024 Study Computer Science.
         <br />
-        All rights reserved.
+        Yushin Kim
       </p>
     </footer>
   );
