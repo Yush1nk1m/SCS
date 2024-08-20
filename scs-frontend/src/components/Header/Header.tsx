@@ -10,7 +10,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { isLoggedIn, logout } = useAuth();
-  console.log(isLoggedIn);
+
   useEffect(() => {
     setLogoutCallback(logout);
   }, [logout]);

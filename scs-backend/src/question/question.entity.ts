@@ -23,6 +23,7 @@ export class Question {
     id: number;
 
     @Column()
+    @Index("IDX_QUESTION_CONTENT")
     content: string;
 
     @CreateDateColumn()
@@ -42,6 +43,7 @@ export class Question {
     @ManyToOne(() => Section, (section) => section.questions, {
         onDelete: "CASCADE",
     })
+    @Index("IDX_QUESTION_SECTION")
     section: Section;
 
     @OneToMany(() => Action, (action) => action.question, { cascade: true })

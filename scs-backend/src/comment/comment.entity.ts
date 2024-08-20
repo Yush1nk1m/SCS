@@ -2,6 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
@@ -29,5 +30,6 @@ export class Comment {
     @ManyToOne(() => Action, (action) => action.comments, {
         onDelete: "CASCADE",
     })
+    @Index("IDX_COMMENT_ACTION")
     action: Action;
 }

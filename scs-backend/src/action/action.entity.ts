@@ -23,6 +23,7 @@ export class Action {
     id: number;
 
     @Column()
+    @Index("IDX_ACTION_TITLE")
     title: string;
 
     @Column("text")
@@ -49,6 +50,7 @@ export class Action {
     @ManyToOne(() => Question, (question) => question.actions, {
         onDelete: "CASCADE",
     })
+    @Index("IDX_ACTION_QUESTION")
     question: Question;
 
     @ManyToMany(() => User, (user) => user.likedActions, {

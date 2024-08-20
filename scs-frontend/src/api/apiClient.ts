@@ -1,10 +1,9 @@
 import axios from "axios";
 import { getAccessToken, isTokenExpired, setTokens } from "../utils/tokenUtils";
 import { Api } from "./swaggerApi";
-import { AuthContext } from "../context/AuthContext";
 
 const api = new Api({
-  baseUrl: "http://localhost:4000",
+  baseUrl: import.meta.env.VITE_API_URL,
   securityWorker: (securityData) => {
     return securityData
       ? { headers: { Authorization: `Bearer ${securityData}` } }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./LibraryPage.css";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import SortingOptions from "../../components/SortingOptions/SortingOptions";

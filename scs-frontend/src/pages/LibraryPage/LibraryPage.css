@@ -15,6 +15,7 @@
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-size: 12px;
 }
 
 .library-tabs button.active {

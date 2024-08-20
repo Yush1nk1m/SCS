@@ -2,6 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -16,6 +17,7 @@ export class Section {
     id: number;
 
     @Column()
+    @Index("IDX_SECTION_SUBJECT")
     subject: string;
 
     @Column({ nullable: true })

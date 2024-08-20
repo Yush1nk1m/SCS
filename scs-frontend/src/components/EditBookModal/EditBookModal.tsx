@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { updateBook } from "../../api/bookApi";
 import toast from "react-hot-toast";
 import "./EditBookModal.css";
