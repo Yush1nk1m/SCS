@@ -3,15 +3,10 @@ import { UploadController } from "./upload.controller";
 import { UploadService } from "./upload.service";
 import { MulterModule } from "@nestjs/platform-express";
 import { MulterConfig } from "../config/multer.config";
-import { ThrottlerModule } from "@nestjs/throttler";
-import { ThrottlerConfig } from "../config/Throttler.config";
 import { S3Client } from "@aws-sdk/client-s3";
 
 @Module({
-    imports: [
-        ThrottlerModule.forRoot(ThrottlerConfig),
-        MulterModule.register(MulterConfig),
-    ],
+    imports: [MulterModule.register(MulterConfig)],
     controllers: [UploadController],
     providers: [
         UploadService,

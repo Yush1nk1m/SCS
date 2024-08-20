@@ -16,9 +16,12 @@ import { APP_GUARD } from "@nestjs/core";
 import { AccessTokenGuard } from "./common/guard/access-token.guard";
 import { UploadModule } from "./upload/upload.module";
 import { RepositoryModule } from "./repository/repository.module";
+import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
+import { ThrottlerConfig } from "./config/Throttler.config";
 
 @Module({
     imports: [
+        ThrottlerModule.forRoot(ThrottlerConfig),
         TypeOrmModule.forRootAsync({
             useFactory() {
                 return typeORMConfig;
@@ -47,6 +50,10 @@ import { RepositoryModule } from "./repository/repository.module";
         {
             provide: APP_GUARD,
             useClass: AccessTokenGuard,
+        },
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard,
         },
     ],
 })

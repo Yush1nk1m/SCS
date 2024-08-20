@@ -8,16 +8,21 @@ import {
 } from "typeorm-transactional";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { join } from "path";
-import * as fs from "fs";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import * as dotenv from "dotenv";
 import { DtoInterceptor } from "./common/interceptor/dto.interceptor";
+import helmet from "helmet";
+import * as fs from "fs";
+import * as compression from "compression";
+import * as dotenv from "dotenv";
 dotenv.config();
 
 async function bootstrap() {
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
 
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+    app.use(helmet());
+    app.use(compression());
 
     app.useStaticAssets(
         join(__dirname, "..", process.env.UPLOAD_LOCATION || "uploads"),
@@ -30,10 +35,9 @@ async function bootstrap() {
         credentials: true,
     });
 
-    const reflector = app.get(Reflector);
-    app.useGlobalInterceptors(new DtoInterceptor(reflector));
-
     app.useGlobalFilters(new AllExceptionFilter());
+
+    app.useGlobalInterceptors(new DtoInterceptor(app.get(Reflector)));
 
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 

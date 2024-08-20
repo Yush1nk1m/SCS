@@ -36,6 +36,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({ questionId, onClose }) => {
     if (selectedBookId) {
       try {
         await saveQuestionToBook(selectedBookId, questionId);
+        toast.success("스크랩 성공!");
         onClose();
       } catch (error: any) {
         switch (error.status) {
