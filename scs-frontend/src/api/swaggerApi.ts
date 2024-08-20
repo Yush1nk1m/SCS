@@ -1897,12 +1897,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Book
-     * @name BookControllerUpdateBookTitle
+     * @name BookControllerUpdateBook
      * @summary 문제집 수정
      * @request PATCH:/v1/books/{id}/title
      * @secure
      */
-    bookControllerUpdateBookTitle: (id: number, data: UpdateBookDto, params: RequestParams = {}) =>
+    bookControllerUpdateBook: (id: number, data: UpdateBookDto, params: RequestParams = {}) =>
       this.request<BookResponseDto, BaseResponseDto>({
         path: `/v1/books/${id}/title`,
         method: "PATCH",

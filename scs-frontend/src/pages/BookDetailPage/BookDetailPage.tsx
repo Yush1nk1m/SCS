@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
+  deleteBook,
   getBook,
   getBookLike,
   getQuestionsOfBook,
@@ -23,8 +24,12 @@ import toast from "react-hot-toast";
 import "./BookDetailPage.css";
 import { QuestionSortOption } from "../../types/question";
 import { useAuth } from "../../hooks/useAuth";
+import QuestionItem from "../../components/QuestionItem/QuestionItem";
+import ScrapModal from "../../components/ScrapModal/ScrapModal";
+import EditBookModal from "../../components/EditBookModal/EditBookModal";
 
 const BookDetailPage: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { isLoggedIn, userId } = useAuth();
   const [book, setBook] = useState<BookDto | null>(null);
@@ -37,6 +42,11 @@ const BookDetailPage: React.FC = () => {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [isLiked, setIsLiked] = useState(false);
+  const [scrapModalOpen, setScrapModalOpen] = useState(false);
+  const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(
+    null
+  );
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     fetchBookData();
@@ -128,6 +138,47 @@ const BookDetailPage: React.FC = () => {
     setCurrentPage(page);
   };
 
+  const handleScrap = (questionId: number) => {
+    setSelectedQuestionId(questionId);
+    setScrapModalOpen(true);
+  };
+
+  const handleDeleteBook = async () => {
+    if (window.confirm("정말로 이 문제집을 삭제하시겠습니까?")) {
+      try {
+        await deleteBook(Number(id));
+        toast.success("문제집이 삭제되었습니다.");
+        navigate("/library");
+      } catch (error: any) {
+        switch (error.status) {
+          case 401:
+            toast.error("로그인이 필요합니다.");
+            break;
+          case 403:
+            toast.error("권한이 존재하지 않습니다.");
+            break;
+          case 404:
+            toast.error("문제집이 존재하지 않습니다.");
+            break;
+          default:
+            toast.error("예기치 못한 에러가 발생했습니다.");
+        }
+      }
+    }
+  };
+
+  const handleEditClick = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleEditSuccess = () => {
+    fetchBookData();
+  };
+
   if (!book) return <div>Loading...</div>;
 
   return (
@@ -167,10 +218,16 @@ const BookDetailPage: React.FC = () => {
         </div>
         {book.publisher.id === userId && (
           <div className="book-detail-edit-delete-container">
-            <button className="book-detail-action-button book-detail-edit-button">
+            <button
+              className="book-detail-action-button book-detail-edit-button"
+              onClick={handleEditClick}
+            >
               <Edit2 size={24} />
             </button>
-            <button className="book-detail-action-button book-detail-delete-button">
+            <button
+              className="book-detail-action-button book-detail-delete-button"
+              onClick={handleDeleteBook}
+            >
               <Trash2 size={24} />
             </button>
           </div>
@@ -194,21 +251,15 @@ const BookDetailPage: React.FC = () => {
         </div>
         <div className="book-detail-questions-list">
           {questions.map((question) => (
-            <Link
-              to={`/question/${question.id}?source=book&id=${id}`}
+            <QuestionItem
               key={question.id}
-              className="book-detail-question-item"
-            >
-              <h3>{question.content}</h3>
-              <div className="book-detail-question-meta">
-                <span className="book-detail-answer-count">
-                  {question.saved}개의 문제집에서 저장 중
-                </span>
-                <span className="book-detail-question-date">
-                  {new Date(question.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-            </Link>
+              id={question.id}
+              content={question.content}
+              saved={question.saved}
+              createdAt={question.createdAt}
+              bookId={id || ""}
+              onScrap={handleScrap}
+            />
           ))}
         </div>
         <Pagination
@@ -217,6 +268,21 @@ const BookDetailPage: React.FC = () => {
           onPageChange={handlePageChange}
         />
       </div>
+      {scrapModalOpen && selectedQuestionId && (
+        <ScrapModal
+          questionId={selectedQuestionId}
+          onClose={() => setScrapModalOpen(false)}
+        />
+      )}
+      {isEditModalOpen && book && (
+        <EditBookModal
+          bookId={book.id}
+          initialTitle={book.title}
+          initialDescription={book.description}
+          onClose={handleEditClose}
+          onUpdate={handleEditSuccess}
+        />
+      )}
     </div>
   );
 };

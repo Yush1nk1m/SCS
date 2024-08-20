@@ -1,24 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import { logout } from "../../api/authApi";
+import { logout as logoutApi } from "../../api/authApi";
 import logo from "../../assets/logo.png";
 import "./Header.css";
+import { setLogoutCallback } from "../../api/apiClient";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
+  console.log(isLoggedIn);
+  useEffect(() => {
+    setLogoutCallback(logout);
+  }, [logout]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const handleLogout = async () => {
-    await logout();
-    window.dispatchEvent(new Event("storage"));
-    setIsMenuOpen(false); // 로그아웃 후 메뉴 닫기
-    // navigate("/"); // 홈으로 리다이렉트
+    try {
+      await logoutApi();
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    } finally {
+      logout();
+      setIsMenuOpen(false);
+    }
   };
 
   return (

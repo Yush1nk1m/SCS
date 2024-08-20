@@ -224,7 +224,7 @@ export class BookController {
     @SetResponseDto(BookResponseDto)
     @Patch(":id/title")
     @HttpCode(HttpStatus.OK)
-    async updateBookTitle(
+    async updateBook(
         @GetCurrentUserId() userId: number,
         @Param("id", ParseIntPipe) bookId: number,
         @Body() updateBookDto: UpdateBookDto,
@@ -238,7 +238,7 @@ export class BookController {
         );
 
         return {
-            message: "Book title has been updated.",
+            message: "Book has been updated.",
             book,
         };
     }

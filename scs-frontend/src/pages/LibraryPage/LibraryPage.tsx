@@ -93,6 +93,10 @@ const LibraryPage: React.FC = () => {
   };
 
   const handleTabChange = (tab: "public" | "liked" | "my") => {
+    if (!isLoggedIn && (tab === "liked" || tab === "my")) {
+      toast.error("로그인이 필요합니다.");
+      return;
+    }
     setActiveTab(tab);
     setCurrentPage(1);
   };

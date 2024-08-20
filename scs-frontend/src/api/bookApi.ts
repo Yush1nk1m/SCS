@@ -4,6 +4,7 @@ import {
   LikeResponseDto,
   BaseResponseDto,
   QuestionsResponseDto,
+  UpdateBookDto,
 } from "./swaggerApi";
 import { BookSortOption } from "../types/book";
 import { authRequest } from "./apiClient";
@@ -122,6 +123,26 @@ export const createBook = async (
     title,
     description,
   });
+};
+
+export const updateBook = async (
+  bookId: number,
+  updateBookDto: UpdateBookDto
+): Promise<BaseResponseDto> => {
+  return authRequest<BaseResponseDto, { id: number; body: UpdateBookDto }>(
+    (params) => api.v1.bookControllerUpdateBook(params.id, params.body),
+    {
+      id: bookId,
+      body: updateBookDto,
+    }
+  );
+};
+
+export const deleteBook = async (bookId: number): Promise<BaseResponseDto> => {
+  return authRequest<BaseResponseDto, number>(
+    (params) => api.v1.bookControllerDeleteBook(params),
+    bookId
+  );
 };
 
 export const saveQuestionToBook = async (

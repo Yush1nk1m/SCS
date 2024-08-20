@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Layout from "./components/Layout/Layout";
@@ -15,10 +15,19 @@ import LibraryPage from "./pages/LibraryPage/LibraryPage";
 import BookDetailPage from "./pages/BookDetailPage/BookDetailPage";
 import QuestionDetailPage from "./pages/QuestionDetailPage/QuestionDetailPage";
 import QuestionPage from "./pages/QuestionPage/QuestionPage";
+import { AuthProvider } from "./context/AuthContext";
+import { useAuth } from "./hooks/useAuth";
+import { setLogoutCallback } from "./api/apiClient";
 
 const App: React.FC = () => {
+  const { logout } = useAuth();
+
+  useEffect(() => {
+    setLogoutCallback(logout);
+  }, [logout]);
+
   return (
-    <>
+    <AuthProvider>
       <Toaster
         gutter={100000}
         toastOptions={{
@@ -51,7 +60,7 @@ const App: React.FC = () => {
           <Route path="/book/:id" element={<BookDetailPage />} />
         </Routes>
       </Layout>
-    </>
+    </AuthProvider>
   );
 };
 

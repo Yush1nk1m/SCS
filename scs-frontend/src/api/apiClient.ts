@@ -1,12 +1,7 @@
 import axios from "axios";
-import {
-  getAccessToken,
-  isTokenExpired,
-  removeTokens,
-  setTokens,
-} from "../utils/tokenUtils";
-import { refreshTokens } from "./authApi";
+import { getAccessToken, isTokenExpired, setTokens } from "../utils/tokenUtils";
 import { Api } from "./swaggerApi";
+import { AuthContext } from "../context/AuthContext";
 
 const api = new Api({
   baseUrl: "http://localhost:4000",
@@ -16,6 +11,12 @@ const api = new Api({
       : {};
   },
 });
+
+let logoutCallback: (() => void) | null = null;
+
+export const setLogoutCallback = (callback: () => void) => {
+  logoutCallback = callback;
+};
 
 let isRefreshing = false;
 let refreshPromise: Promise<boolean> | null = null;
@@ -75,10 +76,25 @@ export const authRequest = async <T, P>(
           refreshPromise = null;
         });
       }
-      await refreshPromise;
+      const refreshSuccess = await refreshPromise;
+      if (!refreshSuccess) {
+        if (logoutCallback) {
+          logoutCallback();
+        }
+        throw {
+          status: 401,
+        };
+      }
+
       accessToken = getAccessToken();
       if (!accessToken) {
-        throw new Error("인증 실패");
+        if (logoutCallback) {
+          logoutCallback();
+        }
+
+        throw {
+          status: 401,
+        };
       }
     }
 
