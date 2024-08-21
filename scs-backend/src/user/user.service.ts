@@ -187,4 +187,43 @@ export class UserService {
                 return this.userRepository.findBooksTotalLiked(userId);
         }
     }
+
+    // [U-10] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async changeUserAffiliation(
+        userId: number,
+        affiliation: string,
+    ): Promise<User> {
+        // find user from DB
+        const user = await this.userRepository.findUserById(userId);
+
+        // if user does not exist, it is an error
+        if (!user) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        // change user's affiliation and return
+        user.affiliation = affiliation;
+        return this.userRepository.save(user);
+    }
+
+    // [U-11] Service logic
+    @Transactional({
+        isolationLevel: IsolationLevel.REPEATABLE_READ,
+    })
+    async changeUserPosition(userId: number, position: string): Promise<User> {
+        // find user from DB
+        const user = await this.userRepository.findUserById(userId);
+
+        // if user does not exist, it is an error
+        if (!user) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        // change user's position and return
+        user.position = position;
+        return this.userRepository.save(user);
+    }
 }

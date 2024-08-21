@@ -37,6 +37,8 @@ import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 import { BooksResponseDto } from "../book/dto/response.dto";
 import { GetBooksQueryDto } from "../book/dto/get-books-query.dto";
 import { GetContributionQueryDto } from "./dto/get-contribution-query.dto";
+import { ChangePositionDto } from "./dto/change-position.dto";
+import { ChangeAffiliationDto } from "./dto/change-affiliation.dto";
 
 @ApiTags("User")
 @ApiInternalServerErrorResponse({
@@ -268,6 +270,58 @@ export class UserController {
 
         return {
             message: "User nickname has been changed.",
+        };
+    }
+
+    // [U-10] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "로그인한 사용자 소속 변경" })
+    @ApiOkResponse({
+        description: "소속 변경 성공",
+        type: UserResponseDto,
+    })
+    @SetResponseDto(UserResponseDto)
+    @Patch("affiliation")
+    @HttpCode(HttpStatus.OK)
+    async changeUserAffiliation(
+        @GetCurrentUserId() userId: number,
+        @Body() changeAffiliationDto: ChangeAffiliationDto,
+    ): Promise<UserResponseDto> {
+        const { affiliation } = changeAffiliationDto;
+        const user = await this.userService.changeUserAffiliation(
+            userId,
+            affiliation,
+        );
+
+        return {
+            message: "User nickname has been changed.",
+            user,
+        };
+    }
+
+    // [U-11] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "로그인한 사용자 포지션 변경" })
+    @ApiOkResponse({
+        description: "포지션 변경 성공",
+        type: UserResponseDto,
+    })
+    @SetResponseDto(UserResponseDto)
+    @Patch("position")
+    @HttpCode(HttpStatus.OK)
+    async changeUserPosition(
+        @GetCurrentUserId() userId: number,
+        @Body() changePositionDto: ChangePositionDto,
+    ): Promise<UserResponseDto> {
+        const { position } = changePositionDto;
+        const user = await this.userService.changeUserPosition(
+            userId,
+            position,
+        );
+
+        return {
+            message: "User nickname has been changed.",
+            user,
         };
     }
 

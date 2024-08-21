@@ -137,6 +137,8 @@
 |  U-07  |  GET   |    /v1/users/books     | 로그인한 사용자가 생성한 문제집 조회   |
 |  U-08  |  GET   | /v1/users/books/liked  | 로그인한 사용자가 좋아요한 문제집 조회 |
 |  U-09  |  GET   | /v1/users/contribution | 로그인한 사용자의 커뮤니티 기여도 조회 |
+|  U-10  | PATCH  | /v1/users/affiliation  | 로그인한 사용자 소속 변경              |
+|  U-11  | PATCH  |   /v1/users/position   | 로그인한 사용자 포지션 변경            |
 
 ### U-01: 모든 사용자 정보 조회
 
@@ -316,7 +318,53 @@
 - **Response data**:
 
 ```
+{
+  "message": "Request has been processed.",
+  "total": 0,
+  "percentile": 0
+}
+```
 
+### U-10: 로그인한 사용자 소속 변경
+
+- **Description**: 로그인한 사용자의 소속을 변경한다.
+- **Method**: `PATCH`
+- **URI**: `/v1/users/affiliation`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { affiliation: `new affiliation` }
+- **Response data**:
+
+```
+{
+  "message": "Request has been processed.",
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "nickname": "닉네임",
+    "affiliation": "서강대학교",
+    "position": "백엔드"
+  }
+}
+```
+
+### U-10: 로그인한 사용자 포지션 변경
+
+- **Description**: 로그인한 사용자의 포지션을 변경한다.
+- **Method**: `PATCH`
+- **URI**: `/v1/users/position`
+- **Request**: Request header = { Authorization: `Bearer ${accessToken}` } & Body = { position: `new position` }
+- **Response data**:
+
+```
+{
+  "message": "Request has been processed.",
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "nickname": "닉네임",
+    "affiliation": "서강대학교",
+    "position": "백엔드"
+  }
+}
 ```
 
 ## Section
