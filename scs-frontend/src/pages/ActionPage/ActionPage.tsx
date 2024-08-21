@@ -162,7 +162,7 @@ const ActionPage: React.FC = () => {
       <h1 className="action-detail-title">{action.title}</h1>
       <div className="action-detail-author-info">
         <span>
-          {action.writer.nickname} •{" "}
+          {action.writer?.nickname || "탈퇴한 사용자"} •{" "}
           {new Date(action.createdAt).toLocaleString()}
         </span>
       </div>
@@ -181,7 +181,7 @@ const ActionPage: React.FC = () => {
           {action.likeCount}명이 좋아합니다
         </div>
       </div>
-      {action.writer.id === userId && (
+      {action.writer?.id === userId && (
         <div className="action-detail-buttons">
           <button onClick={handleEdit} className="action-detail-edit-button">
             <Edit size={20} />
@@ -197,7 +197,7 @@ const ActionPage: React.FC = () => {
         </div>
       )}
       <div className="action-detail-comments-section">
-        <h2 className="action-detail-comments-title">댓글</h2>
+        <h2 className="action-detail-comments-title">댓글 {comments.length}</h2>
         {comments.map((comment) => (
           <Comment
             key={comment.id}

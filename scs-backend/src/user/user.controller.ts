@@ -257,7 +257,7 @@ export class UserController {
     @ApiOperation({ summary: "로그인한 사용자 닉네임 변경" })
     @ApiOkResponse({
         description: "닉네임 변경 성공",
-        type: BaseResponseDto,
+        type: UserResponseDto,
     })
     @SetResponseDto(BaseResponseDto)
     @Patch("nickname")
@@ -265,11 +265,13 @@ export class UserController {
     async changeUserNickname(
         @GetCurrentUserId() id: number,
         @Body() changeNicknameDto: ChangeNicknameDto,
-    ): Promise<BaseResponseDto> {
-        await this.userService.changeUserNickname(id, changeNicknameDto);
+    ): Promise<UserResponseDto> {
+        const { nickname } = changeNicknameDto;
+        const user = await this.userService.changeUserNickname(id, nickname);
 
         return {
             message: "User nickname has been changed.",
+            user,
         };
     }
 
@@ -294,7 +296,7 @@ export class UserController {
         );
 
         return {
-            message: "User nickname has been changed.",
+            message: "User affiliation has been changed.",
             user,
         };
     }
@@ -320,7 +322,7 @@ export class UserController {
         );
 
         return {
-            message: "User nickname has been changed.",
+            message: "User position has been changed.",
             user,
         };
     }

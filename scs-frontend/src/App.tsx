@@ -18,6 +18,7 @@ import QuestionPage from "./pages/QuestionPage/QuestionPage";
 import { AuthProvider } from "./context/AuthContext";
 import { useAuth } from "./hooks/useAuth";
 import { setLogoutCallback } from "./api/apiClient";
+import MyPage from "./pages/MyPage/MyPage";
 
 const App: React.FC = () => {
   const { logout } = useAuth();
@@ -44,6 +45,7 @@ const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/mypage" element={<MyPage />} />
           <Route path="/section" element={<SectionPage />} />
           <Route
             path="/section/:sectionId/questions"

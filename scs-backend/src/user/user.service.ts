@@ -10,12 +10,11 @@ import { User } from "./user.entity";
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import { IsolationLevel, Transactional } from "typeorm-transactional";
 import * as bcrypt from "bcrypt";
-import { ChangeNicknameDto } from "./dto/change-nickname.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
-import * as dotenv from "dotenv";
 import { Book } from "../book/book.entity";
 import { BookRepository } from "../repository/book.repository";
 import { ContributionType } from "./types/contribution.enum";
+import * as dotenv from "dotenv";
 dotenv.config();
 
 @Injectable()
@@ -89,12 +88,18 @@ export class UserService {
     @Transactional({
         isolationLevel: IsolationLevel.REPEATABLE_READ,
     })
-    async changeUserNickname(
-        id: number,
-        changeNicknameDto: ChangeNicknameDto,
-    ): Promise<void> {
-        const { nickname } = changeNicknameDto;
-        await this.userRepository.updateNickname(id, nickname);
+    async changeUserNickname(userId: number, nickname: string): Promise<User> {
+        // find user from DB
+        const user = await this.userRepository.findUserById(userId);
+
+        // if user does not exist, it is an error
+        if (!user) {
+            throw new UnauthorizedException("User does not exist.");
+        }
+
+        // change user's nickname and return
+        user.nickname = nickname;
+        return this.userRepository.save(user);
     }
 
     // [U-06] Service logic

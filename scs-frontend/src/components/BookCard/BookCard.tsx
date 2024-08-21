@@ -30,7 +30,9 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
             )}
           </span>
         </div>
-        <span className="book-card__publisher">{book.publisher.nickname}</span>
+        <span className="book-card__publisher">
+          {book.publisher?.nickname || "탈퇴한 사용자"}
+        </span>
       </div>
     </Link>
   );

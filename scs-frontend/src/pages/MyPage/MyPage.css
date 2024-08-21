@@ -1,0 +1,97 @@
+.my-page {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.profile-info {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.contribution-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.settings-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4c4cff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+@media (min-width: 768px) {
+  .my-page {
+    max-width: 90%;
+  }
+
+  .profile-info {
+    font-size: 1.2em;
+  }
+
+  .contribution-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .contribution-box {
+    padding: 30px;
+  }
+
+  .settings-button {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 0.9em;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .my-page {
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    position: relative;
+    padding-bottom: 60px; /* 버튼 높이 + 여백 */
+  }
+
+  .profile-and-contributions {
+    display: flex;
+    gap: 30px;
+  }
+
+  .profile-info {
+    flex: 0 0 300px;
+    font-size: 1.3em;
+  }
+
+  .contribution-grid {
+    flex: 1;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .contribution-box {
+    padding: 40px;
+  }
+
+  .settings-button {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    padding: 10px 20px;
+    font-size: 1em;
+  }
+}

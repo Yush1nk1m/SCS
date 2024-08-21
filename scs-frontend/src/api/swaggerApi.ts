@@ -261,6 +261,22 @@ export interface ChangeNicknameDto {
   nickname: string;
 }
 
+export interface ChangeAffiliationDto {
+  /**
+   * 사용자의 새로운 소속
+   * @example "서강대학교"
+   */
+  affiliation: string;
+}
+
+export interface ChangePositionDto {
+  /**
+   * 사용자의 새로운 소속
+   * @example "서강대학교"
+   */
+  position: string;
+}
+
 export interface DeleteUserDto {
   /**
    * 사용자 비밀번호 (8-32자)
@@ -1291,8 +1307,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     userControllerChangeUserNickname: (data: ChangeNicknameDto, params: RequestParams = {}) =>
-      this.request<BaseResponseDto, BaseResponseDto>({
+      this.request<UserResponseDto, BaseResponseDto>({
         path: `/v1/users/nickname`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserControllerChangeUserAffiliation
+     * @summary 로그인한 사용자 소속 변경
+     * @request PATCH:/v1/users/affiliation
+     * @secure
+     */
+    userControllerChangeUserAffiliation: (data: ChangeAffiliationDto, params: RequestParams = {}) =>
+      this.request<UserResponseDto, BaseResponseDto>({
+        path: `/v1/users/affiliation`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserControllerChangeUserPosition
+     * @summary 로그인한 사용자 포지션 변경
+     * @request PATCH:/v1/users/position
+     * @secure
+     */
+    userControllerChangeUserPosition: (data: ChangePositionDto, params: RequestParams = {}) =>
+      this.request<UserResponseDto, BaseResponseDto>({
+        path: `/v1/users/position`,
         method: "PATCH",
         body: data,
         secure: true,

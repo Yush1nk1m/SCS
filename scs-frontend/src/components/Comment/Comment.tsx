@@ -33,7 +33,9 @@ const Comment: React.FC<CommentProps> = ({
   return (
     <div className="comment">
       <div className="comment-header">
-        <strong className="comment-author">{comment.writer.nickname}</strong>
+        <strong className="comment-author">
+          {comment.writer?.nickname || "탈퇴한 사용자"}
+        </strong>
         <span className="comment-date">
           {new Date(comment.createdAt).toLocaleString()}
         </span>
@@ -62,7 +64,7 @@ const Comment: React.FC<CommentProps> = ({
       ) : (
         <>
           <p className="comment-content">{comment.content}</p>
-          {userId === comment.writer.id && (
+          {userId === comment.writer?.id && (
             <div className="comment-buttons">
               <button
                 className="comment-edit-button"

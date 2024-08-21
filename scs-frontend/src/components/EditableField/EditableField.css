@@ -1,0 +1,40 @@
+.editable-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editable-field button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #4c4cff;
+}
+
+.editable-field.editing {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editable-field.editing input {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.editable-field.editing button {
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.editable-field.editing button:first-of-type {
+  background-color: #4caf50;
+  color: white;
+}
+
+.editable-field.editing button:last-of-type {
+  background-color: #f44336;
+  color: white;
+}

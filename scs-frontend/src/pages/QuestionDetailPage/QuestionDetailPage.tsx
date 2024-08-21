@@ -111,7 +111,7 @@ const QuestionDetailPage: React.FC = () => {
             <h1 className="question-detail-title">{question.content}</h1>
             <p className="question-detail-writer">
               <User size={16} />
-              <span>{question.writer?.nickname || "알 수 없음"}</span>
+              <span>{question.writer?.nickname || "탈퇴한 사용자"}</span>
             </p>
           </div>
         )}

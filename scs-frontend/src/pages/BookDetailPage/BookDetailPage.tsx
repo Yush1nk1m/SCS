@@ -193,7 +193,7 @@ const BookDetailPage: React.FC = () => {
             <Calendar size={16} />{" "}
             {new Date(book.createdAt).toLocaleDateString()}
           </span>
-          <span>{book.publisher.nickname}</span>
+          <span>{book.publisher?.nickname || "탈퇴한 사용자"}</span>
           <span>
             {book.visibility === "public" ? (
               <Eye size={16} />
@@ -216,7 +216,7 @@ const BookDetailPage: React.FC = () => {
             {book.likeCount}명이 좋아합니다
           </span>
         </div>
-        {book.publisher.id === userId && (
+        {book.publisher?.id === userId && (
           <div className="book-detail-edit-delete-container">
             <button
               className="book-detail-action-button book-detail-edit-button"
