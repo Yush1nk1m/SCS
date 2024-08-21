@@ -15,6 +15,7 @@ import { DeleteUserDto } from "./dto/delete-user.dto";
 import * as dotenv from "dotenv";
 import { Book } from "../book/book.entity";
 import { BookRepository } from "../repository/book.repository";
+import { ContributionType } from "./types/contribution.enum";
 dotenv.config();
 
 @Injectable()
@@ -168,5 +169,22 @@ export class UserService {
             order,
             search,
         );
+    }
+
+    // [U-09] Service logic
+    async getUserContribution(
+        userId: number,
+        type: ContributionType,
+    ): Promise<[number, number]> {
+        switch (type) {
+            case ContributionType.CREATED:
+                return this.userRepository.findTotalCreate(userId);
+            case ContributionType.QUESTION:
+                return this.userRepository.findQuestionsTotalSaved(userId);
+            case ContributionType.ACTION:
+                return this.userRepository.findActionsTotalLiked(userId);
+            case ContributionType.BOOK:
+                return this.userRepository.findBooksTotalLiked(userId);
+        }
     }
 }

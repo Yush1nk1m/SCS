@@ -122,4 +122,140 @@ export class UserRepository extends Repository<User> {
             return [user.likedBooks, user.likedBooks.length];
         }
     }
+
+    // find total number o questions, actions and books written by user and its percentile
+    async findTotalCreate(id: number): Promise<[number, number]> {
+        const query = `
+            WITH user_contributions AS (
+                SELECT
+                    u.id,
+                    (COALESCE(COUNT(DISTINCT q.id), 0) +
+                    COALESCE(COUNT(DISTINCT a.id), 0) +
+                    COALESCE(COUNT(DISTINCT b.id), 0)) AS total_count
+                FROM
+                    "user" u
+                LEFT JOIN question q ON q."writerId" = u.id
+                LEFT JOIN action a ON a."writerId" = u.id
+                LEFT JOIN book b ON b."publisherId" = u.id
+                GROUP BY u.id
+            ),
+            ranked_contributions AS (
+                SELECT
+                    id,
+                    total_count,
+                    PERCENT_RANK() OVER (ORDER BY total_count DESC) AS percentile
+                FROM
+                    user_contributions
+            )
+            SELECT
+                rc.total_count,
+                rc.percentile
+            FROM
+                ranked_contributions rc
+            WHERE
+                rc.id = $1;
+        `;
+
+        const result = await this.dataSource.query(query, [id]);
+        return [result[0].total_count, Math.round(result[0].percentile * 100)];
+    }
+
+    // find total number of saved count of questions written by user and its percentile
+    async findQuestionsTotalSaved(id: number): Promise<[number, number]> {
+        const query = `
+            WITH user_questions AS (
+                SELECT
+                    u.id,
+                    COALESCE(SUM(q.saved), 0) AS total_saved
+                FROM
+                    "user" u
+                LEFT JOIN question q ON q."writerId" = u.id
+                GROUP BY u.id
+            ),
+            ranked_questions_saved AS (
+                SELECT
+                    id,
+                    total_saved,
+                    PERCENT_RANK() OVER (ORDER BY total_saved DESC) AS percentile
+                FROM
+                    user_questions
+            )
+            SELECT
+                rqs.total_saved,
+                rqs.percentile
+            FROM
+                ranked_questions_saved rqs
+            WHERE
+                rqs.id = $1;
+        `;
+
+        const result = await this.dataSource.query(query, [id]);
+        return [result[0].total_saved, Math.round(result[0].percentile * 100)];
+    }
+
+    // find total number of liked count of actions written by user and its percentile
+    async findActionsTotalLiked(id: number): Promise<[number, number]> {
+        const query = `
+            WITH user_actions AS (
+                SELECT
+                    u.id,
+                    COALESCE(SUM(a."likeCount"), 0) AS total_liked
+                FROM
+                    "user" u
+                LEFT JOIN action a ON a."writerId" = u.id
+                GROUP BY u.id
+            ),
+            ranked_actions_liked AS (
+                SELECT
+                    id,
+                    total_liked,
+                    PERCENT_RANK() OVER (ORDER BY total_liked DESC) AS percentile
+                FROM
+                    user_actions
+            )
+            SELECT
+                ral.total_liked,
+                ral.percentile
+            FROM
+                ranked_actions_liked ral
+            WHERE
+                ral.id = $1;
+        `;
+
+        const result = await this.dataSource.query(query, [id]);
+        return [result[0].total_liked, Math.round(result[0].percentile * 100)];
+    }
+
+    // find total number of liked count of books written by user and its percentile
+    async findBooksTotalLiked(id: number): Promise<[number, number]> {
+        const query = `
+            WITH user_books AS (
+                SELECT
+                    u.id,
+                    COALESCE(SUM(b."likeCount"), 0) AS total_liked
+                FROM
+                    "user" u
+                LEFT JOIN book b ON b."publisherId" = u.id
+                GROUP BY u.id
+            ),
+            ranked_books_liked AS (
+                SELECT
+                    id,
+                    total_liked,
+                    PERCENT_RANK() OVER (ORDER BY total_liked DESC) AS percentile
+                FROM
+                    user_books
+            )
+            SELECT
+                rbl.total_liked,
+                rbl.percentile
+            FROM
+                ranked_books_liked rbl
+            WHERE
+                rbl.id = $1;
+        `;
+
+        const result = await this.dataSource.query(query, [id]);
+        return [result[0].total_liked, Math.round(result[0].percentile * 100)];
+    }
 }

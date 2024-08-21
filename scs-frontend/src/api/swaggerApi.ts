@@ -160,6 +160,18 @@ export interface UserResponseDto {
   user: UserDto;
 }
 
+export interface ContributionResponseDto {
+  /**
+   * 응답 메시지
+   * @example "Request has been processed."
+   */
+  message: string;
+  /** 기여 횟수 */
+  total: number;
+  /** 기여 횟수의 백분위수 (정수) */
+  percentile: number;
+}
+
 export interface PublisherDto {
   /**
    * 사용자 고유 ID
@@ -1138,6 +1150,30 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<UserResponseDto, BaseResponseDto>({
         path: `/v1/users/me`,
         method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserControllerGetMyContribution
+     * @summary 로그인한 사용자의 커뮤니티 기여도 조회
+     * @request GET:/v1/users/contribution
+     * @secure
+     */
+    userControllerGetMyContribution: (
+      query: {
+        type: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ContributionResponseDto, BaseResponseDto>({
+        path: `/v1/users/contribution`,
+        method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,

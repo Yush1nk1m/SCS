@@ -18,3 +18,14 @@ export class UsersResponseDto extends BaseResponseDto {
     @Expose()
     users: UserDto[];
 }
+
+@Expose()
+export class ContributionResponseDto extends BaseResponseDto {
+    @ApiProperty({ description: "기여 횟수" })
+    @Expose()
+    total: number;
+
+    @ApiProperty({ description: "기여 횟수의 백분위수 (정수)" })
+    @Expose()
+    percentile: number;
+}

@@ -27,11 +27,16 @@ import {
     ApiTags,
     ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { UserResponseDto, UsersResponseDto } from "./dto/response.dto";
+import {
+    ContributionResponseDto,
+    UserResponseDto,
+    UsersResponseDto,
+} from "./dto/response.dto";
 import { BaseResponseDto } from "../common/dto/base-response.dto";
 import { SetResponseDto } from "../common/decorator/set-response-dto.decorator";
 import { BooksResponseDto } from "../book/dto/response.dto";
 import { GetBooksQueryDto } from "../book/dto/get-books-query.dto";
+import { GetContributionQueryDto } from "./dto/get-contribution-query.dto";
 
 @ApiTags("User")
 @ApiInternalServerErrorResponse({
@@ -87,6 +92,37 @@ export class UserController {
         return {
             message: `An user with id: ${id} has been found.`,
             user,
+        };
+    }
+
+    // [U-09] Controller logic
+    @ApiBearerAuth()
+    @ApiOperation({ summary: "로그인한 사용자의 커뮤니티 기여도 조회" })
+    @ApiOkResponse({
+        description: "기여도 조회 성공",
+        type: ContributionResponseDto,
+    })
+    @ApiUnauthorizedResponse({
+        description: "접근 권한이 없음",
+        type: BaseResponseDto,
+    })
+    @SetResponseDto(ContributionResponseDto)
+    @Get("contribution")
+    @HttpCode(HttpStatus.OK)
+    async getMyContribution(
+        @GetCurrentUserId() userId: number,
+        @Query() query: GetContributionQueryDto,
+    ): Promise<ContributionResponseDto> {
+        const { type } = query;
+        const [total, percentile] = await this.userService.getUserContribution(
+            userId,
+            type,
+        );
+
+        return {
+            message: "User contribution information has been found.",
+            total,
+            percentile,
         };
     }
 
