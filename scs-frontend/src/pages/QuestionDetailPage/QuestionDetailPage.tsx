@@ -33,7 +33,7 @@ const QuestionDetailPage: React.FC = () => {
   useEffect(() => {
     if (id) {
       fetchQuestionData(id);
-      fetchActionsData(id);
+      fetchActionsData(id, "");
     }
   }, [id, sortOption, currentPage]);
 

@@ -19,7 +19,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({ questionId, onClose }) => {
 
   const fetchBooks = async () => {
     try {
-      const response = await getMyBooks(1, 100, "createdAt", "DESC");
+      const response = await getMyBooks(1, 100, "createdAt", "DESC", "");
       setBooks(response.books);
     } catch (error: any) {
       switch (error.status) {
