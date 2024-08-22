@@ -26,7 +26,7 @@ export const getBooks = async (
   limit: number | undefined,
   sort: BookSortOption["sort"],
   order: BookSortOption["order"],
-  search?: string
+  search: string
 ): Promise<BooksResponseDto> => {
   try {
     const response = await api.v1.bookControllerGetBooks({
@@ -45,20 +45,20 @@ export const getBooks = async (
 };
 
 export const getMyBooks = async (
-  page: number | undefined,
-  limit: number | undefined,
+  page: number,
+  limit: number,
   sort: BookSortOption["sort"],
   order: BookSortOption["order"],
-  search?: string
+  search: string
 ): Promise<BooksResponseDto> => {
   return authRequest<
     BooksResponseDto,
     {
-      page?: number | undefined;
-      limit?: number | undefined;
-      sort?: "createdAt" | "likeCount" | undefined;
-      order?: "ASC" | "DESC" | undefined;
-      search?: string | undefined;
+      page: number;
+      limit: number;
+      sort: "createdAt" | "likeCount";
+      order: "ASC" | "DESC";
+      search: string;
     }
   >((params) => api.v1.userControllerGetMyBooks(params), {
     page,

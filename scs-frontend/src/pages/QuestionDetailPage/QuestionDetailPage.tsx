@@ -53,7 +53,7 @@ const QuestionDetailPage: React.FC = () => {
     }
   };
 
-  const fetchActionsData = async (questionId: string, search?: string) => {
+  const fetchActionsData = async (questionId: string, search: string) => {
     try {
       const response = await fetchActions(questionId, {
         ...sortOption,

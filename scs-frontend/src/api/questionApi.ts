@@ -19,11 +19,11 @@ export const fetchQuestion = async (questionId: string) => {
 export const fetchActions = async (
   questionId: string,
   options: {
-    sort?: "updatedAt" | "likeCount";
-    order?: "ASC" | "DESC";
-    search?: string;
-    page?: number;
-    limit?: number;
+    sort: "updatedAt" | "likeCount";
+    order: "ASC" | "DESC";
+    search: string;
+    page: number;
+    limit: number;
   }
 ) => {
   try {
