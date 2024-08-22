@@ -6,7 +6,7 @@ import {
   getCurrentUser,
   getMyContribution,
 } from "../../api/userApi";
-import { UserDto, ContributionResponseDto } from "../../api/swaggerApi";
+import { UserDto } from "../../api/swaggerApi";
 import ContributionBox from "../../components/ContributionBox/ContributionBox";
 import SettingsModal from "../../components/SettingsModal/SettingsModal";
 import "./MyPage.css";
