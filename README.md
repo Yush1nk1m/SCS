@@ -94,5 +94,3 @@ SCS는 컴퓨터 과학 전공 지식을 학습하기 위한 웹 서비스입니
 프로젝트 관리자 - [@youth_1nn](https://www.instagram.com/youth_1nn/) - kys010306@sogang.ac.kr
 
 프로젝트 링크: [https://github.com/Yush1nk1m/SCS](https://github.com/Yush1nk1m/SCS)
-
----
