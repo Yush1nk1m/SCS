@@ -1,7 +1,10 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as config from "config";
+import * as path from "path";
 import * as dotenv from "dotenv";
-dotenv.config();
+dotenv.config({
+    path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`),
+});
 
 const dbConfig = config.get("db");
 

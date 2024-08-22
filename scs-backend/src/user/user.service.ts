@@ -14,8 +14,7 @@ import { DeleteUserDto } from "./dto/delete-user.dto";
 import { Book } from "../book/book.entity";
 import { BookRepository } from "../repository/book.repository";
 import { ContributionType } from "./types/contribution.enum";
-import * as dotenv from "dotenv";
-dotenv.config();
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class UserService {
@@ -24,6 +23,7 @@ export class UserService {
     constructor(
         private readonly userRepository: UserRepository,
         private readonly bookRepository: BookRepository,
+        private readonly configService: ConfigService,
     ) {}
 
     // [U-01] Service logic
@@ -72,7 +72,7 @@ export class UserService {
         // check if the current password is correct and change the password, remove refresh token
         if (user.password && (await bcrypt.compare(password, user.password))) {
             const salt = await bcrypt.genSalt(
-                parseInt(process.env.SALT_LENGTH) || 10,
+                parseInt(this.configService.get("SALT_LENGTH")) || 10,
             );
             const hashedPassword = await bcrypt.hash(newPassword, salt);
 

@@ -1,33 +1,30 @@
 import { NestFactory, Reflector } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import { ValidationPipe } from "@nestjs/common";
+import { Logger, ValidationPipe } from "@nestjs/common";
 import { AllExceptionFilter } from "./common/filter/all-exception.filter";
 import {
     initializeTransactionalContext,
     StorageDriver,
 } from "typeorm-transactional";
 import { NestExpressApplication } from "@nestjs/platform-express";
-import { join } from "path";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { DtoInterceptor } from "./common/interceptor/dto.interceptor";
 import helmet from "helmet";
 import * as fs from "fs";
+import * as path from "path";
 import * as compression from "compression";
-import * as dotenv from "dotenv";
-dotenv.config();
+import { config } from "dotenv";
+config({ path: path.resolve(__dirname, `../.env.${process.env.NODE_ENV}`) });
 
 async function bootstrap() {
+    const logger = new Logger("bootstrap");
+    logger.verbose("NODE_ENV:", process.env.NODE_ENV);
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
 
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
     app.use(helmet());
     app.use(compression());
-
-    app.useStaticAssets(
-        join(__dirname, "..", process.env.UPLOAD_LOCATION || "uploads"),
-        { prefix: "/v1/uploads/" },
-    );
 
     app.enableCors({
         origin: ["http://localhost:3000", "http://localhost:5173"],

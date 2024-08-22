@@ -4,6 +4,11 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { JwtPayload } from "../types/jwt-payload.type";
 import { JwtRefreshPayload } from "../types/jwt-refresh-payload.type";
 import { Request } from "express";
+import * as path from "path";
+import { config } from "dotenv";
+config({
+    path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`),
+});
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(

@@ -20,8 +20,7 @@ import { JwtService } from "@nestjs/jwt";
 import { LoginDto } from "./dto/login.dto";
 import { Tokens } from "./types/tokens.type";
 import { JwtPayload } from "./types/jwt-payload.type";
-import * as dotenv from "dotenv";
-dotenv.config();
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AuthService {
@@ -31,6 +30,7 @@ export class AuthService {
         private readonly authRepository: AuthRepository,
         private readonly userRepository: UserRepository,
         private readonly mailerService: MailerService,
+        private readonly configService: ConfigService,
         private readonly jwtService: JwtService,
     ) {}
 
@@ -115,7 +115,7 @@ export class AuthService {
 
         // hash password
         const salt = await bcrypt.genSalt(
-            parseInt(process.env.SALT_LENGTH) || 10,
+            parseInt(this.configService.get("SALT_LENGTH")) || 10,
         );
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -213,7 +213,7 @@ export class AuthService {
     ): Promise<void> {
         // hash refresh token
         const salt = await bcrypt.genSalt(
-            parseInt(process.env.SALT_LENGTH) || 10,
+            parseInt(this.configService.get("SALT_LENGTH")) || 10,
         );
         const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
 
@@ -242,12 +242,12 @@ export class AuthService {
         // sign JWT tokens with Passport.js
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(jwtPayload, {
-                secret: process.env.JWT_ACCESS_SECRET,
-                expiresIn: process.env.JWT_ACCESS_EXPIRESIN,
+                secret: this.configService.get("JWT_ACCESS_SECRET"),
+                expiresIn: this.configService.get("JWT_ACCESS_EXPIRESIN"),
             }),
             this.jwtService.signAsync(jwtPayload, {
-                secret: process.env.JWT_REFRESH_SECRET,
-                expiresIn: process.env.JWT_REFRESH_EXPIRESIN,
+                secret: this.configService.get("JWT_REFRESH_SECRET"),
+                expiresIn: this.configService.get("JWT_REFRESH_EXPIRESIN"),
             }),
         ]);
 

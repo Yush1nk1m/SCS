@@ -4,6 +4,11 @@ import { UploadService } from "./upload.service";
 import { MulterModule } from "@nestjs/platform-express";
 import { MulterConfig } from "../config/multer.config";
 import { S3Client } from "@aws-sdk/client-s3";
+import * as path from "path";
+import { config } from "dotenv";
+config({
+    path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`),
+});
 
 @Module({
     imports: [MulterModule.register(MulterConfig)],

@@ -18,9 +18,14 @@ import { UploadModule } from "./upload/upload.module";
 import { RepositoryModule } from "./repository/repository.module";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { ThrottlerConfig } from "./config/Throttler.config";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: `.env.${process.env.NODE_ENV}`,
+        }),
         ThrottlerModule.forRoot(ThrottlerConfig),
         TypeOrmModule.forRootAsync({
             useFactory() {
