@@ -25,7 +25,7 @@ const LoginForm: React.FC = () => {
       navigate(-1);
     } catch (error: any) {
       console.error("로그인 실패:", error);
-      if (error.status === 403) {
+      if (error.status === 401) {
         toast.error("이메일과 비밀번호를 확인해 주세요.");
       } else {
         toast.error("예기치 못한 에러가 발생했습니다.");
