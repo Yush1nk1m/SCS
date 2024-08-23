@@ -4,7 +4,9 @@
 
 ## AuthService
 
-이 섹션은 인증 관련 API의 서비스에 대한 단위 테스트 설계이다.
+이 섹션은 인증 관련 API의 [서비스](../scs-backend/src/auth//auth.service.ts)에 대한 단위 테스트 설계이다.
+
+[테스트 코드 바로가기](../scs-backend/src/auth/auth.service.spec.ts)
 
 | Test ID | API ID |               Method               |
 | :-----: | :----: | :--------------------------------: |
@@ -74,7 +76,9 @@
 
 ## UserService
 
-이 섹션은 사용자 관련 API의 서비스에 대한 단위 테스트 설계이다.
+이 섹션은 사용자 관련 API의 [서비스](../scs-backend/src/user/user.service.ts)에 대한 단위 테스트 설계이다.
+
+[테스트 코드 바로가기](../scs-backend/src/user/user.service.spec.ts)
 
 | Test ID |  API ID   |               Method                |
 | :-----: | :-------: | :---------------------------------: |
@@ -91,80 +95,104 @@
 
 ### [S-U-01]: UserService.findAllUsers()
 
-|  Test ID  |    Name    | Summary                   | Expected result |
-| :-------: | :--------: | :------------------------ | :-------------- |
-| S-U-01-01 |  Success   | 모든 사용자를 조회한다.   | Resolve         |
-| S-U-01-02 | Empty List | 사용자가 존재하지 않는다. | Resolve         |
+|  Test ID  |         Name         | Summary                         | Expected result |
+| :-------: | :------------------: | :------------------------------ | :-------------- |
+| S-U-01-01 |       Success        | 모든 사용자를 조회한다.         | Resolve         |
+| S-U-01-02 |      Empty list      | 사용자가 존재하지 않는다.       | Resolve         |
+| S-U-01-03 | Failed to find users | 사용자 조회 중 예외가 발생한다. | Reject with any |
 
 ### [S-U-02]: UserService.findUser()
 
-|  Test ID  |      Name      | Summary                            | Expected result |
-| :-------: | :------------: | :--------------------------------- | :-------------- |
-| S-U-02-01 |    Success     | 특정 사용자를 성공적으로 조회한다. | Resolve         |
-| S-U-02-02 | User Not Found | 사용자가 존재하지 않는다.          | Reject with 404 |
+|  Test ID  |        Name         | Summary                            | Expected result |
+| :-------: | :-----------------: | :--------------------------------- | :-------------- |
+| S-U-02-01 |       Success       | 특정 사용자를 성공적으로 조회한다. | Resolve         |
+| S-U-02-02 |   User not found    | 사용자가 존재하지 않는다.          | Reject with 404 |
+| S-U-02-03 | Failed to find user | 사용자 조회 중 예외가 발생한다.    | Reject with any |
 
 ### [S-U-03]: UserService.changeUserPassword()
 
-|  Test ID  |            Name            | Summary                               | Expected result |
-| :-------: | :------------------------: | :------------------------------------ | :-------------- |
-| S-U-03-01 |          Success           | 비밀번호를 성공적으로 변경한다.       | Resolve         |
-| S-U-03-02 |   Passwords Do Not Match   | 새 비밀번호와 확인 비밀번호가 다르다. | Reject with 400 |
-| S-U-03-03 |       User Not Found       | 사용자가 존재하지 않는다.             | Reject with 401 |
-| S-U-03-04 | Incorrect Current Password | 현재 비밀번호가 일치하지 않는다.      | Reject with 401 |
+|  Test ID  |            Name            | Summary                                     | Expected result |
+| :-------: | :------------------------: | :------------------------------------------ | :-------------- |
+| S-U-03-01 |          Success           | 비밀번호를 성공적으로 변경한다.             | Resolve         |
+| S-U-03-02 | Failed to update password  | 비밀번호 업데이트 중 예외가 발생한다.       | Reject with any |
+| S-U-03-03 |  Failed to hash password   | 비밀번호 해싱 중 예외가 발생한다.           | Reject with any |
+| S-U-03-04 |  Failed to generate salt   | Salt 생성 중 예외가 발생한다.               | Reject with any |
+| S-U-03-05 | Failed to compare password | 비밀번호 비교 중 예외가 발생한다.           | Reject with any |
+| S-U-03-06 |     Incorrect password     | 비밀번호가 일치하지 않는다.                 | Reject with 401 |
+| S-U-03-07 |       User not found       | 사용자가 존재하지 않는다.                   | Reject with 401 |
+| S-U-03-08 |    Failed to find user     | 사용자 조회 중 예외가 발생한다.             | Reject with any |
+| S-U-03-09 | Incorrect confirm password | 비밀번호와 확인 비밀번호가 일치하지 않는다. | Reject with 400 |
 
 ### [S-U-04]: UserService.changeUserNickname()
 
-|  Test ID  |      Name      | Summary                       | Expected result |
-| :-------: | :------------: | :---------------------------- | :-------------- |
-| S-U-04-01 |    Success     | 닉네임을 성공적으로 변경한다. | Resolve         |
-| S-U-04-02 | User Not Found | 사용자가 존재하지 않는다.     | Reject with 401 |
+|  Test ID  |        Name         | Summary                              | Expected result         |
+| :-------: | :-----------------: | :----------------------------------- | :---------------------- |
+| S-U-04-01 |       Success       | 닉네임을 성공적으로 변경한다.        | Resolve with saved user |
+| S-U-04-02 | Failed to save user | 사용자 정보 저장 중 예외가 발생한다. | Reject with any         |
+| S-U-04-03 |   User not Found    | 사용자가 존재하지 않는다.            | Reject with 401         |
+| S-U-04-04 | Failed to find user | 사용자 조회 중 예외가 발생한다.      | Reject with any         |
 
 ### [S-U-05]: UserService.deleteUser()
 
-|  Test ID  |          Name           | Summary                       | Expected result |
-| :-------: | :---------------------: | :---------------------------- | :-------------- |
-| S-U-05-01 |         Success         | 사용자를 성공적으로 삭제한다. | Resolve         |
-| S-U-05-02 | Invalid Confirm Message | 확인 메시지가 올바르지 않다.  | Reject with 400 |
-| S-U-05-03 |     User Not Found      | 사용자가 존재하지 않는다.     | Reject with 401 |
-| S-U-05-04 |   Incorrect Password    | 비밀번호가 일치하지 않는다.   | Reject with 401 |
+|  Test ID  |            Name            | Summary                           | Expected result |
+| :-------: | :------------------------: | :-------------------------------- | :-------------- |
+| S-U-05-01 |          Success           | 사용자를 성공적으로 삭제한다.     | Resolve         |
+| S-U-05-02 |   Failed to delete user    | 사용자 삭제 중 예외가 발생한다.   | Reject with any |
+| S-U-05-03 | Failed to compare password | 비밀번호 비교 중 예외가 발생한다. | Reject with any |
+| S-U-05-04 |     Incorrect password     | 비밀번호가 일치하지 않는다.       | Reject with 401 |
+| S-U-05-05 |       User not found       | 사용자가 조회되지 않는다.         | Reject with 401 |
+| S-U-05-06 |    Failed to find user     | 사용자 조회 중 예외가 발생한다.   | Reject with any |
+| S-U-05-07 | Incorrect confirm message  | 확인 메시지가 일치하지 않는다.    | Reject with 400 |
 
 ### [S-U-06]: UserService.getMyBooks()
 
-|  Test ID  |      Name      | Summary                                | Expected result |
-| :-------: | :------------: | :------------------------------------- | :-------------- |
-| S-U-06-01 |    Success     | 사용자의 문제집을 성공적으로 조회한다. | Resolve         |
-| S-U-06-02 | User Not Found | 사용자가 존재하지 않는다.              | Reject with 401 |
-| S-U-06-03 |    No Books    | 사용자가 생성한 문제집이 없다.         | Resolve         |
+|  Test ID  |         Name         | Summary                                | Expected result |
+| :-------: | :------------------: | :------------------------------------- | :-------------- |
+| S-U-06-01 |       Success        | 사용자의 문제집을 성공적으로 조회한다. | Resolve         |
+| S-U-06-02 |       No books       | 사용자가 생성한 문제집이 없다.         | Resolve         |
+| S-U-06-03 | Failed to find books | 문제집 조회 중 예외가 발생한다.        | Reject with any |
+| S-U-06-04 |    User not found    | 사용자가 존재하지 않는다.              | Reject with 401 |
+| S-U-06-05 | Failed to find user  | 사용자 조회 중 예외가 발생한다.        | Reject with any |
 
 ### [S-U-07]: UserService.getLikedBooks()
 
-|  Test ID  |      Name      | Summary                                         | Expected result |
-| :-------: | :------------: | :---------------------------------------------- | :-------------- |
-| S-U-07-01 |    Success     | 사용자가 좋아요한 문제집을 성공적으로 조회한다. | Resolve         |
-| S-U-07-02 | User Not Found | 사용자가 존재하지 않는다.                       | Reject with 401 |
-| S-U-07-03 | No Liked Books | 사용자가 좋아요한 문제집이 없다.                | Resolve         |
+|  Test ID  |         Name         | Summary                                         | Expected result |
+| :-------: | :------------------: | :---------------------------------------------- | :-------------- |
+| S-U-07-01 |       Success        | 사용자가 좋아요한 문제집을 성공적으로 조회한다. | Resolve         |
+| S-U-07-02 |    No Liked Books    | 사용자가 좋아요한 문제집이 없다.                | Resolve         |
+| S-U-07-03 | Failed to find books | 문제집 조회 중 예외가 발생한다.                 | Reject with any |
+| S-U-07-04 |    User Not Found    | 사용자가 존재하지 않는다.                       | Reject with 401 |
+| S-U-07-05 | Failed to find user  | 사용자 조회 중 예외가 발생한다.                 | Reject with any |
 
 ### [S-U-08]: UserService.getUserContribution()
 
-|  Test ID  |       Name       | Summary                                | Expected result |
-| :-------: | :--------------: | :------------------------------------- | :-------------- |
-| S-U-08-01 |     Success      | 사용자의 기여도를 성공적으로 조회한다. | Resolve         |
-| S-U-08-02 |   Invalid Type   | 유효하지 않은 기여도 타입이다.         | Reject with any |
-| S-U-08-03 | No Contributions | 사용자의 기여도가 없다.                | Resolve         |
+|  Test ID  |                 Name                  | Summary                                  | Expected result |
+| :-------: | :-----------------------------------: | :--------------------------------------- | :-------------- |
+| S-U-08-01 |                Success                | 사용자의 기여도를 성공적으로 조회한다.   | Resolve         |
+| S-U-08-02 |           No contributions            | 사용자의 기여도가 없다.                  | Resolve         |
+| S-U-08-03 |      Failed to find total create      | CREATED 기여도 조회 중 예외가 발생한다.  | Reject with any |
+| S-U-08-04 | Failed to find questions' total saved | QUESTION 기여도 조회 중 예외가 발생한다. | Reject with any |
+| S-U-08-05 |  Failed to find actions' total liked  | ACITON 기여도 조회 중 예외가 발생한다.   | Reject with any |
+| S-U-08-06 |   Failed to find books' total liked   | BOOK 기여도 조회 중 예외가 발생한다.     | Reject with any |
+| S-U-08-07 |             Invalid Type              | 유효하지 않은 기여도 타입이다.           | Reject with any |
 
 ### [S-U-09]: UserService.changeUserAffiliation()
 
-|  Test ID  |      Name      | Summary                              | Expected result |
-| :-------: | :------------: | :----------------------------------- | :-------------- |
-| S-U-09-01 |    Success     | 사용자의 소속을 성공적으로 변경한다. | Resolve         |
-| S-U-09-02 | User Not Found | 사용자가 존재하지 않는다.            | Reject with 401 |
+|  Test ID  |        Name         | Summary                              | Expected result |
+| :-------: | :-----------------: | :----------------------------------- | :-------------- |
+| S-U-09-01 |       Success       | 사용자의 소속을 성공적으로 변경한다. | Resolve         |
+| S-U-09-02 |   Failed to save    | 사용자 정보 저장 중 예외가 발생한다. | Reject with any |
+| S-U-09-03 |   User not found    | 사용자가 존재하지 않는다.            | Reject with 401 |
+| S-U-09-04 | Failed to find user | 사용자 조회 중 예외가 발생한다.      | Reject with any |
 
 ### [S-U-10]: UserService.changeUserPosition()
 
-|  Test ID  |      Name      | Summary                                | Expected result |
-| :-------: | :------------: | :------------------------------------- | :-------------- |
-| S-U-10-01 |    Success     | 사용자의 포지션을 성공적으로 변경한다. | Resolve         |
-| S-U-10-02 | User Not Found | 사용자가 존재하지 않는다.              | Reject with 401 |
+|  Test ID  |        Name         | Summary                                | Expected result |
+| :-------: | :-----------------: | :------------------------------------- | :-------------- |
+| S-U-10-01 |       Success       | 사용자의 포지션을 성공적으로 변경한다. | Resolve         |
+| S-U-10-02 |   Failed to save    | 사용자 정보 저장 중 예외가 발생한다.   | Reject with any |
+| S-U-10-03 |   User Not Found    | 사용자가 존재하지 않는다.              | Reject with 401 |
+| S-U-10-04 | Failed to find user | 사용자 조회 중 예외가 발생한다.        | Reject with any |
 
 ## SectionService
 
