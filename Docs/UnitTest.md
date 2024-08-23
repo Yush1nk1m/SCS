@@ -146,35 +146,38 @@
 
 ### [S-U-06]: UserService.getMyBooks()
 
-|  Test ID  |         Name         | Summary                                | Expected result |
-| :-------: | :------------------: | :------------------------------------- | :-------------- |
-| S-U-06-01 |       Success        | 사용자의 문제집을 성공적으로 조회한다. | Resolve         |
-| S-U-06-02 |       No books       | 사용자가 생성한 문제집이 없다.         | Resolve         |
-| S-U-06-03 | Failed to find books | 문제집 조회 중 예외가 발생한다.        | Reject with any |
-| S-U-06-04 |    User not found    | 사용자가 존재하지 않는다.              | Reject with 401 |
-| S-U-06-05 | Failed to find user  | 사용자 조회 중 예외가 발생한다.        | Reject with any |
+|  Test ID  |         Name          | Summary                                            | Expected result |
+| :-------: | :-------------------: | :------------------------------------------------- | :-------------- |
+| S-U-06-01 |        Success        | 사용자의 문제집을 성공적으로 조회한다.             | Resolve         |
+| S-U-06-02 | Success with no query | 쿼리 없이도 사용자의 문제집을 성공적으로 조회한다. | Resolve         |
+| S-U-06-03 |       No books        | 사용자가 생성한 문제집이 없다.                     | Resolve         |
+| S-U-06-04 | Failed to find books  | 문제집 조회 중 예외가 발생한다.                    | Reject with any |
+| S-U-06-05 |    User not found     | 사용자가 존재하지 않는다.                          | Reject with 401 |
+| S-U-06-06 |  Failed to find user  | 사용자 조회 중 예외가 발생한다.                    | Reject with any |
 
 ### [S-U-07]: UserService.getLikedBooks()
 
-|  Test ID  |         Name         | Summary                                         | Expected result |
-| :-------: | :------------------: | :---------------------------------------------- | :-------------- |
-| S-U-07-01 |       Success        | 사용자가 좋아요한 문제집을 성공적으로 조회한다. | Resolve         |
-| S-U-07-02 |    No Liked Books    | 사용자가 좋아요한 문제집이 없다.                | Resolve         |
-| S-U-07-03 | Failed to find books | 문제집 조회 중 예외가 발생한다.                 | Reject with any |
-| S-U-07-04 |    User Not Found    | 사용자가 존재하지 않는다.                       | Reject with 401 |
-| S-U-07-05 | Failed to find user  | 사용자 조회 중 예외가 발생한다.                 | Reject with any |
+|  Test ID  |         Name          | Summary                                                              | Expected result |
+| :-------: | :-------------------: | :------------------------------------------------------------------- | :-------------- |
+| S-U-07-01 |        Success        | 사용자가 좋아요한 문제집을 성공적으로 조회한다.                      | Resolve         |
+| S-U-07-02 | Success with no query | 쿼리 파라미터 없이도 사용자가 좋아요한 문제집을 성공적으로 조회한다. | Resolve         |
+| S-U-07-03 |    No liked books     | 사용자가 좋아요한 문제집이 없다.                                     | Resolve         |
+| S-U-07-04 | Failed to find books  | 문제집 조회 중 예외가 발생한다.                                      | Reject with any |
+| S-U-07-05 |    User not found     | 사용자가 존재하지 않는다.                                            | Reject with 401 |
+| S-U-07-06 |  Failed to find user  | 사용자 조회 중 예외가 발생한다.                                      | Reject with any |
 
 ### [S-U-08]: UserService.getUserContribution()
 
-|  Test ID  |                 Name                  | Summary                                  | Expected result |
-| :-------: | :-----------------------------------: | :--------------------------------------- | :-------------- |
-| S-U-08-01 |                Success                | 사용자의 기여도를 성공적으로 조회한다.   | Resolve         |
-| S-U-08-02 |           No contributions            | 사용자의 기여도가 없다.                  | Resolve         |
-| S-U-08-03 |      Failed to find total create      | CREATED 기여도 조회 중 예외가 발생한다.  | Reject with any |
-| S-U-08-04 | Failed to find questions' total saved | QUESTION 기여도 조회 중 예외가 발생한다. | Reject with any |
-| S-U-08-05 |  Failed to find actions' total liked  | ACITON 기여도 조회 중 예외가 발생한다.   | Reject with any |
-| S-U-08-06 |   Failed to find books' total liked   | BOOK 기여도 조회 중 예외가 발생한다.     | Reject with any |
-| S-U-08-07 |             Invalid Type              | 유효하지 않은 기여도 타입이다.           | Reject with any |
+|  Test ID  |                 Name                  | Summary                                         | Expected result |
+| :-------: | :-----------------------------------: | :---------------------------------------------- | :-------------- |
+| S-U-08-01 |            Success CREATED            | 사용자의 CREATED 기여도를 성공적으로 조회한다.  | Resolve         |
+| S-U-08-02 |           Success QUESTION            | 사용자의 QUESTION 기여도를 성공적으로 조회한다. | Resolve         |
+| S-U-08-03 |            Success ACTION             | 사용자의 ACTION 기여도를 성공적으로 조회한다.   | Resolve         |
+| S-U-08-04 |             Success BOOK              | 사용자의 BOOK 기여도를 성공적으로 조회한다.     | Resolve         |
+| S-U-08-05 |      Failed to find total create      | CREATED 기여도 조회 중 예외가 발생한다.         | Reject with any |
+| S-U-08-06 | Failed to find questions' total saved | QUESTION 기여도 조회 중 예외가 발생한다.        | Reject with any |
+| S-U-08-07 |  Failed to find actions' total liked  | ACITON 기여도 조회 중 예외가 발생한다.          | Reject with any |
+| S-U-08-08 |   Failed to find books' total liked   | BOOK 기여도 조회 중 예외가 발생한다.            | Reject with any |
 
 ### [S-U-09]: UserService.changeUserAffiliation()
 
@@ -191,7 +194,7 @@
 | :-------: | :-----------------: | :------------------------------------- | :-------------- |
 | S-U-10-01 |       Success       | 사용자의 포지션을 성공적으로 변경한다. | Resolve         |
 | S-U-10-02 |   Failed to save    | 사용자 정보 저장 중 예외가 발생한다.   | Reject with any |
-| S-U-10-03 |   User Not Found    | 사용자가 존재하지 않는다.              | Reject with 401 |
+| S-U-10-03 |   User not found    | 사용자가 존재하지 않는다.              | Reject with 401 |
 | S-U-10-04 | Failed to find user | 사용자 조회 중 예외가 발생한다.        | Reject with any |
 
 ## SectionService
