@@ -62,7 +62,7 @@ const EditActionPage: React.FC = () => {
       await updateAction(Number(id), updateActionDto);
       toast.success("액션이 성공적으로 수정되었습니다.");
       navigate(
-        `/action/${id}?source=${source}&id=${sourceId}&questionId=${questionId}`
+        `/action/${id}?source=${source}&id=${sourceId}&questionId=${questionId}&qpage=${queryParams.get("qpage")}&spage=${queryParams.get("spage")}`
       );
     } catch (error: any) {
       console.error("액션 수정 실패:", error);
@@ -100,7 +100,7 @@ const EditActionPage: React.FC = () => {
               type="button"
               onClick={() =>
                 navigate(
-                  `/action/${id}?source=${source}&id=${sourceId}&questionId=${questionId}`
+                  `/action/${id}?source=${source}&id=${sourceId}&questionId=${questionId}&qpage=${queryParams.get("qpage")}&spage=${queryParams.get("spage")}`
                 )
               }
               className="cancelButton"

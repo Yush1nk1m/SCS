@@ -53,7 +53,7 @@ const CreateActionPage: React.FC = () => {
       const response = await createAction(Number(questionId), title, content);
       toast.success("액션 생성 성공!", { id: loadingToast });
       navigate(
-        `/action/${response.action.id}?source=${source}&id=${sourceId}&questionId=${questionId}`
+        `/action/${response.action.id}?source=${source}&id=${sourceId}&questionId=${questionId}&spage=${queryParams.get("spage")}&qpage=1`
       );
     } catch (error: any) {
       switch (error.status) {
@@ -102,7 +102,7 @@ const CreateActionPage: React.FC = () => {
               type="button"
               onClick={() =>
                 navigate(
-                  `/question/${questionId}?source=${source}&id=${sourceId}`
+                  `/question/${questionId}?page=${queryParams.get("qpage")}&source=${source}&id=${sourceId}&spage=${queryParams.get("spage")}`
                 )
               }
               className="cancelButton"

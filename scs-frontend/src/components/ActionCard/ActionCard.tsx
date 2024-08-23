@@ -4,6 +4,7 @@ import "./ActionCard.css";
 import { Heart, Calendar, Image, ArrowRight } from "lucide-react";
 
 interface ActionCardProps {
+  qpage: number;
   id: number;
   title: string;
   imageUrl?: string;
@@ -12,6 +13,7 @@ interface ActionCardProps {
 }
 
 const ActionCard: React.FC<ActionCardProps> = ({
+  qpage,
   id,
   title,
   imageUrl,
@@ -28,7 +30,7 @@ const ActionCard: React.FC<ActionCardProps> = ({
 
   const handleClick = () => {
     navigate(
-      `/action/${id}?source=${source}&id=${sourceId}&questionId=${questionId}`
+      `/action/${id}?source=${source}&id=${sourceId}&questionId=${questionId}&spage=${queryParams.get("spage")}&qpage=${qpage}`
     );
   };
 

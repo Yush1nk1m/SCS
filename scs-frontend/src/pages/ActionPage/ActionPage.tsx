@@ -124,7 +124,7 @@ const ActionPage: React.FC = () => {
 
   const handleEdit = () => {
     navigate(
-      `/action/${id}/edit?source=${source}&id=${sourceId}&questionId=${questionId}`
+      `/action/${id}/edit?source=${source}&id=${sourceId}&questionId=${questionId}&qpage=${queryParams.get("qpage")}&spage=${queryParams.get("spage")}`
     );
   };
 
@@ -133,7 +133,9 @@ const ActionPage: React.FC = () => {
       try {
         await deleteAction(Number(id));
         toast.success("액션이 삭제되었습니다.");
-        navigate(`/question/${questionId}?source=${source}&id=${sourceId}`);
+        navigate(
+          `/question/${questionId}?page=${queryParams.get("qpage")}&source=${source}&id=${sourceId}&spage=${queryParams.get("spage")}`
+        );
       } catch (error: any) {
         toast.error(
           error.status === 403
@@ -153,7 +155,9 @@ const ActionPage: React.FC = () => {
       <button
         className="action-detail-back-button"
         onClick={() =>
-          navigate(`/question/${questionId}?source=${source}&id=${sourceId}`)
+          navigate(
+            `/question/${questionId}?page=${queryParams.get("qpage")}&source=${source}&id=${sourceId}&spage=${queryParams.get("spage")}`
+          )
         }
       >
         <ArrowLeft size={20} />

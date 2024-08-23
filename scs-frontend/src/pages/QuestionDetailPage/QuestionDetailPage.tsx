@@ -27,7 +27,11 @@ const QuestionDetailPage: React.FC = () => {
     sort: "updatedAt",
     order: "DESC",
   });
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    !isNaN(Number(queryParams.get("page")))
+      ? Number(queryParams.get("page"))
+      : 1
+  );
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
@@ -92,7 +96,11 @@ const QuestionDetailPage: React.FC = () => {
         {source === "section" ? (
           <button
             className="question-detail-back-button"
-            onClick={() => navigate(`/section/${sourceId}/questions`)}
+            onClick={() =>
+              navigate(
+                `/section/${sourceId}/questions?page=${queryParams.get("spage")}`
+              )
+            }
           >
             <ArrowLeft size={20} />
             <span>질문 목록으로 돌아가기</span>
@@ -132,6 +140,7 @@ const QuestionDetailPage: React.FC = () => {
           {actions.map((action) => (
             <ActionCard
               key={action.id}
+              qpage={currentPage}
               id={action.id}
               title={action.title}
               imageUrl={action.imageUrls?.[0]}
@@ -150,7 +159,7 @@ const QuestionDetailPage: React.FC = () => {
             className="question-detail-create-action-button"
             onClick={() =>
               navigate(
-                `/question/${id}/create-action?source=${source}&id=${sourceId}`
+                `/question/${id}/create-action?source=${source}&id=${sourceId}&spage=${queryParams.get("spage")}&qpage=${currentPage}`
               )
             }
           >

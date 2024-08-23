@@ -6,10 +6,15 @@ import "./QuestionCard.css";
 
 interface QuestionCardProps {
   question: QuestionDto;
+  page: number;
   onScrap: (questionId: number) => void;
 }
 
-const QuestionCard: React.FC<QuestionCardProps> = ({ question, onScrap }) => {
+const QuestionCard: React.FC<QuestionCardProps> = ({
+  question,
+  page,
+  onScrap,
+}) => {
   const { sectionId } = useParams<{ sectionId: string }>();
   return (
     <div className="question-card">
@@ -28,7 +33,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, onScrap }) => {
           스크랩
         </button>
         <Link
-          to={`/question/${question.id}?source=section&id=${sectionId}`}
+          to={`/question/${question.id}?page=1&source=section&id=${sectionId}&spage=${page}`}
           className="view-button"
         >
           보기

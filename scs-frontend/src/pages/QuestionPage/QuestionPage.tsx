@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { fetchQuestions } from "../../api/sectionApi";
 import { QuestionDto } from "../../api/swaggerApi";
 import { ArrowLeft, PlusCircle } from "lucide-react";
@@ -15,9 +15,15 @@ import ScrapModal from "../../components/ScrapModal/ScrapModal";
 import QuestionCard from "../../components/QuestionCard/QuestionCard";
 
 const QuestionPage: React.FC = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
   const { sectionId } = useParams<{ sectionId: string }>();
   const [questions, setQuestions] = useState<QuestionDto[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    !isNaN(Number(queryParams.get("page")))
+      ? Number(queryParams.get("page"))
+      : 1
+  );
   const [totalPages, setTotalPages] = useState(1);
   const [sortOption, setSortOption] = useState<QuestionSortOption>({
     sort: "createdAt",
@@ -100,6 +106,7 @@ const QuestionPage: React.FC = () => {
           <QuestionCard
             key={question.id}
             question={question}
+            page={currentPage}
             onScrap={handleScrap}
           />
         ))}

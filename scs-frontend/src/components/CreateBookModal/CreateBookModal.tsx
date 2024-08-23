@@ -24,6 +24,9 @@ const CreateBookModal: React.FC<CreateBookModalProps> = ({
       await createBook(visibility, title, description);
       toast.success("문제집이 생성되었습니다.");
       onBookCreated();
+      setTitle("");
+      setDescription("");
+      setVisibility("public");
       onClose();
     } catch (error) {
       toast.error("문제집 생성에 실패했습니다.");
