@@ -42,8 +42,6 @@
 | S-A-03-03 | Failed to delete verification | 인증 데이터 삭제 중 예외가 발생한다. | Reject with any           |
 | S-A-03-04 |         Not verified          | 인증 데이터가 검증되지 않았다.       | Reject with 401           |
 | S-A-03-05 |  Failed to find verification  | 인증 데이터 조회 중 예외가 발생한다. | Reject with any           |
-| S-A-03-06 |        Failed to hash         | 비밀번호 해싱 중 예외가 발생한다.    | Reject with any           |
-| S-A-03-07 |    Failed to generate salt    | Salt 생성 중 예외가 발생한다.        | Reject with any           |
 
 ### [S-A-04]: AuthService.login()
 
