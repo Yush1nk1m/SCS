@@ -199,7 +199,9 @@
 
 ## SectionService
 
-이 섹션은 섹션 관련 API의 서비스에 대한 단위 테스트 설계이다.
+이 섹션은 섹션 관련 API의 [서비스](../scs-backend/src/section/section.service.ts)에 대한 단위 테스트 설계이다.
+
+[테스트 코드 바로가기](../scs-backend/src/section/section.service.spec.ts)
 
 | Test ID | API ID |                  Method                   |
 | :-----: | :----: | :---------------------------------------: |
@@ -216,54 +218,61 @@
 |  Test ID  |          Name           | Summary                          | Expected result |
 | :-------: | :---------------------: | :------------------------------- | :-------------- |
 | S-S-01-01 |         Success         | 모든 섹션을 성공적으로 조회한다. | Resolve         |
-| S-S-01-02 |       Empty List        | 섹션이 존재하지 않는다.          | Resolve         |
+| S-S-01-02 |       Empty list        | 섹션이 존재하지 않는다.          | Resolve         |
 | S-S-01-03 | Failed to find sections | 섹션 조회 중 예외가 발생한다.    | Reject with any |
 
 ### [S-S-02]: SectionService.getSpecificSection()
 
-|  Test ID  |       Name        | Summary                          | Expected result |
-| :-------: | :---------------: | :------------------------------- | :-------------- |
-| S-S-02-01 |      Success      | 특정 섹션을 성공적으로 조회한다. | Resolve         |
-| S-S-02-02 | Section Not Found | 섹션이 존재하지 않는다.          | Reject with 404 |
+|  Test ID  |          Name          | Summary                          | Expected result |
+| :-------: | :--------------------: | :------------------------------- | :-------------- |
+| S-S-02-01 |        Success         | 특정 섹션을 성공적으로 조회한다. | Resolve         |
+| S-S-02-02 |   Section not found    | 섹션이 존재하지 않는다.          | Reject with 404 |
+| S-S-02-03 | Failed to find section | 섹션 조회 중 예외가 발생한다.    | Reject with any |
 
 ### [S-S-03]: SectionService.createSection()
 
-|  Test ID  |      Name      | Summary                        | Expected result |
-| :-------: | :------------: | :----------------------------- | :-------------- |
-| S-S-03-01 |    Success     | 새 섹션을 성공적으로 생성한다. | Resolve         |
-| S-S-03-02 | User Not Found | 사용자가 존재하지 않는다.      | Reject with 401 |
-| S-S-03-03 | Invalid Input  | 유효하지 않은 입력 데이터.     | Reject with 400 |
+|  Test ID  |           Name           | Summary                         | Expected result |
+| :-------: | :----------------------: | :------------------------------ | :-------------- |
+| S-S-03-01 |         Success          | 새 섹션을 성공적으로 생성한다.  | Resolve         |
+| S-S-03-02 | Failed to create section | 섹션 생성 중 예외가 발생한다.   | Reject with any |
+| S-S-03-03 |      User not found      | 사용자가 존재하지 않는다.       | Reject with 401 |
+| S-S-03-04 |   Failed to find user    | 사용자 조회 중 예외가 발생한다. | Reject with any |
 
 ### [S-S-04]: SectionService.updateSectionSubject()
 
-|  Test ID  |       Name        | Summary                          | Expected result |
-| :-------: | :---------------: | :------------------------------- | :-------------- |
-| S-S-04-01 |      Success      | 섹션 주제를 성공적으로 수정한다. | Resolve         |
-| S-S-04-02 | Section Not Found | 섹션이 존재하지 않는다.          | Reject with 404 |
-| S-S-04-03 |  Invalid Subject  | 유효하지 않은 주제.              | Reject with 400 |
+|  Test ID  |          Name          | Summary                          | Expected result |
+| :-------: | :--------------------: | :------------------------------- | :-------------- |
+| S-S-04-01 |        Success         | 섹션 주제를 성공적으로 수정한다. | Resolve         |
+| S-S-04-02 |     Failed to save     | 섹션 저장 중 예외가 발생한다.    | Reject with any |
+| S-S-04-03 |   Section not found    | 섹션이 존재하지 않는다.          | Reject with 404 |
+| S-S-04-04 | Failed to find section | 섹션 조회 중 예외가 발생한다.    | Reject with any |
 
 ### [S-S-05]: SectionService.updateSectionDescription()
 
-|  Test ID  |        Name         | Summary                          | Expected result |
-| :-------: | :-----------------: | :------------------------------- | :-------------- |
-| S-S-05-01 |       Success       | 섹션 설명을 성공적으로 수정한다. | Resolve         |
-| S-S-05-02 |  Section Not Found  | 섹션이 존재하지 않는다.          | Reject with 404 |
-| S-S-05-03 | Invalid Description | 유효하지 않은 설명.              | Reject with 400 |
+|  Test ID  |          Name          | Summary                          | Expected result |
+| :-------: | :--------------------: | :------------------------------- | :-------------- |
+| S-S-05-01 |        Success         | 섹션 설명을 성공적으로 수정한다. | Resolve         |
+| S-S-05-02 |     Failed to save     | 섹션 저장 중 예외가 발생한다.    | Reject with any |
+| S-S-05-03 |   Section not found    | 섹션이 존재하지 않는다.          | Reject with 404 |
+| S-S-05-04 | Failed to find section | 섹션 조회 중 예외가 발생한다.    | Reject with any |
 
 ### [S-S-06]: SectionService.deleteSection()
 
-|  Test ID  |       Name        | Summary                     | Expected result |
-| :-------: | :---------------: | :-------------------------- | :-------------- |
-| S-S-06-01 |      Success      | 섹션을 성공적으로 삭제한다. | Resolve         |
-| S-S-06-02 | Section Not Found | 섹션이 존재하지 않는다.     | Reject with 404 |
+|  Test ID  |           Name           | Summary                       | Expected result |
+| :-------: | :----------------------: | :---------------------------- | :-------------- |
+| S-S-06-01 |         Success          | 섹션을 성공적으로 삭제한다.   | Resolve         |
+| S-S-06-02 | Failed to delete section | 섹션 삭제 중 예외가 발생한다. | Reject with any |
 
 ### [S-S-07]: SectionService.getQuestionsBySection()
 
-|  Test ID  |       Name        | Summary                                   | Expected result |
-| :-------: | :---------------: | :---------------------------------------- | :-------------- |
-| S-S-07-01 |      Success      | 특정 섹션의 질문들을 성공적으로 조회한다. | Resolve         |
-| S-S-07-02 | Section Not Found | 섹션이 존재하지 않는다.                   | Reject with 404 |
-| S-S-07-03 |   No Questions    | 해당 섹션에 질문이 없다.                  | Resolve         |
+|  Test ID  |           Name           | Summary                                                        | Expected result |
+| :-------: | :----------------------: | :------------------------------------------------------------- | :-------------- |
+| S-S-07-01 |         Success          | 특정 섹션의 질문들을 성공적으로 조회한다.                      | Resolve         |
+| S-S-07-02 |  Success with no query   | 쿼리 파라미터 없이도 특정 섹션의 질문들을 성공적으로 조회한다. |
+| S-S-07-03 |       No Questions       | 해당 섹션에 질문이 없다.                                       | Resolve         |
+| S-S-07-04 | Failed to find questions | 질문 조회 중 예외가 발생한다.                                  | Reject with any |
+| S-S-07-05 |    Section not found     | 섹션이 존재하지 않는다.                                        | Reject with 404 |
+| S-S-07-06 |  Failed to find section  | 섹션 조회 중 예외가 발생한다.                                  | Reject with any |
 
 ## QuestionService
 
