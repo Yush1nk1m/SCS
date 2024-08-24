@@ -215,11 +215,12 @@
 
 ### [S-S-01]: SectionService.getAllSections()
 
-|  Test ID  |          Name           | Summary                          | Expected result |
-| :-------: | :---------------------: | :------------------------------- | :-------------- |
-| S-S-01-01 |         Success         | 모든 섹션을 성공적으로 조회한다. | Resolve         |
-| S-S-01-02 |       Empty list        | 섹션이 존재하지 않는다.          | Resolve         |
-| S-S-01-03 | Failed to find sections | 섹션 조회 중 예외가 발생한다.    | Reject with any |
+|  Test ID  |          Name           | Summary                               | Expected result |
+| :-------: | :---------------------: | :------------------------------------ | :-------------- |
+| S-S-01-01 |         Success         | 모든 섹션을 성공적으로 조회한다.      | Resolve         |
+| S-S-01-02 |       Empty list        | 섹션이 존재하지 않는다.               | Resolve         |
+| S-S-01-03 |  Success with no query  | 쿼리 파라미터 없이도 조회에 성공한다. |
+| S-S-01-04 | Failed to find sections | 섹션 조회 중 예외가 발생한다.         | Reject with any |
 
 ### [S-S-02]: SectionService.getSpecificSection()
 
@@ -276,7 +277,9 @@
 
 ## QuestionService
 
-이 섹션은 질문 관련 API의 서비스에 대한 단위 테스트 설계이다.
+이 섹션은 질문 관련 API의 [서비스](../scs-backend/src/question/question.service.ts)에 대한 단위 테스트 설계이다.
+
+[테스트 코드 바로가기](../scs-backend/src/question/question.service.spec.ts)
 
 | Test ID | API ID |                 Method                  |
 | :-----: | :----: | :-------------------------------------: |
@@ -288,42 +291,50 @@
 
 ### [S-Q-01]: QuestionService.getSpecificQuestion()
 
-|  Test ID  |        Name        | Summary                          | Expected result |
-| :-------: | :----------------: | :------------------------------- | :-------------- |
-| S-Q-01-01 |      Success       | 특정 질문을 성공적으로 조회한다. | Resolve         |
-| S-Q-01-02 | Question Not Found | 질문이 존재하지 않는다.          | Reject with 404 |
+|  Test ID  |          Name           | Summary                          | Expected result |
+| :-------: | :---------------------: | :------------------------------- | :-------------- |
+| S-Q-01-01 |         Success         | 특정 질문을 성공적으로 조회한다. | Resolve         |
+| S-Q-01-02 |   Question not found    | 질문이 존재하지 않는다.          | Reject with 404 |
+| S-Q-01-03 | Failed to find question | 질문 조회 중 예외가 발생한다.    | Reject with any |
 
 ### [S-Q-02]: QuestionService.createQuestion()
 
-|  Test ID  |       Name        | Summary                        | Expected result |
-| :-------: | :---------------: | :----------------------------- | :-------------- |
-| S-Q-02-01 |      Success      | 새 질문을 성공적으로 생성한다. | Resolve         |
-| S-Q-02-02 |  User Not Found   | 사용자가 존재하지 않는다.      | Reject with 401 |
-| S-Q-02-03 | Section Not Found | 섹션이 존재하지 않는다.        | Reject with 404 |
-| S-Q-02-04 |   Invalid Input   | 유효하지 않은 입력 데이터.     | Reject with 400 |
+|  Test ID  |           Name            | Summary                         | Expected result |
+| :-------: | :-----------------------: | :------------------------------ | :-------------- |
+| S-Q-02-01 |          Success          | 새 질문을 성공적으로 생성한다.  | Resolve         |
+| S-Q-02-02 | Failed to create question | 질문 생성 중 예외가 발생한다.   | Reject with any |
+| S-Q-02-03 |     Section not found     | 섹션이 존재하지 않는다.         | Reject with 404 |
+| S-Q-02-04 |  Failed to find section   | 섹션 조회 중 예외가 발생한다.   | Reject with any |
+| S-Q-02-05 |      User not found       | 사용자가 존재하지 않는다.       | Reject with 401 |
+| S-Q-02-06 |    Failed to find user    | 사용자 조회 중 예외가 발생한다. | Reject with any |
 
 ### [S-Q-03]: QuestionService.updateQuestionContent()
 
-|  Test ID  |        Name        | Summary                          | Expected result |
-| :-------: | :----------------: | :------------------------------- | :-------------- |
-| S-Q-03-01 |      Success       | 질문 내용을 성공적으로 수정한다. | Resolve         |
-| S-Q-03-02 | Question Not Found | 질문이 존재하지 않는다.          | Reject with 404 |
-| S-Q-03-03 |  Invalid Content   | 유효하지 않은 질문 내용.         | Reject with 400 |
+|  Test ID  |          Name           | Summary                          | Expected result |
+| :-------: | :---------------------: | :------------------------------- | :-------------- |
+| S-Q-03-01 |         Success         | 질문 내용을 성공적으로 수정한다. | Resolve         |
+| S-Q-03-02 | Failed to save question | 질문 저장 중 예외가 발생한다.    | Reject with any |
+| S-Q-03-03 |   Question not found    | 질문이 존재하지 않는다.          | Reject with 404 |
+| S-Q-03-04 | Failed to find question | 질문 조회 중 예외가 발생한다.    | Reject with any |
 
 ### [S-Q-04]: QuestionService.deleteQuestion()
 
-|  Test ID  |        Name        | Summary                     | Expected result |
-| :-------: | :----------------: | :-------------------------- | :-------------- |
-| S-Q-04-01 |      Success       | 질문을 성공적으로 삭제한다. | Resolve         |
-| S-Q-04-02 | Question Not Found | 질문이 존재하지 않는다.     | Reject with 404 |
+|  Test ID  |           Name            | Summary                       | Expected result |
+| :-------: | :-----------------------: | :---------------------------- | :-------------- |
+| S-Q-04-01 |          Success          | 질문을 성공적으로 삭제한다.   | Resolve         |
+| S-Q-04-02 | Failed to delete question | 질문 삭제 중 예외가 발생한다. | Reject with any |
+| S-Q-04-03 |    Question not found     | 질문이 존재하지 않는다.       | Reject with 404 |
+| S-Q-04-04 |  Failed to find question  | 질문 조회 중 예외가 발생한다. | Reject with any |
 
 ### [S-Q-05]: QuestionService.getActionsByQuestion()
 
-|  Test ID  |        Name        | Summary                                   | Expected result |
-| :-------: | :----------------: | :---------------------------------------- | :-------------- |
-| S-Q-05-01 |      Success       | 특정 질문의 답변들을 성공적으로 조회한다. | Resolve         |
-| S-Q-05-02 | Question Not Found | 질문이 존재하지 않는다.                   | Reject with 404 |
-| S-Q-05-03 |     No Actions     | 해당 질문에 답변이 없다.                  | Resolve         |
+|  Test ID  |          Name           | Summary                                   | Expected result |
+| :-------: | :---------------------: | :---------------------------------------- | :-------------- |
+| S-Q-05-01 |         Success         | 특정 질문의 답변들을 성공적으로 조회한다. | Resolve         |
+| S-Q-05-02 |       No actions        | 해당 질문에 답변이 없다.                  | Resolve         |
+| S-Q-05-03 | Failed to find actions  | 액션 조회 중 예외가 발생한다.             | Reject with any |
+| S-Q-05-04 |   Question not found    | 질문이 존재하지 않는다.                   | Reject with 404 |
+| S-Q-05-05 | Failed to find question | 질문 조회 중 예외가 발생한다.             | Reject with any |
 
 ## ActionService
 
