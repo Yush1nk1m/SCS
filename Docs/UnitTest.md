@@ -353,72 +353,90 @@
 
 ### [S-AC-01]: ActionService.getSpecificAction()
 
-|  Test ID   |       Name       | Summary                          | Expected result |
-| :--------: | :--------------: | :------------------------------- | :-------------- |
-| S-AC-01-01 |     Success      | 특정 답변을 성공적으로 조회한다. | Resolve         |
-| S-AC-01-02 | Action Not Found | 답변이 존재하지 않는다.          | Reject with 404 |
+|  Test ID   |          Name           | Summary                           | Expected result |
+| :--------: | :---------------------: | :-------------------------------- | :-------------- |
+| S-AC-01-01 |         Success         | 특정 답변을 성공적으로 조회한다.  | Resolve         |
+| S-AC-01-02 | Failed to sanitize html | HTML sanitize 중 예외가 발생한다. | Reject with any |
+| S-AC-01-03 |    Action not found     | 답변이 존재하지 않는다.           | Reject with 404 |
+| S-AC-01-04 |  Failed to find action  | 답변 조회 중 예외가 발생한다.     | Reject with any |
 
 ### [S-AC-02]: ActionService.createAction()
 
-|  Test ID   |        Name        | Summary                        | Expected result |
-| :--------: | :----------------: | :----------------------------- | :-------------- |
-| S-AC-02-01 |      Success       | 새 답변을 성공적으로 생성한다. | Resolve         |
-| S-AC-02-02 |   User Not Found   | 사용자가 존재하지 않는다.      | Reject with 401 |
-| S-AC-02-03 | Question Not Found | 질문이 존재하지 않는다.        | Reject with 404 |
-| S-AC-02-04 |   Invalid Input    | 유효하지 않은 입력 데이터.     | Reject with 400 |
+|  Test ID   |             Name             | Summary                             | Expected result |
+| :--------: | :--------------------------: | :---------------------------------- | :-------------- |
+| S-AC-02-01 |           Success            | 새 답변을 성공적으로 생성한다.      | Resolve         |
+| S-AC-02-02 |        Failed to save        | 답변 저장 중 예외가 발생한다.       | Reject with any |
+| S-AC-02-03 |       Failed to create       | 답변 생성 중 예외가 발생한다.       | Reject with any |
+| S-AC-02-04 |       Failed to parse        | 내용 파싱 중 예외가 발생한다.       | Reject with any |
+| S-AC-02-05 | Failed to extract image urls | 이미지 URL 추출 중 예외가 발생한다. | Reject with any |
+| S-AC-02-06 |      Question not found      | 질문이 존재하지 않는다.             | Reject with 404 |
+| S-AC-02-07 |   Failed to find question    | 질문 조회 중 예외가 발생한다.       | Reject with any |
+| S-AC-02-08 |        User not found        | 사용자가 존재하지 않는다.           | Reject with 401 |
+| S-AC-02-09 |     Failed to find user      | 사용자 조회 중 예외가 발생한다.     | Reject with any |
 
 ### [S-AC-03]: ActionService.updateAction()
 
-|  Test ID   |        Name         | Summary                     | Expected result |
-| :--------: | :-----------------: | :-------------------------- | :-------------- |
-| S-AC-03-01 |       Success       | 답변을 성공적으로 수정한다. | Resolve         |
-| S-AC-03-02 |  Action Not Found   | 답변이 존재하지 않는다.     | Reject with 404 |
-| S-AC-03-03 | User Not Authorized | 사용자에게 권한이 없다.     | Reject with 403 |
-| S-AC-03-04 |    Invalid Input    | 유효하지 않은 입력 데이터.  | Reject with 400 |
+|  Test ID   |             Name             | Summary                              | Expected result |
+| :--------: | :--------------------------: | :----------------------------------- | :-------------- |
+| S-AC-03-01 |           Success            | 답변을 성공적으로 수정한다.          | Resolve         |
+| S-AC-03-02 |        Failed to save        | 답변 저장 중 예외가 발생한다.        | Reject with any |
+| S-AC-03-03 | Failed to parse and sanitize | 파싱 중 예외가 발생한다.             | Reject with any |
+| S-AC-03-04 | Failed to extract image urls | 이미지 링크 추출 중 예외가 발생한다. | Reject with any |
+| S-AC-03-05 |     User not authorized      | 사용자에게 권한이 없다.              | Reject with 403 |
+| S-AC-03-06 |       Action not found       | 답변이 존재하지 않는다.              | Reject with 404 |
+| S-AC-03-07 |    Failed to find action     | 답변 조회 중 예외가 발생한다.        | Reject with any |
 
 ### [S-AC-04]: ActionService.deleteAction()
 
-|  Test ID   |        Name         | Summary                     | Expected result |
-| :--------: | :-----------------: | :-------------------------- | :-------------- |
-| S-AC-04-01 |       Success       | 답변을 성공적으로 삭제한다. | Resolve         |
-| S-AC-04-02 |  Action Not Found   | 답변이 존재하지 않는다.     | Reject with 404 |
-| S-AC-04-03 | User Not Authorized | 사용자에게 권한이 없다.     | Reject with 403 |
+|  Test ID   |         Name          | Summary                       | Expected result |
+| :--------: | :-------------------: | :---------------------------- | :-------------- |
+| S-AC-04-01 |        Success        | 답변을 성공적으로 삭제한다.   | Resolve         |
+| S-AC-04-02 |   Failed to delete    | 답변 삭제 중 예외가 발생한다. | Reject with any |
+| S-AC-04-03 |  User not authorized  | 사용자에게 권한이 없다.       | Reject with 403 |
+| S-AC-04-04 |   Action not found    | 답변이 존재하지 않는다.       | Reject with 404 |
+| S-AC-04-05 | Failed to find action | 답변 조회 중 예외가 발생한다. | Reject with any |
 
 ### [S-AC-05]: ActionService.getRawContent()
 
-|  Test ID   |        Name         | Summary                           | Expected result |
-| :--------: | :-----------------: | :-------------------------------- | :-------------- |
-| S-AC-05-01 |       Success       | Raw 컨텐츠를 성공적으로 가져온다. | Resolve         |
-| S-AC-05-02 |  Action Not Found   | 답변이 존재하지 않는다.           | Reject with 404 |
-| S-AC-05-03 | User Not Authorized | 사용자에게 권한이 없다.           | Reject with 403 |
+|  Test ID   |         Name          | Summary                           | Expected result |
+| :--------: | :-------------------: | :-------------------------------- | :-------------- |
+| S-AC-05-01 |        Success        | Raw 컨텐츠를 성공적으로 가져온다. | Resolve         |
+| S-AC-05-02 |  User not authorized  | 사용자에게 권한이 없다.           | Reject with 403 |
+| S-AC-05-03 |   Action not found    | 답변이 존재하지 않는다.           | Reject with 404 |
+| S-AC-05-04 | Failed to find action | 답변 조회 중 예외가 발생한다.     | Reject with any |
 
 ### [S-AC-06]: ActionService.toggleLike()
 
-|  Test ID   |       Name       | Summary                       | Expected result |
-| :--------: | :--------------: | :---------------------------- | :-------------- |
-| S-AC-06-01 |  Success - Like  | 좋아요를 성공적으로 등록한다. | Resolve         |
-| S-AC-06-02 | Success - Unlike | 좋아요를 성공적으로 취소한다. | Resolve         |
-| S-AC-06-03 |  User Not Found  | 사용자가 존재하지 않는다.     | Reject with 401 |
-| S-AC-06-04 | Action Not Found | 답변이 존재하지 않는다.       | Reject with 404 |
+|  Test ID   |         Name          | Summary                         | Expected result |
+| :--------: | :-------------------: | :------------------------------ | :-------------- |
+| S-AC-06-01 |    Success - Like     | 좋아요를 성공적으로 등록한다.   | Resolve         |
+| S-AC-06-02 |   Success - Unlike    | 좋아요를 성공적으로 취소한다.   | Resolve         |
+| S-AC-06-03 |   Action not found    | 답변이 존재하지 않는다.         | Reject with 404 |
+| S-AC-06-04 | Failed to find action | 답변 조회 중 예외가 발생한다.   | Reject with any |
+| S-AC-06-05 |    User not found     | 사용자가 존재하지 않는다.       | Reject with 401 |
+| S-AC-06-06 |  Failed to find user  | 사용자 조회 중 예외가 발생한다. | Reject with any |
 
 ### [S-AC-07]: ActionService.getLike()
 
-|  Test ID   |        Name         | Summary                                           | Expected result |
-| :--------: | :-----------------: | :------------------------------------------------ | :-------------- |
-| S-AC-07-01 |   Success - Liked   | 좋아요 상태를 성공적으로 조회한다 (좋아요 함).    | Resolve         |
-| S-AC-07-02 | Success - Not Liked | 좋아요 상태를 성공적으로 조회한다 (좋아요 안 함). | Resolve         |
-| S-AC-07-03 |   User Not Found    | 사용자가 존재하지 않는다.                         | Reject with 401 |
-| S-AC-07-04 |  Action Not Found   | 답변이 존재하지 않는다.                           | Reject with 404 |
+|  Test ID   |         Name          | Summary                                           | Expected result |
+| :--------: | :-------------------: | :------------------------------------------------ | :-------------- |
+| S-AC-07-01 |    Success - Liked    | 좋아요 상태를 성공적으로 조회한다 (좋아요 함).    | Resolve         |
+| S-AC-07-02 |  Success - Not liked  | 좋아요 상태를 성공적으로 조회한다 (좋아요 안 함). | Resolve         |
+| S-AC-07-03 |   Action not found    | 답변이 존재하지 않는다.                           | Reject with 404 |
+| S-AC-07-04 | Failed to find action | 답변 조회 중 예외가 발생한다.                     | Reject with any |
+| S-AC-07-05 |    User not found     | 사용자가 존재하지 않는다.                         | Reject with 401 |
+| S-AC-07-06 |  Failed to find user  | 사용자 조회 중 예외가 발생한다.                   | Reject with any |
 
 ### [S-AC-08]: ActionService.getComments()
 
-|  Test ID   |         Name         | Summary                                      | Expected result |
-| :--------: | :------------------: | :------------------------------------------- | :-------------- |
-| S-AC-08-01 |       Success        | 답변의 댓글들을 성공적으로 조회한다.         | Resolve         |
-| S-AC-08-02 |   Action Not Found   | 답변이 존재하지 않는다.                      | Reject with 404 |
-| S-AC-08-03 |     No Comments      | 해당 답변에 댓글이 없다.                     | Resolve         |
-| S-AC-08-04 |      Pagination      | 페이지네이션이 올바르게 동작한다.            | Resolve         |
-| S-AC-08-05 | Sort by Created Date | 생성일 기준으로 정렬된 댓글 목록을 반환한다. | Resolve         |
+|  Test ID   |          Name           | Summary                                    | Expected result |
+| :--------: | :---------------------: | :----------------------------------------- | :-------------- |
+| S-AC-08-01 |         Success         | 답변의 댓글들을 성공적으로 조회한다.       | Resolve         |
+| S-AC-08-02 |  Success with no query  | 쿼리 파라미터 없이도 댓글 조회에 성공한다. | Resolve         |
+| S-AC-08-03 |       No comments       | 해당 답변에 댓글이 없다.                   | Resolve         |
+| S-AC-08-04 | Failed to find comments | 댓글 조회 중 예외가 발생한다.              | Reject with any |
+| S-AC-08-05 |    Action not found     | 답변이 존재하지 않는다.                    | Reject with 404 |
+| S-AC-08-06 |  Failed to find action  | 답변 조회 중 예외가 발생한다.              | Reject with any |
 
 ## CommentService
 

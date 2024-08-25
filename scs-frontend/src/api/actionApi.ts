@@ -70,7 +70,7 @@ export const deleteAction = async (
 export const getComments = async (
   id: number,
   page: number = 1,
-  limit: number = 10
+  limit: number = 100
 ) => {
   try {
     const response = await api.v1.actionControllerGetComments(id, {

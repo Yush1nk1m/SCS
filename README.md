@@ -8,6 +8,10 @@ SCS는 컴퓨터 과학 전공 지식을 학습하기 위한 웹 서비스입니
 - `frontend/`: SCS의 프론트엔드 프로젝트
 - `backend/`: SCS의 백엔드 프로젝트
 
+## 프로젝트 아키텍처
+
+![SCS production architecture](Docs/UML/Architecture/SCS-Architecture.png)
+
 ## 주요 기능
 
 - 섹션별 질문 관리 (네트워크, 데이터베이스, 자바스크립트 등)
