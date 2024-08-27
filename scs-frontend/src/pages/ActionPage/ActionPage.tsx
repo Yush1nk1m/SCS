@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, Heart, Edit, Trash2, Send } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import DOMPurify from "dompurify";
 import {
   getAction,
   likeAction,
@@ -19,6 +18,7 @@ import Comment from "../../components/Comment/Comment";
 import toast from "react-hot-toast";
 import "./ActionPage.css";
 import { useAuth } from "../../hooks/useAuth";
+import ActionContent from "../../components/ActionContent/ActionContent";
 
 const ActionPage: React.FC = () => {
   const navigate = useNavigate();
@@ -170,10 +170,7 @@ const ActionPage: React.FC = () => {
           {new Date(action.createdAt).toLocaleString()}
         </span>
       </div>
-      <div
-        className="action-detail-content"
-        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(action.content) }}
-      />
+      <ActionContent content={action.content} />
       <div className="action-detail-like-section">
         <button
           className={`action-detail-like-button ${isLiked ? "liked" : ""}`}

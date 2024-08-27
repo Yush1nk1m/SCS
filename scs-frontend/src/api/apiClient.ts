@@ -3,7 +3,7 @@ import { getAccessToken, isTokenExpired, setTokens } from "../utils/tokenUtils";
 import { Api } from "./swaggerApi";
 
 const api = new Api({
-  baseUrl: "http://localhost:4000", //import.meta.env.VITE_API_URL,
+  baseUrl: import.meta.env.VITE_API_URL,
   securityWorker: (securityData) => {
     return securityData
       ? { headers: { Authorization: `Bearer ${securityData}` } }
