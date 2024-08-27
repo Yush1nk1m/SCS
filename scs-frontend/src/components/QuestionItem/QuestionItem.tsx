@@ -23,7 +23,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
   return (
     <div className="question-item">
       <Link
-        to={`/question/${id}?source=book&id=${bookId}`}
+        to={`/question/${id}?page=1&source=book&id=${bookId}`}
         className="question-item-link"
       >
         <h3>

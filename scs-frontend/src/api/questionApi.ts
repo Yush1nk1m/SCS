@@ -21,9 +21,9 @@ export const fetchActions = async (
   options: {
     sort: "updatedAt" | "likeCount";
     order: "ASC" | "DESC";
-    search: string;
     page: number;
     limit: number;
+    search: string;
   }
 ) => {
   try {

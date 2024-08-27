@@ -33,13 +33,14 @@ const QuestionDetailPage: React.FC = () => {
       : 1
   );
   const [totalPages, setTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (id) {
       fetchQuestionData(id);
-      fetchActionsData(id, "");
+      fetchActionsData(id);
     }
-  }, [id, sortOption, currentPage]);
+  }, [id, sortOption, currentPage, searchTerm]);
 
   const fetchQuestionData = async (questionId: string) => {
     try {
@@ -57,13 +58,13 @@ const QuestionDetailPage: React.FC = () => {
     }
   };
 
-  const fetchActionsData = async (questionId: string, search: string) => {
+  const fetchActionsData = async (questionId: string) => {
     try {
       const response = await fetchActions(questionId, {
         ...sortOption,
-        search,
         page: currentPage,
         limit: 12,
+        search: searchTerm,
       });
       setActions(response.actions);
       setTotalPages(Math.ceil(response.total / 12));
@@ -79,14 +80,12 @@ const QuestionDetailPage: React.FC = () => {
     }
   };
 
-  const onSearch = (searchTerm: string) => {
+  const onSearch = (term: string) => {
     setCurrentPage(1);
-    if (id) {
-      fetchActionsData(id, searchTerm);
-    }
+    setSearchTerm(term);
   };
 
-  const handlePageChange = (newPage: number) => {
+  const onPageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
@@ -152,7 +151,7 @@ const QuestionDetailPage: React.FC = () => {
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={handlePageChange}
+          onPageChange={onPageChange}
         />
         {isLoggedIn && (
           <button

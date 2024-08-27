@@ -58,25 +58,25 @@ const QuestionPage: React.FC = () => {
     }
   };
 
-  const handleSearch = (term: string) => {
+  const onSearch = (term: string) => {
     setSearchTerm(term);
     setCurrentPage(1);
   };
 
-  const handlePageChange = (newPage: number) => {
+  const onPageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
-  const handleCreateQuestion = () => {
+  const onCreateQuestion = () => {
     setIsCreateModalOpen(true);
   };
 
-  const handleQuestionSubmit = async () => {
+  const onQuestionSubmit = async () => {
     setIsCreateModalOpen(false);
     await fetchQuestionsData();
   };
 
-  const handleScrap = (questionId: number) => {
+  const onScrap = (questionId: number) => {
     setSelectedQuestionId(questionId);
     setScrapModalOpen(true);
   };
@@ -89,7 +89,7 @@ const QuestionPage: React.FC = () => {
       </Link>
       <h1 className="question-page-title">질문 목록</h1>
       <div className="question-page-controls">
-        <SearchForm onSearch={handleSearch} placeholder="질문 검색..." />
+        <SearchForm onSearch={onSearch} placeholder="질문 검색..." />
         <SortingOptions<QuestionSortOption>
           sortOption={sortOption}
           onSortChange={setSortOption}
@@ -107,20 +107,17 @@ const QuestionPage: React.FC = () => {
             key={question.id}
             question={question}
             page={currentPage}
-            onScrap={handleScrap}
+            onScrap={onScrap}
           />
         ))}
       </div>
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={handlePageChange}
+        onPageChange={onPageChange}
       />
       {isLoggedIn && (
-        <button
-          className="create-question-button"
-          onClick={handleCreateQuestion}
-        >
+        <button className="create-question-button" onClick={onCreateQuestion}>
           <PlusCircle size={20} />
           <span>질문 생성</span>
         </button>
@@ -129,7 +126,7 @@ const QuestionPage: React.FC = () => {
         <CreateQuestionModal
           sectionId={Number(sectionId!)}
           onClose={() => setIsCreateModalOpen(false)}
-          onSubmit={handleQuestionSubmit}
+          onSubmit={onQuestionSubmit}
         />
       )}
       {scrapModalOpen && selectedQuestionId && (
