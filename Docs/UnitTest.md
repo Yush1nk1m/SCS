@@ -338,7 +338,9 @@
 
 ## ActionService
 
-이 섹션은 액션 관련 API의 서비스에 대한 단위 테스트 설계이다.
+이 섹션은 액션 관련 API의 [서비스](../scs-backend/src/action/action.service.ts)에 대한 단위 테스트 설계이다.
+
+[테스트 코드 바로가기](../scs-backend/src/action/action.service.spec.ts)
 
 | Test ID | API ID |              Method               |
 | :-----: | :----: | :-------------------------------: |
@@ -440,7 +442,7 @@
 
 ## CommentService
 
-이 섹션은 댓글 관련 API의 서비스에 대한 단위 테스트 설계이다.
+이 섹션은 댓글 관련 API의 [서비스](../scs-backend/src/comment/comment.service.spec.ts)에 대한 단위 테스트 설계이다.
 
 | Test ID | API ID |             Method             |
 | :-----: | :----: | :----------------------------: |
@@ -450,29 +452,35 @@
 
 ### [S-CM-01]: CommentService.createComment()
 
-|  Test ID   |       Name       | Summary                        | Expected result |
-| :--------: | :--------------: | :----------------------------- | :-------------- |
-| S-CM-01-01 |     Success      | 새 댓글을 성공적으로 생성한다. | Resolve         |
-| S-CM-01-02 |  User Not Found  | 사용자가 존재하지 않는다.      | Reject with 401 |
-| S-CM-01-03 | Action Not Found | 답변이 존재하지 않는다.        | Reject with 404 |
-| S-CM-01-04 |  Invalid Input   | 유효하지 않은 입력 데이터.     | Reject with 400 |
+|  Test ID   |         Name          | Summary                            | Expected result |
+| :--------: | :-------------------: | :--------------------------------- | :-------------- |
+| S-CM-01-01 |        Success        | 새 댓글을 성공적으로 생성한다.     | Resolve         |
+| S-CM-01-02 |    Failed to save     | 댓글 정보 저장 중 예외가 발생한다. | Reject with any |
+| S-CM-01-03 |   Failed to create    | 댓글 정보 생성 중 예외가 발생한다. | Reject with any |
+| S-CM-01-04 |   Action not found    | 답변이 존재하지 않는다.            | Reject with 404 |
+| S-CM-01-05 | Failed to find action | 액션 조회 중 예외가 발생한다       |
+| S-CM-01-06 |    User not found     | 사용자가 존재하지 않는다.          | Reject with 401 |
+| S-CM-01-07 |  Failed to find user  | 사용자 조회 중 예외가 발생한다.    | Reject with any |
 
 ### [S-CM-02]: CommentService.updateComment()
 
-|  Test ID   |        Name         | Summary                     | Expected result |
-| :--------: | :-----------------: | :-------------------------- | :-------------- |
-| S-CM-02-01 |       Success       | 댓글을 성공적으로 수정한다. | Resolve         |
-| S-CM-02-02 |  Comment Not Found  | 댓글이 존재하지 않는다.     | Reject with 404 |
-| S-CM-02-03 | User Not Authorized | 사용자에게 권한이 없다.     | Reject with 403 |
-| S-CM-02-04 |    Invalid Input    | 유효하지 않은 입력 데이터.  | Reject with 400 |
+|  Test ID   |          Name          | Summary                       | Expected result |
+| :--------: | :--------------------: | :---------------------------- | :-------------- |
+| S-CM-02-01 |        Success         | 댓글을 성공적으로 수정한다.   | Resolve         |
+| S-CM-02-02 |     Failed to save     | 댓글 저장 중 예외가 발생한다. | Reject with any |
+| S-CM-02-03 |  User Not Authorized   | 사용자에게 권한이 없다.       | Reject with 403 |
+| S-CM-02-04 |   Comment Not Found    | 댓글이 존재하지 않는다.       | Reject with 404 |
+| S-CM-02-05 | Failed to find comment | 댓글 조회 중 예외가 발생한다. | Reject with any |
 
 ### [S-CM-03]: CommentService.deleteComment()
 
-|  Test ID   |        Name         | Summary                     | Expected result |
-| :--------: | :-----------------: | :-------------------------- | :-------------- |
-| S-CM-03-01 |       Success       | 댓글을 성공적으로 삭제한다. | Resolve         |
-| S-CM-03-02 |  Comment Not Found  | 댓글이 존재하지 않는다.     | Reject with 404 |
-| S-CM-03-03 | User Not Authorized | 사용자에게 권한이 없다.     | Reject with 403 |
+|  Test ID   |          Name          | Summary                       | Expected result |
+| :--------: | :--------------------: | :---------------------------- | :-------------- |
+| S-CM-03-01 |        Success         | 댓글을 성공적으로 삭제한다.   | Resolve         |
+| S-CM-03-02 |    Failed to delete    | 댓글 삭제 중 예외가 발생한다. | Reject with any |
+| S-CM-03-03 |  User Not Authorized   | 사용자에게 권한이 없다.       | Reject with 403 |
+| S-CM-03-04 |   Comment Not Found    | 댓글이 존재하지 않는다.       | Reject with 404 |
+| S-CM-03-05 | Failed to find comment | 댓글 조회 중 예외가 발생한다. | Reject with any |
 
 ## BookService
 
