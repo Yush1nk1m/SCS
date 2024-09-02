@@ -484,7 +484,9 @@
 
 ## BookService
 
-이 섹션은 문제집 관련 API의 서비스에 대한 단위 테스트 설계이다.
+이 섹션은 문제집 관련 API의 [서비스](../scs-backend/src/book/book.service.ts)에 대한 단위 테스트 설계이다.
+
+[테스트 코드 바로가기](../scs-backend/src/book/book.service.spec.ts)
 
 | Test ID | API ID |               Method               |
 | :-----: | :----: | :--------------------------------: |
@@ -502,105 +504,122 @@
 
 ### [S-B-01]: BookService.getBooks()
 
-|  Test ID  |         Name         | Summary                                    | Expected result |
-| :-------: | :------------------: | :----------------------------------------- | :-------------- |
-| S-B-01-01 |       Success        | 모든 문제집을 성공적으로 조회한다.         | Resolve         |
-| S-B-01-02 |       No Books       | 문제집이 존재하지 않는다.                  | Resolve         |
-| S-B-01-03 |      Pagination      | 페이지네이션이 올바르게 동작한다.          | Resolve         |
-| S-B-01-04 | Sort by Created Date | 생성일 기준으로 정렬된 목록을 반환한다.    | Resolve         |
-| S-B-01-05 |  Sort by Like Count  | 좋아요 수 기준으로 정렬된 목록을 반환한다. | Resolve         |
-| S-B-01-06 |        Search        | 검색어에 맞는 문제집들을 반환한다.         | Resolve         |
+|  Test ID  |         Name          | Summary                               | Expected result |
+| :-------: | :-------------------: | :------------------------------------ | :-------------- |
+| S-B-01-01 |        Success        | 모든 문제집을 성공적으로 조회한다.    | Resolve         |
+| S-B-01-02 |       No books        | 문제집이 존재하지 않는다.             | Resolve         |
+| S-B-01-03 | Success with no query | 쿼리 파라미터 없이도 조회에 성공한다. | Resolve         |
+| S-B-01-04 |    Failed to find     | 문제집 조회 중 예외가 발생한다.       | Reject with any |
 
 ### [S-B-02]: BookService.getBook()
 
-|  Test ID  |      Name      | Summary                            | Expected result |
-| :-------: | :------------: | :--------------------------------- | :-------------- |
-| S-B-02-01 |    Success     | 특정 문제집을 성공적으로 조회한다. | Resolve         |
-| S-B-02-02 | Book Not Found | 문제집이 존재하지 않는다.          | Reject with 404 |
+|  Test ID  |        Name         | Summary                            | Expected result |
+| :-------: | :-----------------: | :--------------------------------- | :-------------- |
+| S-B-02-01 |       Success       | 특정 문제집을 성공적으로 조회한다. | Resolve         |
+| S-B-02-02 |   Book not found    | 문제집이 존재하지 않는다.          | Reject with 404 |
+| S-B-02-03 | Failed to find book | 문제집 조회 중 예외가 발생한다.    | Reject with any |
 
 ### [S-B-03]: BookService.createBook()
 
-|  Test ID  |      Name      | Summary                          | Expected result |
-| :-------: | :------------: | :------------------------------- | :-------------- |
-| S-B-03-01 |    Success     | 새 문제집을 성공적으로 생성한다. | Resolve         |
-| S-B-03-02 | User Not Found | 사용자가 존재하지 않는다.        | Reject with 401 |
-| S-B-03-03 | Invalid Input  | 유효하지 않은 입력 데이터.       | Reject with 400 |
+|  Test ID  |        Name         | Summary                          | Expected result |
+| :-------: | :-----------------: | :------------------------------- | :-------------- |
+| S-B-03-01 |       Success       | 새 문제집을 성공적으로 생성한다. | Resolve         |
+| S-B-03-02 |   Failed to save    | 문제집 저장 중 예외가 발생한다.  | Reject with any |
+| S-B-03-03 |  Failed to create   | 문제집 생성 중 예외가 발생한다.  | Reject with any |
+| S-B-03-04 |   User not found    | 사용자가 존재하지 않는다.        | Reject with 401 |
+| S-B-03-05 | Failed to find user | 사용자 조회 중 예외가 발생한다.  | Reject with any |
 
 ### [S-B-04]: BookService.updateBook()
 
-|  Test ID  |        Name         | Summary                       | Expected result |
-| :-------: | :-----------------: | :---------------------------- | :-------------- |
-| S-B-04-01 |       Success       | 문제집을 성공적으로 수정한다. | Resolve         |
-| S-B-04-02 |   Book Not Found    | 문제집이 존재하지 않는다.     | Reject with 404 |
-| S-B-04-03 | User Not Authorized | 사용자에게 권한이 없다.       | Reject with 403 |
-| S-B-04-04 |    Invalid Input    | 유효하지 않은 입력 데이터.    | Reject with 400 |
+|  Test ID  |        Name         | Summary                         | Expected result |
+| :-------: | :-----------------: | :------------------------------ | :-------------- |
+| S-B-04-01 |       Success       | 문제집을 성공적으로 수정한다.   | Resolve         |
+| S-B-04-02 |   Failed to save    | 문제집 저장 중 예외가 발생한다. | Reject with any |
+| S-B-04-03 | User not authorized | 사용자에게 권한이 없다.         | Reject with 403 |
+| S-B-04-04 |   Book not found    | 문제집이 존재하지 않는다.       | Reject with 404 |
+| S-B-04-05 | Failed to find book | 문제집 조회 중 예외가 발생한다. | Reject with any |
 
 ### [S-B-06]: BookService.deleteBook()
 
-|  Test ID  |        Name         | Summary                       | Expected result |
-| :-------: | :-----------------: | :---------------------------- | :-------------- |
-| S-B-06-01 |       Success       | 문제집을 성공적으로 삭제한다. | Resolve         |
-| S-B-06-02 |   Book Not Found    | 문제집이 존재하지 않는다.     | Reject with 404 |
-| S-B-06-03 | User Not Authorized | 사용자에게 권한이 없다.       | Reject with 403 |
+|  Test ID  |               Name                | Summary                                 | Expected result |
+| :-------: | :-------------------------------: | :-------------------------------------- | :-------------- |
+| S-B-06-01 |              Success              | 문제집을 성공적으로 삭제한다.           | Resolve         |
+| S-B-06-02 |       Failed to delete book       | 문제집 삭제 중 예외가 발생한다.         | Reject with any |
+| S-B-06-03 |  Failed to decrease save counts   | 질문 저장 횟수 갱신 중 예외가 발생한다. | Reject with any |
+| S-B-06-04 |        User not authorized        | 사용자에게 권한이 없다.                 | Reject with 403 |
+| S-B-06-05 |          Book not found           | 문제집이 존재하지 않는다.               | Reject with 404 |
+| S-B-06-06 | Failed to find book and questions | 문제집 조회 중 예외가 발생한다.         | Reject with any |
 
 ### [S-B-07]: BookService.saveQuestion()
 
-|  Test ID  |        Name         | Summary                              | Expected result |
-| :-------: | :-----------------: | :----------------------------------- | :-------------- |
-| S-B-07-01 |       Success       | 질문을 문제집에 성공적으로 저장한다. | Resolve         |
-| S-B-07-02 |   Book Not Found    | 문제집이 존재하지 않는다.            | Reject with 404 |
-| S-B-07-03 | Question Not Found  | 질문이 존재하지 않는다.              | Reject with 404 |
-| S-B-07-04 | User Not Authorized | 사용자에게 권한이 없다.              | Reject with 403 |
-| S-B-07-05 |   Question Exists   | 질문이 이미 문제집에 존재한다.       | Reject with 409 |
+|  Test ID  |               Name                | Summary                              | Expected result |
+| :-------: | :-------------------------------: | :----------------------------------- | :-------------- |
+| S-B-07-01 |              Success              | 질문을 문제집에 성공적으로 저장한다. | Resolve         |
+| S-B-07-02 |          Failed to save           | 문제집 저장 중 예외가 발생한다.      | Reject with any |
+| S-B-07-03 |      Question already exists      | 질문이 이미 문제집에 존재한다.       | Reject with 409 |
+| S-B-07-04 |        User not authorized        | 사용자에게 권한이 없다.              | Reject with 403 |
+| S-B-07-05 |          Book not found           | 문제집이 존재하지 않는다.            | Reject with 404 |
+| S-B-07-06 | Failed to find book and questions | 문제집 조회 중 예외가 발생한다.      | Reject with any |
+| S-B-07-07 |        Question not found         | 질문이 존재하지 않는다.              | Reject with 404 |
+| S-B-07-08 |      Failed to find question      | 질문 조회 중 예외가 발생한다.        | Reject with any |
 
 ### [S-B-08]: BookService.deleteQuestion()
 
-|  Test ID  |         Name         | Summary                                | Expected result |
-| :-------: | :------------------: | :------------------------------------- | :-------------- |
-| S-B-08-01 |       Success        | 질문을 문제집에서 성공적으로 삭제한다. | Resolve         |
-| S-B-08-02 |    Book Not Found    | 문제집이 존재하지 않는다.              | Reject with 404 |
-| S-B-08-03 |  Question Not Found  | 질문이 존재하지 않는다.                | Reject with 404 |
-| S-B-08-04 | User Not Authorized  | 사용자에게 권한이 없다.                | Reject with 403 |
-| S-B-08-05 | Question Not In Book | 질문이 문제집에 존재하지 않는다.       | Reject with 409 |
+|  Test ID  |               Name                | Summary                                | Expected result |
+| :-------: | :-------------------------------: | :------------------------------------- | :-------------- |
+| S-B-08-01 |              Success              | 질문을 문제집에서 성공적으로 삭제한다. | Resolve         |
+| S-B-08-02 |        Failed to save book        | 문제집 저장 중 예외가 발생한다.        | Reject with any |
+| S-B-08-03 |      Failed to save question      | 질문 저장 중 예외가 발생한다.          | Reject with any |
+| S-B-08-04 |       Question not in book        | 질문이 문제집에 존재하지 않는다.       | Reject with 409 |
+| S-B-08-05 |        User not authorized        | 사용자에게 권한이 없다.                | Reject with 403 |
+| S-B-08-06 |          Book not found           | 문제집이 존재하지 않는다.              | Reject with 404 |
+| S-B-08-07 | Failed to find book and questions | 문제집 조회 중 예외가 발생한다.        | Reject with any |
+| S-B-08-08 |        Question not found         | 질문이 존재하지 않는다.                | Reject with 404 |
+| S-B-08-09 |      Failed to find question      | 질문 조회 중 예외가 발생한다.          | Reject with any |
 
 ### [S-B-09]: BookService.toggleLike()
 
-|  Test ID  |       Name       | Summary                       | Expected result |
-| :-------: | :--------------: | :---------------------------- | :-------------- |
-| S-B-09-01 |  Success - Like  | 좋아요를 성공적으로 등록한다. | Resolve         |
-| S-B-09-02 | Success - Unlike | 좋아요를 성공적으로 취소한다. | Resolve         |
-| S-B-09-03 |  User Not Found  | 사용자가 존재하지 않는다.     | Reject with 401 |
-| S-B-09-04 |  Book Not Found  | 문제집이 존재하지 않는다.     | Reject with 404 |
+|  Test ID  |        Name         | Summary                              | Expected result |
+| :-------: | :-----------------: | :----------------------------------- | :-------------- |
+| S-B-09-01 |   Success - Like    | 좋아요를 성공적으로 등록한다.        | Resolve         |
+| S-B-09-02 |  Success - Unlike   | 좋아요를 성공적으로 취소한다.        | Resolve         |
+| S-B-09-03 | Failed to save book | 문제집 저장 중 예외가 발생한다.      | Reject with any |
+| S-B-09-04 | Failed to save user | 사용자 정보 저장 중 예외가 발생한다. | Reject with any |
+| S-B-09-05 |   Book not found    | 문제집이 존재하지 않는다.            | Reject with 404 |
+| S-B-09-06 | Failed to find book | 문제집 조회 중 예외가 발생한다.      | Reject with any |
+| S-B-09-07 |   User not found    | 사용자가 존재하지 않는다.            | Reject with 401 |
+| S-B-09-08 | Failed to find user | 사용자 정보 조회 중 예외가 발생한다. | Reject with any |
 
 ### [S-B-10]: BookService.getLike()
 
-|  Test ID  |        Name         | Summary                                           | Expected result |
-| :-------: | :-----------------: | :------------------------------------------------ | :-------------- |
-| S-B-10-01 |   Success - Liked   | 좋아요 상태를 성공적으로 조회한다 (좋아요 함).    | Resolve         |
-| S-B-10-02 | Success - Not Liked | 좋아요 상태를 성공적으로 조회한다 (좋아요 안 함). | Resolve         |
-| S-B-10-03 |   User Not Found    | 사용자가 존재하지 않는다.                         | Reject with 401 |
-| S-B-10-04 |   Book Not Found    | 문제집이 존재하지 않는다.                         | Reject with 404 |
+|  Test ID  |                Name                 | Summary                                           | Expected result |
+| :-------: | :---------------------------------: | :------------------------------------------------ | :-------------- |
+| S-B-10-01 |           Success - Liked           | 좋아요 상태를 성공적으로 조회한다 (좋아요 함).    | Resolve         |
+| S-B-10-02 |         Success - Not liked         | 좋아요 상태를 성공적으로 조회한다 (좋아요 안 함). | Resolve         |
+| S-B-10-03 |           Book not found            | 문제집이 존재하지 않는다.                         | Reject with 404 |
+| S-B-10-04 |         Failed to find book         | 문제집 조회 중 예외가 발생한다.                   | Reject with any |
+| S-B-10-05 |           User not found            | 사용자가 존재하지 않는다.                         | Reject with 401 |
+| S-B-10-06 | Failed to find user and liked books | 사용자 정보 조회 중 예외가 발생한다.              | Reject with any |
 
 ### [S-B-11]: BookService.updateBookVisibility()
 
 |  Test ID  |        Name         | Summary                                 | Expected result |
 | :-------: | :-----------------: | :-------------------------------------- | :-------------- |
 | S-B-11-01 |       Success       | 문제집 공개 범위를 성공적으로 수정한다. | Resolve         |
-| S-B-11-02 |   Book Not Found    | 문제집이 존재하지 않는다.               | Reject with 404 |
-| S-B-11-03 | User Not Authorized | 사용자에게 권한이 없다.                 | Reject with 403 |
-| S-B-11-04 | Invalid Visibility  | 유효하지 않은 공개 범위 값.             | Reject with 400 |
+| S-B-11-02 |   Failed to save    | 문제집 저장 중 예외가 발생한다.         | Reject with any |
+| S-B-11-03 | User not authorized | 사용자에게 권한이 없다.                 | Reject with 403 |
+| S-B-11-04 |   Book not found    | 문제집이 존재하지 않는다.               | Reject with 404 |
+| S-B-11-05 | Failed to find book | 문제집 조회 중 예외가 발생한다.         | Reject with any |
 
 ### [S-B-12]: BookService.getQuestionsOfBook()
 
-|  Test ID  |         Name         | Summary                                         | Expected result |
-| :-------: | :------------------: | :---------------------------------------------- | :-------------- |
-| S-B-12-01 |       Success        | 문제집의 질문들을 성공적으로 조회한다.          | Resolve         |
-| S-B-12-02 |    Book Not Found    | 문제집이 존재하지 않는다.                       | Reject with 404 |
-| S-B-12-03 |     No Questions     | 문제집에 질문이 없다.                           | Resolve         |
-| S-B-12-04 |      Pagination      | 페이지네이션이 올바르게 동작한다.               | Resolve         |
-| S-B-12-05 | Sort by Created Date | 생성일 기준으로 정렬된 질문 목록을 반환한다.    | Resolve         |
-| S-B-12-06 | Sort by Saved Count  | 저장 횟수 기준으로 정렬된 질문 목록을 반환한다. | Resolve         |
-| S-B-12-07 |        Search        | 검색어에 맞는 질문들을 반환한다.                | Resolve         |
+|  Test ID  |           Name           | Summary                                        | Expected result |
+| :-------: | :----------------------: | :--------------------------------------------- | :-------------- |
+| S-B-12-01 |         Success          | 문제집의 질문들을 성공적으로 조회한다.         | Resolve         |
+| S-B-12-02 |       No questions       | 문제집에 질문이 없다.                          | Resolve         |
+| S-B-12-03 | Failed to find questions | 문제집의 질문들을 조회하는 중 예외가 발생한다. | Reject with any |
+| S-B-12-04 |      Book not found      | 문제집이 존재하지 않는다.                      | Reject with 404 |
+| S-B-12-05 |   Failed to find book    | 문제집 조회 중 예외가 발생한다.                | Reject with any |
 
 ## UploadService
 
