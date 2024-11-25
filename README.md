@@ -32,7 +32,7 @@ SCS는 컴퓨터 과학 전공 지식을 학습하기 위한 웹 서비스입니
 - NestJS
 - TypeORM
 - PostgreSQL
-- JWT 인증
+- JWT
 
 ### Common
 
